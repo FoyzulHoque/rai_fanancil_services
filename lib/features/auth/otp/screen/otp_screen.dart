@@ -1,0 +1,275 @@
+import 'dart:async';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:get/get.dart';
+import '../../../../core/themes/app_colors.dart';
+import '../../create new password/screen/create_new_password_screen.dart';
+import '../../forget password/controller/send_email_with_otp_controller.dart';
+import '../../text editing controller/custom_text_editing_controller.dart';
+import '../controller/otp_controller.dart';
+
+class OtpScreen extends StatefulWidget {
+  const OtpScreen({super.key});
+
+  @override
+  _OtpScreenState createState() => _OtpScreenState();
+}
+
+class _OtpScreenState extends State<OtpScreen> {
+  final OtpController otpController = Get.put(OtpController());
+  final ResetPasswordController resetPasswordController = Get.find();
+  final CustomTextEditingController accountTextEditingController = Get.find();
+
+  int _secondsRemaining = 60;
+  late Timer _timer;
+
+  @override
+  void initState() {
+    super.initState();
+    startTimer();
+  }
+
+  void startTimer() {
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (_secondsRemaining == 0) {
+        timer.cancel();
+      } else {
+        if (mounted) {
+          setState(() {
+            _secondsRemaining--;
+          });
+        }
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
+  }
+
+  void _onChanged(String value, int index) {
+    if (value.length == 1 && index < CustomTextEditingController.otpLength - 1) {
+      FocusScope.of(context).requestFocus(accountTextEditingController.focusNodes[index + 1]);
+    } else if (value.isEmpty && index > 0) {
+      FocusScope.of(context).requestFocus(accountTextEditingController.focusNodes[index - 1]);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: AppColors.secondaryColors,
+      appBar: AppBar(
+        backgroundColor: AppColors.secondaryColors,
+        leading: Padding(
+          padding: const EdgeInsets.all(6.0),
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.grey[300],
+              borderRadius: BorderRadius.circular(50),
+            ),
+            child: const BackButton(color: Colors.black),
+          ),
+        ),
+        elevation: 0,
+        systemOverlayStyle: SystemUiOverlayStyle.dark,
+      ),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const SizedBox(height: 20),
+               Text(
+                'Enter OTP'.tr,
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 10),
+              RichText(
+                textAlign: TextAlign.center,
+                text: TextSpan(
+                  style: const TextStyle(color: Colors.grey, fontSize: 14),
+                  children: [
+                     TextSpan(text: "OTP code has been sent to".tr),
+                    TextSpan(
+                      text: accountTextEditingController.emailController.text,
+                      style: const TextStyle(color: Colors.black, fontWeight: FontWeight.w500),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 30),
+        
+        
+              // OTP Input Fields
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: List.generate(CustomTextEditingController.otpLength, (index) {
+                  return SizedBox(
+                    width: 56,
+                    height: 56,
+                    child: TextField(
+                      controller: accountTextEditingController[index],
+                      focusNode: accountTextEditingController.focusNodes [index],
+                      keyboardType: TextInputType.number,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+                      inputFormatters: [
+                        FilteringTextInputFormatter.digitsOnly,
+                        LengthLimitingTextInputFormatter(1),
+                      ],
+                      maxLength: 1,
+                      decoration: InputDecoration(
+                        counterText: '',
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: const BorderSide(color: Colors.grey),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: const BorderSide(color: AppColors.primary, width: 2),
+                        ),
+                        contentPadding: const EdgeInsets.symmetric(vertical: 12),
+                      ),
+                      onChanged: (value) {
+                        _onChanged(value, index);
+                      },
+                    ),
+                  );
+                }),
+              ),
+              const SizedBox(height: 12),
+
+              // Timer Text
+              RichText(
+                text: TextSpan(
+                  style: const TextStyle(color: Colors.black, fontSize: 14),
+                  children: [
+                    TextSpan(text: 'Resend code in '.tr),
+                    TextSpan(
+                      text: '$_secondsRemaining s',
+                      style: const TextStyle(color: AppColors.primary, fontWeight: FontWeight.w600),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 30),
+              Center(
+                child: Container(
+                  height: 277,
+                  width: 247.26,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Image.asset("assets/images/otp_body.png"),
+                ),
+              ),
+              const SizedBox(height: 40),
+        
+              // Confirm Button
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: apiCallButton,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.primary,
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    elevation: 2,
+                  ),
+                  child:  Text(
+                    'Confirm Code'.tr,
+                    style: TextStyle(fontSize: 16, color: Colors.white, fontWeight: FontWeight.w600),
+                  ),
+                ),
+              ),
+        
+              const SizedBox(height: 20),
+        
+              // Timer Text
+              /*RichText(
+                text: TextSpan(
+                  style: const TextStyle(color: Colors.black, fontSize: 14),
+                  children: [
+                     TextSpan(text: 'Resend code in '.tr),
+                    TextSpan(
+                      text: '$_secondsRemaining s',
+                      style: const TextStyle(color: AppColors.primary, fontWeight: FontWeight.w600),
+                    ),
+                  ],
+                ),
+              ),
+        
+              const SizedBox(height: 12),*/
+        
+              // Resend Code
+              GestureDetector(
+                onTap: _secondsRemaining == 0 ? resendOtpApiCallMethod : null,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                     Text("Didn't receive code? ".tr, style: TextStyle(color: Colors.grey)),
+                    GestureDetector(
+                      onTap: _secondsRemaining == 0 ? resendOtpApiCallMethod : null,
+                      child: Text(
+                        'Resend Code'.tr,
+                        style: TextStyle(
+                          color: _secondsRemaining == 0 ? AppColors.primary : Colors.grey,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  // Confirm Button Action
+  Future<void> apiCallButton() async {
+    Get.to(() => CreateNewPasswordScreen());
+
+    /*final otp = accountTextEditingController.getOtpString();
+
+    debugPrint("OTP from getOtpString: '$otp'");
+
+    if (otp.length != 4 || !RegExp(r'^\d{4}$').hasMatch(otp)) {
+      Get.snackbar("Error".tr, "Please enter a valid 4-digit OTP".tr);
+      return;
+    }
+
+    bool isSuccess = await otpController.otpApiCallMethod();
+    if (isSuccess) {
+      Get.to(() => CreateNewPasswordScreen());
+    } else {
+      Get.snackbar("Error".tr, otpController.errorMessage ?? "Invalid OTP".tr);
+    }*/
+  }
+
+  // Resend OTP
+  Future<void> resendOtpApiCallMethod() async {
+    if (_secondsRemaining != 0) {
+      Get.snackbar("Wait".tr, "Please wait for the timer to finish".tr);
+      return;
+    }
+
+    bool isSuccess = await resetPasswordController.resetPasswordApiCallMethod();
+    if (isSuccess) {
+      setState(() {
+        _secondsRemaining = 60;
+        startTimer();
+      });
+    //Get.snackbar("Success", "OTP sent successfully".tr);
+    } else {
+    //Get.snackbar("Error", "Failed to resend OTP".tr);
+    }
+  }
+}
