@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:iconic/features/splash/controller/splash_controller.dart';
 
 import '../../core/themes/app_colors.dart';
+import 'controller/splash_controller.dart';
 
 class SplashScreen extends StatelessWidget {
   SplashScreen({super.key});
@@ -25,7 +25,7 @@ class SplashScreen extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 24),
                   child: Image.asset(
-                    'assets/icons/app_logo.png',
+                    'assets/logos/Primary-Logo 1.png',
                     height: 150,
                     width: 150,
                   ),

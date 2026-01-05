@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:iconic/features/user/user%20navbar/navbar_controller.dart';
 import '../../../auth/text editing controller/custom_text_editing_controller.dart';
+import '../../../user/user navbar/navbar_controller.dart';
 import '../../profile/my_profile/controller/my_profile_controller.dart';
 import '../controller/create_cart_api_controller.dart';
 import '../controller/home_api_controller.dart';

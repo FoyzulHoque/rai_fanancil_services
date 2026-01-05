@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
-import 'package:iconic/core/themes/app_colors.dart';
+
+import '../../../../../core/themes/app_colors.dart';
 
 class CustomContainerWidget extends StatelessWidget {
   const CustomContainerWidget({super.key,  this.text, this.onTabAction});

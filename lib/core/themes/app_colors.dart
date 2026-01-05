@@ -5,8 +5,8 @@ class AppColors {
 
   static const Color defaultBlack = Color(0xFF1A1A1A);
 
-  static const Color primary = Color(0xFF212121); 
-  static const Color secondaryColors = Color(0xFFFBF3E8);
+  static const Color primary = Color(0xFF0C7BB9);
+  static const Color secondaryColors = Color(0xFFFFFFFF);
   static const Color subcolor = Color(0xFF9E9E9E);
   static const Color btncolor = Color(0xFFB2F7F5); 
   static const Color white = Colors.white;

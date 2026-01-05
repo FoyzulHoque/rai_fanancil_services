@@ -20,7 +20,7 @@ dependencies:
   google_fonts: ^6.2.1
   flutter_spinkit: ^5.2.1
   flutter_easyloading: ^3.0.5
-
+  jwt_decoder: ^2.0.1
   # Images
   cached_network_image: ^3.4.1
   image_picker: ^1.1.2
@@ -58,8 +58,9 @@ flutter:
   assets:
     - assets/images/
     - assets/icons/
+    - assets/logos/
 
 flutter_icons:
   android: true
   ios: true
-  image_path: "assets/icons/app_icon.png"
+  image_path: "assets/logos/Primary-Logo 1.png"

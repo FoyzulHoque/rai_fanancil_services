@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
-import 'package:iconic/features/user/user%20navbar/user_navbar_screen.dart';
 import '../../../../core/themes/app_colors.dart';
 import '../../../../core/themes/text_styles.dart';
 import '../../../../core/widgets/custom_button.dart';
 import '../../../../core/widgets/custom_field.dart';
+import '../../../host/user navbar/client_navbar_screen.dart';
 import '../../forget password/screen/forget_password_screen.dart';
 import '../../signup/screens/signup_screen.dart';
 import '../../text editing controller/custom_text_editing_controller.dart';
@@ -42,7 +42,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: Padding(
                   padding: const EdgeInsets.only(top: 40.0), // Top padding
                   child: Image.asset(
-                    'assets/icons/app_logo.png', // Path to your logo image
+                    'assets/logos/Primary-Logo 1.png', // Path to your logo image
                     height: 83, // Increased logo size
                     width: 76.78, // Increased logo size
                   ),

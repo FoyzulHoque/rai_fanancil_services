@@ -41,7 +41,7 @@ class SignUpScreen extends StatelessWidget {
                     SizedBox(
                       height: 83,
                       width: 76.78,
-                      child: Image.asset("assets/icons/app_logo.png"),
+                      child: Image.asset("assets/logos/Primary-Logo 1.png"),
                     ),
                     const SizedBox(height: 10,),
                     Text(
@@ -117,6 +117,28 @@ class SignUpScreen extends StatelessWidget {
               ),
               const SizedBox(height: 16),
 
+              // Date of birth .
+              CustomTextField(
+                controller: controller.dateOfBirthController,
+                hintText: 'Date of birth .',
+                prefixIcon: 'assets/icons/calendar-03.png',
+              ),
+              const SizedBox(height: 16),
+              // Location
+              CustomTextField(
+                controller: controller.dateOfBirthController,
+                hintText: 'Location',
+                prefixIcon: 'assets/icons/location-06.png',
+              ),
+              const SizedBox(height: 16),
+              // Email
+              CustomTextField(
+                controller: controller.emailController,
+                hintText: 'Email',
+                prefixIcon: 'assets/icons/email.png',
+              ),
+              const SizedBox(height: 16),
+
               // Gender Dropdown
               Obx(() => DropdownButtonFormField<String>(
                 value: controller.selectedGender.value,
@@ -167,13 +189,7 @@ class SignUpScreen extends StatelessWidget {
               ),
               const SizedBox(height: 16),
 
-              // Email
-              CustomTextField(
-                controller: controller.emailController,
-                hintText: 'Email',
-                prefixIcon: 'assets/icons/email.png',
-              ),
-              const SizedBox(height: 16),
+
 
               // Password
               Obx(() => CustomTextField(
@@ -192,7 +208,7 @@ class SignUpScreen extends StatelessWidget {
                 ),
               )),
               const SizedBox(height: 16),
-              Obx(() => DropdownButtonFormField<String>(
+              /*Obx(() => DropdownButtonFormField<String>(
                 value: controller.selectedRoll.value,
                 onChanged: (value) => controller.selectedRoll.value = value!,
                 decoration: InputDecoration(
@@ -213,11 +229,11 @@ class SignUpScreen extends StatelessWidget {
                     .map((g) => DropdownMenuItem(value: g, child: Text(g)))
                     .toList(),
               )),
-              const SizedBox(height: 32),
+              const SizedBox(height: 32),*/
 
               // Sign Up Button
               Obx(() => CustomFloatingButton(
-                customBackgroundColor: AppColors.black,
+                customBackgroundColor: AppColors.primary,
                 textColors: AppColors.white,
                 onPressed: _apiCallButton,
                 buttonText: apiController.isLoading.value

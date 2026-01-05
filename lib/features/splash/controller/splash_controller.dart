@@ -1,9 +1,9 @@
 import 'dart:async';
 import 'package:get/get.dart';
-import 'package:iconic/features/user/user%20navbar/user_navbar_screen.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import '../../../core/services_class/shared_preferences_helper.dart';
 import '../../host/host owner  splash/screen/host_owner_splash_screen.dart';
+import '../../host/user navbar/client_navbar_screen.dart';
 import '../../onboarding/onboarding_screen.dart';
 class SplashController extends GetxController {
   var currentSplash = 1.obs;

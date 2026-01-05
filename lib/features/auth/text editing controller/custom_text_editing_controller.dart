@@ -25,6 +25,8 @@ class CustomTextEditingController extends GetxController {
   final newPasswordController = TextEditingController();
   final phoneController = TextEditingController();
   final searchingController = TextEditingController();
+  final locationController = TextEditingController();
+  final dateOfBirthController = TextEditingController();
 
   // OTP Controllers & Focus Nodes
   late final List<TextEditingController> otpControllersList;

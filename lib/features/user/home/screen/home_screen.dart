@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/Get.dart';
-import 'package:iconic/core/themes/app_colors.dart';
-
-import '../../../host/home/widget/body_widget.dart';
+import '../../../../core/themes/app_colors.dart';
 import '../../../host/home/widget/home_app_bar_widget.dart';
 import '../home searching/screen/home_searching_screen.dart';
 import '../home searching/widget/searching_default_widget.dart';

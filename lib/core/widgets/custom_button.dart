@@ -27,7 +27,7 @@ class CustomFloatingButton extends StatelessWidget {
         style: ElevatedButton.styleFrom(
           backgroundColor:customBackgroundColor, // Use AppColors.btncolor for button color
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(30.0), // Rounded corners
+            borderRadius: BorderRadius.circular(0), // Rounded corners
           ),
          // elevation: 6.0, // Shadow below the button
         ),

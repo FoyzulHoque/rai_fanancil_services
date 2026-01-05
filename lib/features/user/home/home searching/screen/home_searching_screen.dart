@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:iconic/features/user/home/home%20searching/widget/map_widget.dart';
 import '../../../../../core/themes/app_colors.dart';
 import '../widget/body_container_widget.dart';
 import '../widget/calender_widget/calender_dialog_box_widget.dart';
+import '../widget/map_widget.dart';
 
 class HomeSearchingScreen extends StatefulWidget {
   const HomeSearchingScreen({super.key});
