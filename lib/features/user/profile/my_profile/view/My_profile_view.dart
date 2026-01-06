@@ -10,11 +10,11 @@ class MyProfileView extends StatefulWidget {
 }
 
 class _MyProfileViewState extends State<MyProfileView> {
-  final ProfileApiController controller = Get.find<ProfileApiController>();
+  //final ProfileApiController controller = Get.find<ProfileApiController>();
 
   @override
   void initState() {
-    controller.getProfile();
+   // controller.getProfile();
     super.initState();
   }
 
@@ -268,7 +268,7 @@ class _MyProfileViewState extends State<MyProfileView> {
     );
   }
 
-  Future<void> _logout() async {
+/*  Future<void> _logout() async {
     bool isSuccess = await controller.logout();
     if (isSuccess) {
       Get.snackbar('Success', 'Logged out successfully!',
@@ -288,5 +288,5 @@ class _MyProfileViewState extends State<MyProfileView> {
       Get.snackbar('Error', 'Something went wrong',
           backgroundColor: Colors.red, colorText: Colors.white);
     }
-  }
+  }*/
 }

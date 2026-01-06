@@ -5,7 +5,7 @@ import '../chat/screen/chat_screen.dart';
 import '../home/screen/home_screen.dart';
 import '../profile/my_profile/view/My_profile_view.dart';
 import '../wishlist/screen/wishlist_screen.dart';
-import 'navbar_controller.dart';
+import 'controller/navbar_controller.dart';
 
 class UserBottomNavbar extends StatefulWidget {
   final int initialIndex;

@@ -1,3 +1,4 @@
+/*
 
 import 'package:flutter/material.dart';
 import 'package:get/Get.dart';
@@ -42,7 +43,8 @@ class ProfileApiController extends GetxController {
 
   // lib/feature/profile/controllers/profile_controller.dart
 
-  /*Future<bool> editProfile({
+  */
+/*Future<bool> editProfile({
     required String firstName,
     required String lastName,
     required String country,
@@ -116,7 +118,8 @@ class ProfileApiController extends GetxController {
     } else {
       getProfile(); // fallback
     }
-  }*/
+  }*//*
+
   Future<bool> logout() async {
     isLoading.value = true;
     try {
@@ -158,3 +161,4 @@ class ProfileApiController extends GetxController {
     }
   }
 }
+*/

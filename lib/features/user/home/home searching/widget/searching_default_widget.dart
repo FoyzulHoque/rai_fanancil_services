@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../../core/themes/app_colors.dart';
-import '../../../../host/home/widget/search_widget.dart';
+import '../../widget/search_widget.dart';
 
 class SearchingDefaultWidget extends StatelessWidget {
   const SearchingDefaultWidget({super.key});

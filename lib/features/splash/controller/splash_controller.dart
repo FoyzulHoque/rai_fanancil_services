@@ -2,9 +2,8 @@ import 'dart:async';
 import 'package:get/get.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import '../../../core/services_class/shared_preferences_helper.dart';
-import '../../host/host owner  splash/screen/host_owner_splash_screen.dart';
-import '../../host/user navbar/client_navbar_screen.dart';
 import '../../onboarding/onboarding_screen.dart';
+import '../../user/user navbar/user_navbar_screen.dart';
 class SplashController extends GetxController {
   var currentSplash = 1.obs;
 
@@ -33,9 +32,9 @@ class SplashController extends GetxController {
 
       if (role == 'Client') {
         Get.offAll(() =>  UserBottomNavbar());
-      } else if (role == 'Host') {
-        Get.offAll(() => HostOwnerSplashScreen());
-      } else {
+      } /*else if (role == 'Host') {
+        //Get.offAll(() => HostOwnerSplashScreen());
+      }*/ else {
         Get.offAll(() =>  OnboardingScreen());
       }
     } else {

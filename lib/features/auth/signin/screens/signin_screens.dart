@@ -5,7 +5,7 @@ import '../../../../core/themes/app_colors.dart';
 import '../../../../core/themes/text_styles.dart';
 import '../../../../core/widgets/custom_button.dart';
 import '../../../../core/widgets/custom_field.dart';
-import '../../../host/user navbar/client_navbar_screen.dart';
+import '../../../user/user navbar/user_navbar_screen.dart';
 import '../../forget password/screen/forget_password_screen.dart';
 import '../../signup/screens/signup_screen.dart';
 import '../../text editing controller/custom_text_editing_controller.dart';

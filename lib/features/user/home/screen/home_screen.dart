@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/Get.dart';
 import '../../../../core/themes/app_colors.dart';
-import '../../../host/home/widget/home_app_bar_widget.dart';
 import '../home searching/screen/home_searching_screen.dart';
 import '../home searching/widget/searching_default_widget.dart';
 import '../home_details_screen/screen/home_details_screen.dart';
 import '../widget/body_widget.dart';
 import '../widget/custom_slider_widget.dart';
+import '../widget/home_app_bar_widget.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
