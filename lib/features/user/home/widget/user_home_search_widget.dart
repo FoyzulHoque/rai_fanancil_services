@@ -70,7 +70,7 @@ class SearchWidget extends StatelessWidget {
                     textInputAction: TextInputAction.search,
                     style: const TextStyle(fontSize: 16),
                     decoration: const InputDecoration(
-                      hintText: "Search products, brands...",
+                      hintText: "Search location, suburb...",
                       hintStyle: TextStyle(color: Colors.grey, fontSize: 16),
                       prefixIcon: Icon(
                         Icons.search,

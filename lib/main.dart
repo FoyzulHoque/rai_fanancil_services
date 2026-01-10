@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      title: 'OHBoyD23',
+      title: 'Rai Fanancil Services',
       debugShowCheckedModeBanner: false,
 
       initialBinding: GetXDependencyInjection(),

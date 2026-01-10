@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import '../controller/my_profile_controller.dart';
+
 
 class MyProfileView extends StatefulWidget {
   MyProfileView({super.key});

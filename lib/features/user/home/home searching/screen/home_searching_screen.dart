@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import '../../../../../core/themes/app_colors.dart';
 import '../widget/body_container_widget.dart';
 import '../widget/calender_widget/calender_dialog_box_widget.dart';
-import '../widget/map_widget.dart';
 
 class HomeSearchingScreen extends StatefulWidget {
   const HomeSearchingScreen({super.key});
@@ -46,7 +45,7 @@ class _HomeSearchingScreenState extends State<HomeSearchingScreen> {
               children: [
                 SizedBox(width: 44, child: const Divider()),
 
-                Row(
+              /*  Row(
                   children: [
                     Text("Filter"),
                     Spacer(),
@@ -57,10 +56,10 @@ class _HomeSearchingScreenState extends State<HomeSearchingScreen> {
                       child: Text("Cancel"),
                     ),
                   ],
-                ),
-                const SizedBox(height: 10),
+                ),*/
+                /*const SizedBox(height: 10),
                 const Divider(),
-                const SizedBox(height: 10),
+                const SizedBox(height: 10),*/
                 Container(
                   height: 346,
                   width: 327,
@@ -80,7 +79,7 @@ class _HomeSearchingScreenState extends State<HomeSearchingScreen> {
                             fontWeight: FontWeight.w500,
                           ),
                         ),
-                        const SizedBox(height: 20),
+                       /* const SizedBox(height: 20),
                         Container(
                           height: 38,
                           decoration: BoxDecoration(
@@ -109,8 +108,8 @@ class _HomeSearchingScreenState extends State<HomeSearchingScreen> {
                             ),
                           ),
                         ),
-                        const SizedBox(height: 20),
-                        Expanded(
+                        const SizedBox(height: 20),*/
+                      /*  Expanded(
                           child: ListView.builder(
                             scrollDirection: Axis.horizontal,
                             itemCount: countries.length,
@@ -123,7 +122,7 @@ class _HomeSearchingScreenState extends State<HomeSearchingScreen> {
                               );
                             },
                           ),
-                        ),
+                        ),*/
                       ],
                     ),
                   ),

@@ -26,7 +26,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.secondaryColors,
+      backgroundColor: AppColors.white,
       appBar: AppBar(
         toolbarHeight: 0, // Hides the default AppBar
         backgroundColor: Colors.transparent, // Make it transparent
@@ -140,6 +140,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
               // Login Button
               CustomFloatingButton(
+                customBackgroundColor: AppColors.primary,
+                textColors: AppColors.white,
                 onPressed: _apiCallButton,
                 buttonText: 'Log in',
                  

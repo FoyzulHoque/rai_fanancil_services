@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../bookings/screen/bookings_screen.dart';
-import '../chat/screen/chat_screen.dart';
+import '../financial calculators/screen/financial_calculators_screen.dart';
 import '../home/screen/home_screen.dart';
 import '../profile/my_profile/view/My_profile_view.dart';
-import '../wishlist/screen/wishlist_screen.dart';
+import '../searching/screen/searching_screen.dart';
 import 'controller/navbar_controller.dart';
 
 class UserBottomNavbar extends StatefulWidget {
@@ -26,9 +26,9 @@ class _UserBottomNavbarState extends State<UserBottomNavbar> {
 
   final List<Widget> pages = [
     HomeScreen(),       // index 0
-    WishlistScreen(),       // index 1  → Cart
+    FinancialCalculatorsScreen(),       // index 1  → Cart
     BookingsScreen(),      // index 2
-    ChatScreen(),    // index 3  → Profile
+    SearchingScreen(),    // index 3  → Profile
     MyProfileView(),    // index 3  → Profile
   ];
 
@@ -40,7 +40,7 @@ class _UserBottomNavbarState extends State<UserBottomNavbar> {
         height: 54,
         margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(0),
           color: Colors.white,
         ),
         child: Row(

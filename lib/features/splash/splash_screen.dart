@@ -13,7 +13,7 @@ class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.secondaryColors,
+      backgroundColor: AppColors.white,
       body: Column(
         children: [
           // This will push the logo to center and loader to bottom

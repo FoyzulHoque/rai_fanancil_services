@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rai_fanancil_services/core/themes/app_colors.dart';
 
 class HomeAppBarWidget extends StatelessWidget {
   final String? imageUrl;
@@ -31,9 +32,10 @@ class HomeAppBarWidget extends StatelessWidget {
   }
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
+    return Container(
+      color: AppColors.secondaryColors,
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 30),
         child: Row(
           children: [
             // Profile Avatar
@@ -97,20 +99,20 @@ class HomeAppBarWidget extends StatelessWidget {
                   Text(
                    _getGreeting(),
               style: const TextStyle(
-                fontSize: 13,
-                color: Colors.grey,
+                fontSize: 16,
+                color: Colors.white,
                 fontWeight: FontWeight.w500,
               ),
             ),
 
-// উইজেটের নিচে বা আলাদা ফাইলে
+      // উইজেটের নিচে বা আলাদা ফাইলে
               const SizedBox(height: 2),
                   Text(
                     name ?? "User",
                     style: const TextStyle(
-                      fontSize: 19,
+                      fontSize: 20,
                       fontWeight: FontWeight.bold,
-                      color: Colors.black87,
+                      color: AppColors.white,
                       letterSpacing: 0.3,
                     ),
                     maxLines: 1,
@@ -120,7 +122,7 @@ class HomeAppBarWidget extends StatelessWidget {
               ),
             ),
 
-            // Notification Bell with Badge
+           /* // Notification Bell with Badge
             InkWell(
               onTap: onNotificationTap,
               borderRadius: BorderRadius.circular(30),
@@ -149,7 +151,7 @@ class HomeAppBarWidget extends StatelessWidget {
                   ),
                 ),
               ),
-            ),
+            ),*/
           ],
         ),
       ),

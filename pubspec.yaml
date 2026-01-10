@@ -43,6 +43,7 @@ dependencies:
   # Tools
   change_app_package_name: ^1.5.0
   rename: ^3.0.2
+  fl_chart: ^1.1.1
 
 dev_dependencies:
   flutter_test:
