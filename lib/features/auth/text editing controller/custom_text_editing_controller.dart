@@ -10,8 +10,11 @@ class CustomTextEditingController extends GetxController {
 
   // Reactive variables
   final RxString profileImagePath = ''.obs;
+  final RxString dateOfBirth = ''.obs; // <-- ADDED
   final RxString selectedGender = 'Male'.obs;
   final RxString selectedRoll = 'User'.obs;
+  final RxString selectedROIGrowthFilter = 'Select'.obs;
+  final RxString selectedLoanTerm = 'Select'.obs;
   final RxBool isPasswordVisible = false.obs;
   static const int otpLength = 4;
   final RxString enteredOtp = ''.obs;
@@ -26,7 +29,7 @@ class CustomTextEditingController extends GetxController {
   final phoneController = TextEditingController();
   final searchingController = TextEditingController();
   final locationController = TextEditingController();
-  final dateOfBirthController = TextEditingController();
+  // final dateOfBirthController = TextEditingController(); // <-- REMOVED
 
   // OTP Controllers & Focus Nodes
   late final List<TextEditingController> otpControllersList;
@@ -38,6 +41,8 @@ class CustomTextEditingController extends GetxController {
   // List of genders
   List<String> get genders => ['Male', 'Female', 'Other'];
   List<String> get roll => ['User', 'Host'];
+  List<String> get growthFilter => ['5 years', '10 years', '15 years', '20 years', '25 years', '30 years'];
+  List<String> get loanTerm => ['ROI ≥ 3%', 'ROI ≥ 5%', 'ROI ≥ 7%', 'Capital Growth (1yr)', 'Capital Growth (5yr)', 'Capital Growth (10yr)'];
 
   CustomTextEditingController() {
     // Initialize lists in constructor
@@ -86,6 +91,7 @@ class CustomTextEditingController extends GetxController {
   // Clear all fields
   void clearAll() {
     profileImagePath.value = '';
+    dateOfBirth.value = ''; // <-- ADDED
     firstNameController.clear();
     lastNameController.clear();
     emailController.clear();

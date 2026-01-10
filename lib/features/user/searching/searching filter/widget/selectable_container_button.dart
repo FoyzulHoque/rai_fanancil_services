@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rai_fanancil_services/core/themes/app_colors.dart';
 
 class SelectableContainerButton extends StatelessWidget {
   final String text;
@@ -17,12 +18,14 @@ class SelectableContainerButton extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
+        //width: 262,
+       // height:130 ,
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
         decoration: BoxDecoration(
-          color: isSelected ? Colors.blue : Colors.white,
-          borderRadius: BorderRadius.circular(6),
+          color: isSelected ? AppColors.secondaryColors : Colors.white,
+          borderRadius: BorderRadius.circular(0),
           border: Border.all(
-            color: isSelected ? Colors.blue : Colors.grey.shade400,
+            color: isSelected ?AppColors.secondaryColors : Colors.grey.shade400,
           ),
         ),
         child: Text(

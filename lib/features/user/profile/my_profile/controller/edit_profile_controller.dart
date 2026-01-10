@@ -18,15 +18,14 @@ class EditProfileController extends GetxController {
   // Text Controllers
   late final TextEditingController firstNameCtrl;
   late final TextEditingController lastNameCtrl;
-  late final TextEditingController countryCtrl;
-  late final TextEditingController phoneCtrl;
+  late final TextEditingController location;
+  late final TextEditingController dateTime;
 
   // Original values for change detection
   String _originalFirstName = '';
   String _originalLastName = '';
-  String _originalCountry = '';
-  String _originalPhone = '';
-  String _originalGender = '';
+  String _originalDateTime = '';
+  String _originalLocation = '';
   String _originalImage = '';
 
   @override
@@ -34,8 +33,8 @@ class EditProfileController extends GetxController {
     super.onInit();
     firstNameCtrl = TextEditingController();
     lastNameCtrl = TextEditingController();
-    countryCtrl = TextEditingController();
-    phoneCtrl = TextEditingController();
+    location = TextEditingController();
+    dateTime = TextEditingController();
     _loadProfileData();
   }
 
@@ -45,16 +44,14 @@ class EditProfileController extends GetxController {
     // সরাসরি firstName & lastName নাও — splitting বাদ!
     firstNameCtrl.text = user.firstName ?? '';
     lastNameCtrl.text = user.lastName ?? '';
-    countryCtrl.text = user.country ?? '';
-    phoneCtrl.text = user.phone ?? '';
-    gender.value = user.gender ?? '';
+    location.text = user.location ?? '';
+    dateTime.text = user.datTime?? '';
 
     // Save originals
     _originalFirstName = firstNameCtrl.text.trim();
     _originalLastName = lastNameCtrl.text.trim();
-    _originalCountry = countryCtrl.text.trim();
-    _originalPhone = phoneCtrl.text.trim();
-    _originalGender = gender.value;
+    _originalDateTime = dateTime.text.trim();
+    _originalLocation = location.text.trim();
     _originalImage = user.profileImage ?? '';
 
     // Reset new image
@@ -75,9 +72,8 @@ class EditProfileController extends GetxController {
   bool get hasChanges {
     return firstNameCtrl.text.trim() != _originalFirstName ||
         lastNameCtrl.text.trim() != _originalLastName ||
-        countryCtrl.text.trim() != _originalCountry ||
-        phoneCtrl.text.trim() != _originalPhone ||
-        gender.value != _originalGender ||
+        location.text.trim() != _originalLocation ||
+        dateTime.text.trim() != _originalDateTime ||
         newProfileImagePath.isNotEmpty;
   }
 
@@ -96,9 +92,8 @@ class EditProfileController extends GetxController {
     final success = await profileCtrl.editProfile(
       firstName: first,
       lastName: last,
-      country: countryCtrl.text.trim(),
-      phone: phoneCtrl.text.trim(),
-      gender: gender.value,
+      location: location.text.trim(),
+      dateTime: dateTime.text.trim(),
       profileImagePath:
       newProfileImagePath.isNotEmpty ? newProfileImagePath.value : null,
     );
@@ -119,8 +114,9 @@ class EditProfileController extends GetxController {
   void onClose() {
     firstNameCtrl.dispose();
     lastNameCtrl.dispose();
-    countryCtrl.dispose();
-    phoneCtrl.dispose();
+    dateTime.dispose();
+    location.dispose();
     super.onClose();
   }
-}*/
+}
+*/

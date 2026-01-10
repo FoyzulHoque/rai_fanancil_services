@@ -3,6 +3,12 @@
         android:label="rai_fanancil_services"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+
+        <!-- ✅ Only one Google Maps API Key -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyC7AoMhe2ZP3iHflCVr6a3VeL0ju0bzYVE" />
+
         <activity
             android:name=".MainActivity"
             android:exported="true"

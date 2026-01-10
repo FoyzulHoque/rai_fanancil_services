@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import '../auth/signin/controller/login_controller.dart';
 import '../auth/signup/controller/signup_api_controller.dart';
 import '../auth/text editing controller/custom_text_editing_controller.dart';
+import '../user/searching/searching filter/controller/pricing_controller.dart';
 import '../user/user navbar/controller/navbar_controller.dart';
 
 class GetXDependencyInjection extends Bindings{
@@ -26,8 +27,11 @@ class GetXDependencyInjection extends Bindings{
 
     // ====== Bottom Navbar ======
     Get.lazyPut(() => UserBottomNavbarController(), fenix: true);
-
+    Get.lazyPut(() => PriceRangeController(
+      minLimit: 0,
+      maxLimit: 1000000,
+      initialMin: 0,
+      initialMax: 1000000,
+    ), fenix: true);
   }
 }
-
-

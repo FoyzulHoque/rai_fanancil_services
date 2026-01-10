@@ -11,7 +11,7 @@ class Urls {
   static const String authVerifyOtp = '$_baseUrl/auth/verify-otp';
 
   // User URLs
-  //static const String getUserDataUrl = '$_baseUrl/users/profile';
+  static const String getUserDataUrl = '$_baseUrl/users/profile';
   static const String editUserDataUrl = '$_baseUrl/users/update-profile';
   static const String addressCreateUrl = '$_baseUrl/address/create';
   static const String getAllAddressCreateUrl = '$_baseUrl/address/my-address';

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../bookings/screen/bookings_screen.dart';
 import '../financial calculators/screen/financial_calculators_screen.dart';
 import '../home/screen/home_screen.dart';
 import '../profile/my_profile/view/My_profile_view.dart';
+import '../property/screen/bookings_screen.dart';
 import '../searching/screen/searching_screen.dart';
 import 'controller/navbar_controller.dart';
 
@@ -27,7 +27,7 @@ class _UserBottomNavbarState extends State<UserBottomNavbar> {
   final List<Widget> pages = [
     HomeScreen(),       // index 0
     FinancialCalculatorsScreen(),       // index 1  → Cart
-    BookingsScreen(),      // index 2
+    PropertyScreen(),      // index 2
     SearchingScreen(),    // index 3  → Profile
     MyProfileView(),    // index 3  → Profile
   ];

@@ -1,5 +1,7 @@
 /*
 
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/Get.dart';
 
@@ -43,13 +45,11 @@ class ProfileApiController extends GetxController {
 
   // lib/feature/profile/controllers/profile_controller.dart
 
-  */
-/*Future<bool> editProfile({
+Future<bool> editProfile({
     required String firstName,
     required String lastName,
-    required String country,
-    required String phone,
-    required String gender,
+    required String dateTime,
+    required String location,
     String? profileImagePath,
   }) async {
     isLoading.value = true;
@@ -64,9 +64,8 @@ class ProfileApiController extends GetxController {
           fields: {
             'firstName': firstName,
             'lastName': lastName,
-            'country': country,
-            'phone': phone,
-            'gender': gender,
+            'country': dateTime,
+            'phone': location,
           },
           imageFile: imageFile,
           methodType: 'PUT',
@@ -88,9 +87,8 @@ class ProfileApiController extends GetxController {
           body: {
             'firstName': firstName,
             'lastName': lastName,
-            'country': country,
-            'phone': phone,
-            'gender': gender,
+            'location': location,
+            'dateTime': dateTime,
           },
         );
 
@@ -118,7 +116,7 @@ class ProfileApiController extends GetxController {
     } else {
       getProfile(); // fallback
     }
-  }*//*
+  }
 
   Future<bool> logout() async {
     isLoading.value = true;

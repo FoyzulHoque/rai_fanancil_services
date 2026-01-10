@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-
 import '../../../../../core/themes/app_colors.dart';
 
 class ImportPropertyWidget extends StatelessWidget {
@@ -34,9 +33,11 @@ class ImportPropertyWidget extends StatelessWidget {
                 fontWeight: FontWeight.w400,
                 color: AppColors.primary,
               ),
-            )
+            ),
+
           ],
         ),
+
       ),
     );
   }

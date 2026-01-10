@@ -11,8 +11,15 @@ class SearchScreenBodyWidget extends StatelessWidget {
     this.location,
     this.beds,
     this.baths,
-    this.onTap_Add_property,
-    this.onTap_Use_in_Calculator,
+
+    this.onTapAddProperty,
+    this.onTapUseInCalculator,
+    required this.leftButtonText,
+    required this.rightButtonText,
+    this.borderColorLeft,
+    this.borderColorRight,
+    this.leftTextColor,
+    this.rightTextColor,
   });
 
   final String? image;
@@ -20,8 +27,17 @@ class SearchScreenBodyWidget extends StatelessWidget {
   final String? location;
   final String? beds;
   final String? baths;
-  final VoidCallback? onTap_Add_property;
-  final VoidCallback? onTap_Use_in_Calculator;
+
+  final VoidCallback? onTapAddProperty;
+  final VoidCallback? onTapUseInCalculator;
+
+  final String leftButtonText;
+  final String rightButtonText;
+
+  final Color? borderColorLeft;
+  final Color? borderColorRight;
+  final Color? leftTextColor;
+  final Color? rightTextColor;
 
   @override
   Widget build(BuildContext context) {
@@ -65,43 +81,75 @@ class SearchScreenBodyWidget extends StatelessWidget {
 
           Row(
             children: [
+              SizedBox(
+                  height: 20,
+                  width: 20,
+                  child: Image.asset("assets/icons/bed-alt.png",fit: BoxFit.fill)),
+              const SizedBox(width: 4,),
               Text("$beds beds"),
               const SizedBox(width: 12),
+              SizedBox(
+                  height: 20,
+                  width: 20,
+                  child: Image.asset("assets/icons/bath.png",fit: BoxFit.fill,)),
+              const SizedBox(width: 4,),
               Text("$baths baths"),
             ],
           ),
 
           const Divider(),
 
-          Row(
-            children: [
-              Expanded(
-                child: OutlinedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(0),
-                    ),
-                  ),
-                  onPressed: onTap_Add_property,
-                  child: const Text("+ Add property",style: TextStyle(color: AppColors.black,fontSize: 16)),
+      Row(
+        children: [
+          /// LEFT BUTTON
+          Expanded(
+            child: OutlinedButton(
+              style: OutlinedButton.styleFrom(
+                backgroundColor: AppColors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(0),
+                ),
+                side: BorderSide(
+                  color: borderColorLeft ?? AppColors.grey,
                 ),
               ),
-              const SizedBox(width: 10),
-              Expanded(
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.primary,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(0),
-                    ),
-                  ),
-                  onPressed: onTap_Use_in_Calculator,
-                  child: const Text("Use in Calculator",style: TextStyle(color: AppColors.white,fontSize: 16),),
+              onPressed: onTapAddProperty,
+              child: Text(
+                leftButtonText,
+                style: TextStyle(
+                  color: leftTextColor ?? AppColors.black,
+                  fontSize: 16,
                 ),
               ),
-            ],
-          )
+            ),
+          ),
+
+          const SizedBox(width: 10),
+
+          /// RIGHT BUTTON
+          Expanded(
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.primary,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(0),
+                ),
+                side: BorderSide(
+                  color: borderColorRight ?? AppColors.primary,
+                ),
+              ),
+              onPressed: onTapUseInCalculator,
+              child: Text(
+                rightButtonText,
+                style: TextStyle(
+                  color: rightTextColor ?? AppColors.white,
+                  fontSize: 16,
+                ),
+              ),
+            ),
+          ),
+        ],
+      )
         ],
       ),
     );

@@ -71,8 +71,14 @@ class SearchingScreen extends StatelessWidget {
                             beds: "4",
                             location: "128 Park Avenue, Melbourne, VIC",
                             price: "950,000",
-                            onTap_Add_property: (){},
-                            onTap_Use_in_Calculator: (){},
+                            leftButtonText: '+Add property',
+                            leftTextColor:AppColors.black ,
+                            onTapAddProperty: (){},
+                            borderColorLeft: AppColors.grey,
+                            rightButtonText: 'Use in Calculator',
+                            rightTextColor: AppColors.white,
+                            onTapUseInCalculator: (){},
+                            borderColorRight: AppColors.primary,
                           ),
                         );
                       }

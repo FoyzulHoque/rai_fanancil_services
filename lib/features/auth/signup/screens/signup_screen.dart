@@ -3,6 +3,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import '../../../../core/themes/app_colors.dart';
 import '../../../../core/themes/text_styles.dart';
@@ -117,16 +118,43 @@ class SignUpScreen extends StatelessWidget {
               ),
               const SizedBox(height: 16),
 
-              // Date of birth .
-              CustomTextField(
-                controller: controller.dateOfBirthController,
-                hintText: 'Date of birth .',
-                prefixIcon: 'assets/icons/calendar-03.png',
+              // Date of birth
+              GestureDetector(
+                onTap: () => _selectDate(context),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 16),
+                  decoration: BoxDecoration(
+                    color: Colors.grey[200],
+                    borderRadius: BorderRadius.circular(25),
+                  ),
+                  child: Row(
+                    children: <Widget>[
+                      Image.asset(
+                        'assets/icons/calendar-03.png',
+                        width: 24.0,
+                        height: 24.0,
+                        color: AppColors.primary,
+                      ),
+                      const SizedBox(width: 12.0),
+                      Obx(() => Text(
+                        controller.dateOfBirth.value.isEmpty
+                            ? 'Date of birth'
+                            : controller.dateOfBirth.value,
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: controller.dateOfBirth.value.isEmpty
+                              ? Colors.grey.shade600
+                              : Colors.black87,
+                        ),
+                      )),
+                    ],
+                  ),
+                ),
               ),
               const SizedBox(height: 16),
               // Location
               CustomTextField(
-                controller: controller.dateOfBirthController,
+                controller: controller.locationController,
                 hintText: 'Location',
                 prefixIcon: 'assets/icons/location-06.png',
               ),
@@ -272,4 +300,17 @@ class SignUpScreen extends StatelessWidget {
     }
   }
 
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(1900),
+      lastDate: DateTime.now(),
+    );
+
+    if (picked != null) {
+      final formattedDate = DateFormat('dd/MM/yyyy').format(picked);
+      controller.dateOfBirth.value = formattedDate;
+    }
+  }
 }
