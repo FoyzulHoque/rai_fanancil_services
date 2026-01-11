@@ -4,8 +4,13 @@ class AppColors {
   AppColors._();
 
   static const Color defaultBlack = Color(0xFF1A1A1A);
-
+static List<Color>colorList=[
+  primaryDife,
+  primary,
+  secondaryColors,
+  ];
   static const Color primary = Color(0xFF0C7BB9);
+  static const Color primaryDife = Color(0xFF0E6DAE);
   static const Color secondaryColors = Color(0xFF24BAED);
   static const Color thirdColors = Color(0xFFB8DBF1);
   static const Color subcolor = Color(0xFF9E9E9E);
