@@ -1,7 +1,7 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
-class CashflowBarChart extends StatelessWidget {
+class CashFlowBarChart extends StatelessWidget {
   final String title;
   final List<String> months;
   final List<double> incomeData;
@@ -10,7 +10,7 @@ class CashflowBarChart extends StatelessWidget {
   final Color expenseColor;
   final double maxY;
 
-  const CashflowBarChart({
+  const CashFlowBarChart({
     super.key,
     required this.title,
     required this.months,
@@ -25,6 +25,7 @@ class CashflowBarChart extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       elevation: 4,
+      color: Colors.white,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
       ),

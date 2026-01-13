@@ -17,10 +17,15 @@ class UserBottomNavbarController extends GetxController {
     currentIndex.value = index;
   }
 
-  // Navigate to Cart tab and save product ID
-  void goToCart({String? productId,String? price,String?qut}) {
+  void financialCalculatorsScreen() {
     changeIndex(1); // Cart is at index 1
   }
+
+
+  /* // Navigate to Cart tab and save product ID
+  void FinancialCalculatorsScreen({String? productId,String? price,String?qut}) {
+    changeIndex(1); // Cart is at index 1
+  }*/
 
   // Navigate to Order tab (index 2, assuming Order is 3rd tab)
   void goToOrder() {

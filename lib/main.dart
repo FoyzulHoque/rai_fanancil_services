@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'features/get x dependency injection/get_x_dependency_injection.dart';
 import 'features/splash/splash_screen.dart';
+import 'features/user/user navbar/controller/navbar_controller.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
