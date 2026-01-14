@@ -2,6 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:get/Get.dart';
 import '../../../../../core/themes/app_colors.dart';
 import '../../cash flow calculator/screen/cash_flow_calculator_screen.dart';
+import '../../income calculator/screen/income_calculator.dart';
+import '../../insurance & council rates/screen/insurance_&_council_rates.dart';
+import '../../loan & comparison/screen/loan_&_comparison.dart';
+import '../../mortage calculator/screen/mortage_calculator.dart';
+import '../../property investment/screen/property_investment.dart';
 import '../widget/financial_calculators_body_widget.dart';
 
 class FinancialCalculatorsScreen extends StatelessWidget {
@@ -38,7 +43,9 @@ class FinancialCalculatorsScreen extends StatelessWidget {
                 iconColor:AppColors.greenDip,
                 boxColor:AppColors.greenLowLight ,
                 containerCustomColor:AppColors.greenDip,
-                onTab: (){},
+                onTab: (){
+                  Get.to(()=>IncomeCalculatorScreen());
+                },
               ),
               FinancialCalculatorsBodyWidget(
                 title: "Property Investment",
@@ -47,7 +54,9 @@ class FinancialCalculatorsScreen extends StatelessWidget {
                 iconColor:AppColors.indicator,
                 boxColor:AppColors.accentLightMore ,
                 containerCustomColor:AppColors.indicator,
-                onTab: (){},
+                onTab: (){
+                  Get.to(()=>PropertyInvestmentScreen());
+                },
               ),
               FinancialCalculatorsBodyWidget(
                 title: "Mortgage Calculator",
@@ -56,7 +65,9 @@ class FinancialCalculatorsScreen extends StatelessWidget {
                 iconColor:AppColors.warningSecondary,
                 boxColor:AppColors.infoSecondaryLight ,
                 containerCustomColor:AppColors.warningSecondary,
-                onTab: (){},
+                onTab: (){
+                  Get.to(()=>MortgageCalculatorScreen());
+                },
               ),FinancialCalculatorsBodyWidget(
                 title: "Stamp Duty Calculator",
                 subTitle:'Calculate stamp duty by state' ,
@@ -72,7 +83,9 @@ class FinancialCalculatorsScreen extends StatelessWidget {
                 iconColor:AppColors.lightBlueSolid,
                 boxColor:AppColors.greyDip ,
                 containerCustomColor:AppColors.lightBlueSolid,
-                onTab: (){},
+                onTab: (){
+                  Get.to(()=>InsuranceAndCouncilRatesScreen());
+                },
               ),
               FinancialCalculatorsBodyWidget(
                 title: "Tax Calculator",
@@ -90,7 +103,9 @@ class FinancialCalculatorsScreen extends StatelessWidget {
                 iconColor:AppColors.deepGrey,
                 boxColor:AppColors.greyLight ,
                 containerCustomColor:AppColors.deepGrey,
-                onTab: (){},
+                onTab: (){
+                  Get.to(()=>LoanAndComparisonScreen());
+                },
               ),
             ],
           ),

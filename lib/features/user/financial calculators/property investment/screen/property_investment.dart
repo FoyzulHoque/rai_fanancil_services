@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:get/Get.dart';
+import 'package:get/get.dart';
 import '../../../../../core/themes/app_colors.dart';
 import '../../../../../core/widgets/custom_input_field_widget.dart';
 import '../../cash flow calculator/controller/property_dropdown_controller.dart';
-import 'income_summary_screen.dart';
+import '../controller/select_custom_button_controller.dart';
+import '../widget/custom_button_widget.dart';
+import 'investment_results_screen.dart';
 
-
-class IncomeCalculatorScreen extends StatelessWidget {
-  IncomeCalculatorScreen({super.key});
+class PropertyInvestmentScreen extends StatelessWidget {
+  PropertyInvestmentScreen({super.key});
 
   final PropertyDropdownController propertyDropdownController = Get.put(
     PropertyDropdownController(),
   );
+  final LoanTypeController loanTypeController = Get.put(LoanTypeController());
   TextEditingController propertyController = TextEditingController();
 
   @override
@@ -23,7 +25,7 @@ class IncomeCalculatorScreen extends StatelessWidget {
           children: [
             Container(
               height: 70,
-              decoration: BoxDecoration(color: AppColors.greenDip),
+              decoration: BoxDecoration(color: AppColors.indicator),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
@@ -43,7 +45,7 @@ class IncomeCalculatorScreen extends StatelessWidget {
                     child: Align(
                       alignment: Alignment.center,
                       child: Text(
-                        "Income Calculator",
+                        "Property Investment",
                         style: TextStyle(
                           color: AppColors.white,
                           fontSize: 20,
@@ -75,7 +77,7 @@ class IncomeCalculatorScreen extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                "Income Sources",
+                                "Purchase Details",
                                 style: TextStyle(
                                   color: AppColors.black,
                                   fontSize: 22,
@@ -84,7 +86,7 @@ class IncomeCalculatorScreen extends StatelessWidget {
                               ),
                               const SizedBox(height: 10),
                               Text(
-                                "Gross Employment Income(\$)",
+                                "Purchase Price(\$)",
                                 style: TextStyle(
                                   color: AppColors.grey,
                                   fontSize: 16,
@@ -99,7 +101,7 @@ class IncomeCalculatorScreen extends StatelessWidget {
                               ),
                               const SizedBox(height: 4),
                               Text(
-                                "Rental Income(\$)",
+                                "Deposit Amount(\$)",
                                 style: TextStyle(
                                   color: AppColors.grey,
                                   fontSize: 16,
@@ -113,6 +115,77 @@ class IncomeCalculatorScreen extends StatelessWidget {
                                 hintText: "5000",
                               ),
                               const SizedBox(height: 4),
+                              Text(
+                                "Loan Amount(\$)",
+                                style: TextStyle(
+                                  color: AppColors.grey,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+
+                              CustomInputField(
+                                controller: propertyController,
+                                keyboardType: TextInputType.text,
+                                hintText: "1200",
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      Card(
+                        elevation: 5,
+                        color: AppColors.white,
+                        shape: Border.all(style: BorderStyle.none),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Loan Structure",
+                                style: TextStyle(
+                                  color: AppColors.black,
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                "Interest Type",
+                                style: TextStyle(
+                                  color: Colors.black54,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+
+                              CustomSegmentSelector(
+                                height: 42,
+                                borderRadius: 6,
+                                backgroundColor: AppColors.btncolor,
+                                selectedColor: AppColors.primary,
+                                selectedTextColor: Colors.white,
+                                unSelectedTextColor: Colors.grey,
+                              ),
+
+                              const SizedBox(height: 4),
+                              Text(
+                                "Remaining Loan Term (Years)",
+                                style: TextStyle(
+                                  color: AppColors.grey,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                              const SizedBox(height: 4),
+
+                              CustomInputField(
+                                controller: propertyController,
+                                keyboardType: TextInputType.text,
+                                hintText: "5",
+                              ),
                             ],
                           ),
                         ),
@@ -198,8 +271,7 @@ class IncomeCalculatorScreen extends StatelessWidget {
                 height: 56, // বাটনের উচ্চতা নিজে নিয়ন্ত্রণ করো
                 child: ElevatedButton(
                   onPressed: () {
-                    Get.to(()=>IncomeSummaryScreen());
-                    // ক্যালকুলেশন লজিক
+                    Get.to(() => InvestmentResultsScreen());
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.primary,

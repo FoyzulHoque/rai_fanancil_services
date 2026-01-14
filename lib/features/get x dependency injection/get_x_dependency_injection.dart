@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import '../auth/signin/controller/login_controller.dart';
 import '../auth/signup/controller/signup_api_controller.dart';
 import '../auth/text editing controller/custom_text_editing_controller.dart';
+import '../user/financial calculators/property investment/controller/select_custom_button_controller.dart';
 import '../user/searching/searching filter/controller/pricing_controller.dart';
 import '../user/user navbar/controller/navbar_controller.dart';
 
@@ -24,7 +25,7 @@ class GetXDependencyInjection extends Bindings{
     // ====== Profile ======
     //Get.lazyPut(() => ProfileApiController(), fenix: true);
 
-
+    Get.lazyPut(()=>LoanTypeController());
     // ====== Bottom Navbar ======
     Get.lazyPut(() => UserBottomNavbarController(), fenix: true);
     Get.lazyPut(() => PriceRangeController(

@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import '../../../../../core/themes/app_colors.dart';
+import '../../../../../core/widgets/custome_container.dart';
 import '../../../../../core/widgets/full_page_pdf_make_widget.dart';
 import '../../../user navbar/controller/navbar_controller.dart';
-import '../controller/property_dropdown_controller.dart';
-import '../widget/castom_chart_widget.dart';
+import '../../cash flow calculator/controller/property_dropdown_controller.dart';
+import '../widget/income_cumamary_widget.dart';
 
-class CashFlowResultScreen extends StatelessWidget {
-  CashFlowResultScreen({super.key});
+class IncomeSummaryScreen extends StatelessWidget {
+  IncomeSummaryScreen({super.key});
 
   final PropertyDropdownController propertyDropdownController = Get.put(
     PropertyDropdownController(),
@@ -23,7 +24,7 @@ class CashFlowResultScreen extends StatelessWidget {
           children: [
             Container(
               height: 70,
-              decoration: BoxDecoration(color: AppColors.blue),
+              decoration: BoxDecoration(color: AppColors.greenDip),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
@@ -43,7 +44,7 @@ class CashFlowResultScreen extends StatelessWidget {
                     child: Align(
                       alignment: Alignment.center,
                       child: Text(
-                        "Cash Flow Result",
+                        "Income Summary",
                         style: TextStyle(
                           color: AppColors.white,
                           fontSize: 20,
@@ -75,7 +76,7 @@ class CashFlowResultScreen extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                "Net Monthly Cashflow",
+                                "Net Annual Income",
                                 style: TextStyle(
                                   color: AppColors.white,
                                   fontSize: 22,
@@ -84,7 +85,7 @@ class CashFlowResultScreen extends StatelessWidget {
                               ),
                               const SizedBox(height: 4),
                               Text(
-                                "\$625",
+                                "\$81,873",
                                 style: TextStyle(
                                   color: AppColors.white,
                                   fontSize: 22,
@@ -110,6 +111,27 @@ class CashFlowResultScreen extends StatelessWidget {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
+                                  Row(
+                                    children: [
+                                      customContainer(
+                                        AppColors.greenDip,
+                                        1,
+                                        "Gross Income",
+                                        "\$109,000",
+                                        70,
+                                        173,
+                                      ),
+                                      const SizedBox(width: 10,),
+                                      customContainer(
+                                        AppColors.warning,
+                                        1,
+                                        "Tax Rate",
+                                        "\$24.89%",
+                                        70,
+                                        163
+                                      ),
+                                    ],
+                                  ),
                                   Text(
                                     "Breakdown",
                                     style: TextStyle(
@@ -148,14 +170,22 @@ class CashFlowResultScreen extends StatelessWidget {
                         ],
                       ),
                       const SizedBox(height: 20),
-                      CashFlowBarChart(
-                        title: "6-Month Cashflow Trend",
-                        months: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-                        incomeData: [2800, 3000, 2900, 2700, 2900, 2850],
-                        expenseData: [2200, 2100, 2300, 2150, 2200, 2350],
-                        incomeColor: AppColors.success,
-                        expenseColor: AppColors.red,
+
+                      Card(
+                        elevation: 4,
+                        color: AppColors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(0),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: IncomeSourcesChartCard(
+                            employmentIncome: 85000,
+                            rentalIncome: 24000,
+                          ),
+                        ),
                       ),
+
                       const SizedBox(height: 20),
                       Padding(
                         padding: const EdgeInsets.only(bottom: 20),
@@ -165,25 +195,25 @@ class CashFlowResultScreen extends StatelessWidget {
                           child: ElevatedButton.icon(
 
                             onPressed: () async {
-                               // Add a small delay to ensure the UI is stable
-                               await Future.delayed(const Duration(milliseconds: 50));
-                               final imageBytes = await captureFullPage();
-                               if (imageBytes != null) {
-                                 final pdfFile = await generatePdf(imageBytes);
-                                 await printPdf(pdfFile);
-                               }
+                              // Add a small delay to ensure the UI is stable
+                              await Future.delayed(const Duration(milliseconds: 50));
+                              final imageBytes = await captureFullPage();
+                              if (imageBytes != null) {
+                                final pdfFile = await generatePdf(imageBytes);
+                                await printPdf(pdfFile);
+                              }
                             },
                             icon: const Icon(Icons.print, color: Colors.blue),
                             label: const Text("Print Full Page"),
-                             style: ElevatedButton.styleFrom(
-                                side: BorderSide(color: AppColors.primary, width: 1),
-                                backgroundColor: AppColors.white,
-                                foregroundColor: AppColors.black,
-                                elevation: 4,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(0),
-                                ),
-                             ),
+                            style: ElevatedButton.styleFrom(
+                              side: BorderSide(color: AppColors.primary, width: 1),
+                              backgroundColor: AppColors.white,
+                              foregroundColor: AppColors.black,
+                              elevation: 4,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(0),
+                              ),
+                            ),
                           ),
                         ),
                       ),
@@ -230,31 +260,39 @@ class CashFlowResultScreen extends StatelessWidget {
     required String value,
     Color valueColor = AppColors.grey,
   }) {
-    return Column(
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Container(
+      decoration: BoxDecoration(
+        color: AppColors.infoLight
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
           children: [
-            Text(
-              title,
-              style: TextStyle(
-                color: AppColors.grey,
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  title,
+                  style: TextStyle(
+                    color: AppColors.grey,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                Text(
+                  value,
+                  style: TextStyle(
+                    color: valueColor,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
             ),
-            Text(
-              value,
-              style: TextStyle(
-                color: valueColor,
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
+            //const Divider(),
           ],
         ),
-        const Divider(),
-      ],
+      ),
     );
   }
 }
