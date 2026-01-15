@@ -64,7 +64,7 @@ class SignupApiController extends GetxController {
         //     colorText: Colors.white, 
         //     snackPosition: SnackPosition.BOTTOM);
 
-        // Navigate to signup OTP screen instead of login
+        // Navigate to signup OTP view instead of login
         Get.off(() => SignupOtpScreen());
 
         return true;

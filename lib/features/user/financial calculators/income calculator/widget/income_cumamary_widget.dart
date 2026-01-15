@@ -4,11 +4,16 @@ import 'package:intl/intl.dart';
 class IncomeSourcesChartCard extends StatelessWidget {
   final double employmentIncome;
   final double rentalIncome;
+  final String title;
+  final String employmentIncomeTitle;
+  final String rentalIncomeTitle;
+
+
 
   const IncomeSourcesChartCard({
     super.key,
     required this.employmentIncome,
-    required this.rentalIncome,
+    required this.rentalIncome, required this.title, required this.employmentIncomeTitle, required this.rentalIncomeTitle,
   });
 
   @override
@@ -22,8 +27,8 @@ class IncomeSourcesChartCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           /// Title
-          const Text(
-            'Income Sources',
+           Text(
+            '$title',
             style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.w700,
@@ -86,12 +91,12 @@ class IncomeSourcesChartCard extends StatelessWidget {
             children: [
               _LegendItem(
                 color: const Color(0xFF0E77B7),
-                text: 'Employment Income',
+                text: '$employmentIncomeTitle',
                 value: formatter.format(employmentIncome),
               ),
               _LegendItem(
                 color: const Color(0xFF27B0E6),
-                text: 'Rental Income',
+                text: '$rentalIncomeTitle',
                 value: formatter.format(rentalIncome),
               ),
             ],

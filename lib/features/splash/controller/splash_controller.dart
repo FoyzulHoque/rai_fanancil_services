@@ -46,9 +46,9 @@ class SplashController extends GetxController {
 
 
   void startSplashSequence() {
-    // Wait for 3 seconds and navigate to Onboarding screen
+    // Wait for 3 seconds and navigate to Onboarding view
     Timer(const Duration(seconds: 3), () {
-      checkIsLogin(); // Navigate to onboarding screen after 3 seconds
+      checkIsLogin(); // Navigate to onboarding view after 3 seconds
     });
   }
 

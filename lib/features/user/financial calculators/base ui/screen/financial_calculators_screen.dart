@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/Get.dart';
 import '../../../../../core/themes/app_colors.dart';
+import '../../borrowing health calcuator/screen/borrowing_health_calculator_screen.dart';
 import '../../cash flow calculator/screen/cash_flow_calculator_screen.dart';
 import '../../income calculator/screen/income_calculator.dart';
 import '../../insurance & council rates/screen/insurance_&_council_rates.dart';
 import '../../loan & comparison/screen/loan_&_comparison.dart';
 import '../../mortage calculator/screen/mortage_calculator.dart';
 import '../../property investment/screen/property_investment.dart';
+import '../../stamp duty calculator/screen/stamp_duty_calculator.dart';
+import '../../tax calculator/screen/tax_calculator.dart';
 import '../widget/financial_calculators_body_widget.dart';
 
 class FinancialCalculatorsScreen extends StatelessWidget {
@@ -75,7 +78,9 @@ class FinancialCalculatorsScreen extends StatelessWidget {
                 iconColor:AppColors.deepPink,
                 boxColor:AppColors.lightDeepPink ,
                 containerCustomColor:AppColors.deepPink,
-                onTab: (){},
+                onTab: (){
+                  Get.to(()=>StampDutyCalculatorScreen());
+                },
               ),FinancialCalculatorsBodyWidget(
                 title: "Insurance & Council Rates",
                 subTitle:'Estimate insurance and council fees' ,
@@ -92,9 +97,22 @@ class FinancialCalculatorsScreen extends StatelessWidget {
                 subTitle:'Income, investment & land tax' ,
                 image: 'assets/icons/dollar4.png',
                 iconColor:AppColors.infoLightMore,
+                boxColor:AppColors.primaryDife ,
+                containerCustomColor:AppColors.primaryDife,
+                onTab: (){
+                  Get.to(()=>TaxCalculatorScreen());
+                },
+              ),
+              FinancialCalculatorsBodyWidget(
+                title: "Borrowing Health Calculator",
+                subTitle:'Assess you borrowing power & \ncapacity' ,
+                image: 'assets/icons/Icon_favorite.png',
+                iconColor:AppColors.infoLightMore,
                 boxColor:AppColors.greyAndGreen ,
                 containerCustomColor:AppColors.infoLightMore,
-                onTab: (){},
+                onTab: (){
+                  Get.to(()=>BorrowingHealthCalculatorScreen());
+                },
               ),
               FinancialCalculatorsBodyWidget(
                 title: "Loan & Rate Comparison",

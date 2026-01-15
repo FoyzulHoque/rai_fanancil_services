@@ -18,7 +18,7 @@ Future<void> printPdf(File file) async {
     onLayout: (format) async => file.readAsBytes(),
   );
 }
-// screen short
+// view short
 Future<Uint8List?> captureFullPage() async {
   try {
     RenderRepaintBoundary boundary =

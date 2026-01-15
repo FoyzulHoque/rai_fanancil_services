@@ -24,7 +24,7 @@ class _SignupOtpScreenState extends State<SignupOtpScreen> { // Fixed class name
   @override
   void initState() {
     super.initState();
-    // Clear any previous OTP when screen loads
+    // Clear any previous OTP when view loads
     textCtrl.clearOtpFields();
   }
 

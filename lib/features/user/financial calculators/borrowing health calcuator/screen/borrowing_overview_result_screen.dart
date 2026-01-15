@@ -6,15 +6,17 @@ import '../../../../../core/widgets/custome_container.dart';
 import '../../../../../core/widgets/full_page_pdf_make_widget.dart';
 import '../../../user navbar/controller/navbar_controller.dart';
 import '../../cash flow calculator/controller/property_dropdown_controller.dart';
-import '../widget/income_cumamary_widget.dart';
+import '../../income calculator/widget/income_cumamary_widget.dart';
 
-class IncomeSummaryScreen extends StatelessWidget {
-  IncomeSummaryScreen({super.key});
+class BorrowingOverviewResultScreen extends StatelessWidget {
+  BorrowingOverviewResultScreen({super.key});
 
   final PropertyDropdownController propertyDropdownController = Get.put(
     PropertyDropdownController(),
   );
-  final UserBottomNavbarController navbarController = Get.find<UserBottomNavbarController>();
+  final UserBottomNavbarController navbarController =
+      Get.find<UserBottomNavbarController>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,7 +26,7 @@ class IncomeSummaryScreen extends StatelessWidget {
           children: [
             Container(
               height: 70,
-              decoration: BoxDecoration(color: AppColors.greenDip),
+              decoration: BoxDecoration(color: AppColors.primaryDife),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
@@ -44,7 +46,7 @@ class IncomeSummaryScreen extends StatelessWidget {
                     child: Align(
                       alignment: Alignment.center,
                       child: Text(
-                        "Income Summary",
+                        "Borrowing Overview",
                         style: TextStyle(
                           color: AppColors.white,
                           fontSize: 20,
@@ -71,26 +73,65 @@ class IncomeSummaryScreen extends StatelessWidget {
                           borderRadius: BorderRadius.circular(0),
                         ),
                         child: Padding(
-                          padding: const EdgeInsets.only(left: 8.0, top: 4.0),
+                          padding: const EdgeInsets.only(left: 8.0, top: 10.0),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
-                                "Net Annual Income",
-                                style: TextStyle(
-                                  color: AppColors.white,
-                                  fontSize: 22,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
+                              Row(
+                                children: [
+                                  Text(
+                                    "Estimated Borrowing Capacity",
+                                    style: TextStyle(
+                                      color: AppColors.white,
+                                      fontSize: 22,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 8),
+                                  Container(
+                                    height: 20,
+                                    width: 40,
+                                    decoration: BoxDecoration(
+                                      color: AppColors.lightDeepPink,
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                    child: Center(child: Text("Week",style: TextStyle(color: AppColors.red,fontSize: 10,fontWeight: FontWeight.w700),)),
+                                  )
+
+                              ],),
+
                               const SizedBox(height: 4),
-                              Text(
-                                "\$81,873",
-                                style: TextStyle(
-                                  color: AppColors.white,
-                                  fontSize: 22,
-                                  fontWeight: FontWeight.w600,
-                                ),
+                              Row(
+                                children: [
+                                  Text(
+                                    "\$81,873",
+                                    style: TextStyle(
+                                      color: AppColors.white,
+                                      fontSize: 22,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 4),
+
+                                  Text(
+                                    "-",
+                                    style: TextStyle(
+                                      color: AppColors.white,
+                                      fontSize: 22,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 4),
+
+                                  Text(
+                                    "\$81,873",
+                                    style: TextStyle(
+                                      color: AppColors.white,
+                                      fontSize: 22,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ],
                           ),
@@ -121,18 +162,18 @@ class IncomeSummaryScreen extends StatelessWidget {
                                         70,
                                         173,
                                       ),
-                                      const SizedBox(width: 10,),
+                                      const SizedBox(width: 10),
                                       customContainer(
                                         AppColors.warning,
                                         1,
                                         "Tax Rate",
                                         "\$24.89%",
                                         70,
-                                        163
+                                        163,
                                       ),
                                     ],
                                   ),
-                                  Text(
+                                  /*Text(
                                     "Breakdown",
                                     style: TextStyle(
                                       color: AppColors.black,
@@ -162,7 +203,7 @@ class IncomeSummaryScreen extends StatelessWidget {
                                   breakdownRow(
                                     title: "Net Cashflow",
                                     value: "\$625",
-                                  ),
+                                  ),*/
                                 ],
                               ),
                             ),
@@ -180,9 +221,9 @@ class IncomeSummaryScreen extends StatelessWidget {
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: IncomeSourcesChartCard(
-employmentIncomeTitle:'Employment Income' ,
-                            rentalIncomeTitle:"Rental Income",
-                            title: "Income Sources",
+                            title: "Assets Vs Liabilities",
+                            employmentIncomeTitle: "Assets",
+                            rentalIncomeTitle: "Liabilities",
                             employmentIncome: 85000,
                             rentalIncome: 24000,
                           ),
@@ -196,10 +237,11 @@ employmentIncomeTitle:'Employment Income' ,
                           width: double.infinity,
                           height: 56,
                           child: ElevatedButton.icon(
-
                             onPressed: () async {
                               // Add a small delay to ensure the UI is stable
-                              await Future.delayed(const Duration(milliseconds: 50));
+                              await Future.delayed(
+                                const Duration(milliseconds: 50),
+                              );
                               final imageBytes = await captureFullPage();
                               if (imageBytes != null) {
                                 final pdfFile = await generatePdf(imageBytes);
@@ -209,7 +251,10 @@ employmentIncomeTitle:'Employment Income' ,
                             icon: const Icon(Icons.print, color: Colors.blue),
                             label: const Text("Print Full Page"),
                             style: ElevatedButton.styleFrom(
-                              side: BorderSide(color: AppColors.primary, width: 1),
+                              side: BorderSide(
+                                color: AppColors.primary,
+                                width: 1,
+                              ),
                               backgroundColor: AppColors.white,
                               foregroundColor: AppColors.black,
                               elevation: 4,
@@ -264,9 +309,7 @@ employmentIncomeTitle:'Employment Income' ,
     Color valueColor = AppColors.grey,
   }) {
     return Container(
-      decoration: BoxDecoration(
-        color: AppColors.infoLight
-      ),
+      decoration: BoxDecoration(color: AppColors.infoLight),
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(

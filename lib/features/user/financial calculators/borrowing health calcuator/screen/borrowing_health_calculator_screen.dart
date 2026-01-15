@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:rai_fanancil_services/features/user/financial%20calculators/tax%20calculator/screen/tax_summary_result.dart';
 import '../../../../../core/themes/app_colors.dart';
 import '../../../../../core/widgets/custom_input_field_widget.dart';
 import '../../cash flow calculator/controller/property_dropdown_controller.dart';
 import '../../property investment/controller/select_custom_button_controller.dart';
+import 'borrowing_overview_result_screen.dart';
 
-class TaxCalculatorScreen extends StatelessWidget {
-  TaxCalculatorScreen({super.key});
+class BorrowingHealthCalculatorScreen extends StatelessWidget {
+BorrowingHealthCalculatorScreen({super.key});
 
   final PropertyDropdownController propertyDropdownController = Get.put(
     PropertyDropdownController(),
@@ -24,7 +24,7 @@ class TaxCalculatorScreen extends StatelessWidget {
           children: [
             Container(
               height: 70,
-              decoration: BoxDecoration(color: AppColors.infoLightMore),
+              decoration: BoxDecoration(color: AppColors.primaryDife),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
@@ -44,7 +44,7 @@ class TaxCalculatorScreen extends StatelessWidget {
                     child: Align(
                       alignment: Alignment.center,
                       child: Text(
-                        "Tax Calculator",
+                        "Borrowing Health Calculator",
                         style: TextStyle(
                           color: AppColors.white,
                           fontSize: 20,
@@ -76,7 +76,7 @@ class TaxCalculatorScreen extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                "Income Sources",
+                                "Income Details",
                                 style: TextStyle(
                                   color: AppColors.black,
                                   fontSize: 22,
@@ -85,7 +85,7 @@ class TaxCalculatorScreen extends StatelessWidget {
                               ),
                               const SizedBox(height: 10),
                               Text(
-                                "Primary Income (Annual)",
+                                "Annual Income (\$)",
                                 style: TextStyle(
                                   color: AppColors.grey,
                                   fontSize: 16,
@@ -100,7 +100,7 @@ class TaxCalculatorScreen extends StatelessWidget {
                               ),
                               const SizedBox(height: 4),
                               Text(
-                                "Other income",
+                                "Other income(\$/year)-Optional",
                                 style: TextStyle(
                                   color: AppColors.grey,
                                   fontSize: 16,
@@ -115,7 +115,7 @@ class TaxCalculatorScreen extends StatelessWidget {
                               ),
                               const SizedBox(height: 4),
                               Text(
-                                "Tax Region",
+                                "Loan Amount(\$)",
                                 style: TextStyle(
                                   color: AppColors.grey,
                                   fontSize: 16,
@@ -126,7 +126,7 @@ class TaxCalculatorScreen extends StatelessWidget {
                               CustomInputField(
                                 controller: propertyController,
                                 keyboardType: TextInputType.text,
-                                hintText: "Victoria",
+                                hintText: "12000",
                               ),
                             ],
                           ),
@@ -143,7 +143,7 @@ class TaxCalculatorScreen extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                "Property Expenses",
+                                "Expenses & Commitments",
                                 style: TextStyle(
                                   color: AppColors.black,
                                   fontSize: 22,
@@ -152,7 +152,7 @@ class TaxCalculatorScreen extends StatelessWidget {
                               ),
                               const SizedBox(height: 10),
                               Text(
-                                "Property Maintenance Cost",
+                                "Living Expenses(\$)",
                                 style: TextStyle(
                                   color: AppColors.grey,
                                   fontSize: 16,
@@ -167,7 +167,7 @@ class TaxCalculatorScreen extends StatelessWidget {
                               ),
                               const SizedBox(height: 4),
                               Text(
-                                "Loan Interest Paid(Annual)",
+                                "Exiting Loan Repayments(\$)",
                                 style: TextStyle(
                                   color: AppColors.grey,
                                   fontSize: 16,
@@ -178,9 +178,9 @@ class TaxCalculatorScreen extends StatelessWidget {
                               CustomInputField(
                                 controller: propertyController,
                                 keyboardType: TextInputType.text,
-                                hintText: "6000",
+                                hintText: "4000",
                               ),
-                              const SizedBox(height: 4),
+                            /*  const SizedBox(height: 4),
                               Text(
                                 "Depreciation(Optional)",
                                 style: TextStyle(
@@ -194,7 +194,7 @@ class TaxCalculatorScreen extends StatelessWidget {
                                 controller: propertyController,
                                 keyboardType: TextInputType.text,
                                 hintText: "4000",
-                              ),
+                              ),*/
                             ],
                           ),
                         ),
@@ -210,7 +210,7 @@ class TaxCalculatorScreen extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                "Investment Details",
+                                "Financial Position",
                                 style: TextStyle(
                                   color: AppColors.black,
                                   fontSize: 22,
@@ -219,7 +219,7 @@ class TaxCalculatorScreen extends StatelessWidget {
                               ),
                               const SizedBox(height: 10),
                               Text(
-                                "Capital Gains Amount(if any)",
+                                "Total Assets Value(\$)",
                                 style: TextStyle(
                                   color: AppColors.grey,
                                   fontSize: 16,
@@ -234,7 +234,7 @@ class TaxCalculatorScreen extends StatelessWidget {
                               ),
                               const SizedBox(height: 4),
                               Text(
-                                "Loan Tax Value",
+                                "Total Liabilities Value(\$)",
                                 style: TextStyle(
                                   color: AppColors.grey,
                                   fontSize: 16,
@@ -244,7 +244,7 @@ class TaxCalculatorScreen extends StatelessWidget {
                               CustomInputField(
                                 controller: propertyController,
                                 keyboardType: TextInputType.text,
-                                hintText: "12500",
+                                hintText: "4000",
                               ),
                             ],
                           ),
@@ -265,7 +265,7 @@ class TaxCalculatorScreen extends StatelessWidget {
                 height: 56, // বাটনের উচ্চতা নিজে নিয়ন্ত্রণ করো
                 child: ElevatedButton(
                   onPressed: () {
-                    Get.to(() => TaxSummaryResult());
+                    Get.to(() => BorrowingOverviewResultScreen());
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.primary,

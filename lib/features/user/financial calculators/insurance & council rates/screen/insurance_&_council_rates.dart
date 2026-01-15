@@ -4,8 +4,6 @@ import '../../../../../core/themes/app_colors.dart';
 import '../../../../../core/widgets/custom_input_field_widget.dart';
 import '../../cash flow calculator/controller/property_dropdown_controller.dart';
 import '../../property investment/controller/select_custom_button_controller.dart';
-import '../../property investment/screen/investment_results_screen.dart';
-import '../../property investment/widget/custom_button_widget.dart';
 import 'cost_estimates_screen.dart';
 
 class InsuranceAndCouncilRatesScreen extends StatelessWidget {

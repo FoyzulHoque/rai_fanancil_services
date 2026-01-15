@@ -22,12 +22,12 @@ class CustomBackgroundWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Get screen width dynamically
+    // Get view width dynamically
     double screenWidth = MediaQuery.of(context).size.width;
 
     return Container(
       height: containerHeight,
-      width: screenWidth, // Use the screen width here
+      width: screenWidth, // Use the view width here
       decoration: BoxDecoration(
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(topLeft),

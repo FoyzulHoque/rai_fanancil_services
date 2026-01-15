@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/Get.dart';
-import 'package:get/get_connect/http/src/utils/utils.dart';
-
 import '../../../../../core/themes/app_colors.dart';
 import '../../../../../core/widgets/custom_input_field_widget.dart';
 import '../controller/property_dropdown_controller.dart';

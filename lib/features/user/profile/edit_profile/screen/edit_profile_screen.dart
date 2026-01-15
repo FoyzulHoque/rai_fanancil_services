@@ -195,7 +195,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       // Navigate back with a result
       Get.back(result: true);
       
-      // Show snackbar in the profile screen
+      // Show snackbar in the profile view
       WidgetsBinding.instance.addPostFrameCallback((_) {
         Get.snackbar('Success', 'Profile updated successfully!',
             backgroundColor: Colors.green, 
