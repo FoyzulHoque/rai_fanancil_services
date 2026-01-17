@@ -3,6 +3,7 @@ import 'package:get/Get.dart';
 import 'package:rai_fanancil_services/core/themes/app_colors.dart';
 import '../widget/custom_app_bar_set_before_nave_bar.dart';
 import '../widget/how_many_borrowing_adults_widget.dart';
+import 'income_details.dart';
 
 class HouseholdBorrowingProfile extends StatelessWidget {
   const HouseholdBorrowingProfile({super.key});
@@ -13,13 +14,14 @@ class HouseholdBorrowingProfile extends StatelessWidget {
       backgroundColor: AppColors.white,
       body: Column(
         children: [
+          //-------------header part------------------
           CustomAppBarSetBeforeNaveBar(
             title: "Household & Borrowing Profile",
             currentStep: 1,
             totalSteps: 6,
             appBarColor: AppColors.secondaryColors,
           ),
-
+          //----------Body part---------------
           Expanded(
             child: SingleChildScrollView(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
@@ -31,7 +33,7 @@ class HouseholdBorrowingProfile extends StatelessWidget {
               ),
             ),
           ),
-
+          //-----Button part---------------------
           Container(
             width: double.infinity,
             padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
@@ -47,7 +49,7 @@ class HouseholdBorrowingProfile extends StatelessWidget {
             ),
             child: ElevatedButton(
               onPressed: () {
-                //Get.to(()=>HouseholdBorrowingProfile());
+                Get.to(()=>IncomeDetailsScreen());
                 // TODO: Start setup flow / navigation
               },
               style: ElevatedButton.styleFrom(
