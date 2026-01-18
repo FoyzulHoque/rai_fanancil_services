@@ -16,6 +16,10 @@ class IncomeDetailsScreen extends StatelessWidget {
   final IncomeDetailsPropertyDropdownController propertyDropdownController = Get.put(
     IncomeDetailsPropertyDropdownController(),
   );
+  final PrimaryIncomeDropdownController primaryIncomeDropdownController = Get.put(
+    PrimaryIncomeDropdownController(),
+  );
+
   final TaxRegionStateDropdownController taxRegionStateDropdownController = Get.put(
     TaxRegionStateDropdownController(),
   );
@@ -44,6 +48,12 @@ class IncomeDetailsScreen extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+
+
+                     /* individual, Business, PAYG  or a combination of both*/
+
+//---input field-----------------------
+                      const SizedBox(height: 24),
                       // Primary Income Card
                       Card(
                         elevation: 5,
@@ -72,6 +82,68 @@ class IncomeDetailsScreen extends StatelessWidget {
                                 ),
                               ),
                               const SizedBox(height: 16),
+                              Obx(() {
+                                final props = primaryIncomeDropdownController.propertiesIcom;
+
+                                // Loading / empty state
+                                if (props.isEmpty) {
+                                  return const Padding(
+                                    padding: EdgeInsets.symmetric(vertical: 20),
+                                    child: Center(
+                                      child: CircularProgressIndicator(),
+                                    ),
+                                  );
+                                }
+
+                                // Auto-select first item if nothing selected yet
+                                if (primaryIncomeDropdownController.selectedProperty.value == null) {
+                                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                                    primaryIncomeDropdownController.selectedProperty.value = props.first;
+                                  });
+                                }
+
+                                return DropdownButtonFormField<String?>(
+                                  value: primaryIncomeDropdownController.selectedProperty.value,
+                                  hint: const Text("Select Property"),
+                                  decoration: InputDecoration(
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(0), // nicer look
+                                    ),
+                                    enabledBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(0),
+                                      borderSide: const BorderSide(color: Colors.grey, width: 1.2),
+                                    ),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(0),
+                                      borderSide: const BorderSide(color: Colors.blueGrey, width: 2),
+                                    ),
+                                    filled: true,
+                                    fillColor: Colors.grey.shade50,
+                                    contentPadding: const EdgeInsets.symmetric(
+                                      horizontal: 16,
+                                      vertical: 12,
+                                    ),
+                                  ),
+                                  icon: const Icon(
+                                    Icons.keyboard_arrow_down_rounded,
+                                    color: Colors.blueGrey,
+                                  ),
+                                  dropdownColor: Colors.white,
+                                  style: const TextStyle(
+                                    color: Colors.black87,
+                                    fontSize: 16,
+                                  ),
+                                  isExpanded: true,
+                                  items: props.map((String value) {
+                                    return DropdownMenuItem<String>(
+                                      value: value,
+                                      child: Text(value),
+                                    );
+                                  }).toList(),
+                                  onChanged: primaryIncomeDropdownController.changeProperty,
+                                );
+                              }),
+                              const SizedBox(height: 8),
                               CustomInputField(
                                 prefixIcon: const Icon(Icons.monetization_on_outlined),
                                 controller: _propertyController1,

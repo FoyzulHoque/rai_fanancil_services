@@ -14,32 +14,50 @@ class SplashScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.white,
-      body: Column(
+      body: Stack(
         children: [
-          // This will push the logo to center and loader to bottom
-          Expanded(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center, // This centers the logo
-              children: [
-                // Centered Logo
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24),
-                  child: Image.asset(
-                    'assets/logos/Primary-Logo 1.png',
-                    height: 150,
-                    width: 150,
-                  ),
+          // Top Text
+          Positioned(
+            top: 380,
+            left: 0,
+            right: 0,
+            child: Center(
+              child: Text(
+                "R-Money by",
+                style: TextStyle(
+                  fontWeight: FontWeight.w700,
+                  fontSize: 28,
+                  // Fix: pick a single Color from colorList
+                  color: AppColors.colorList.isNotEmpty
+                      ? AppColors.colorList[0]
+                      : Colors.black,
                 ),
-              ],
+              ),
             ),
           ),
-          
-          // Loader at the bottom with gap
-          Padding(
-            padding: const EdgeInsets.only(bottom: 60.0),
-            child: SpinKitCircle(
-              color: AppColors.primary,
-              size: 50.0,
+
+          // Centered Logo
+          Center(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24),
+              child: Image.asset(
+                'assets/logos/Primary-Logo 1.png',
+                height: 150,
+                width: 150,
+              ),
+            ),
+          ),
+
+          // Loader at the bottom
+          Positioned(
+            bottom: 60,
+            left: 0,
+            right: 0,
+            child: Center(
+              child: SpinKitCircle(
+                color: AppColors.primary,
+                size: 50.0,
+              ),
             ),
           ),
         ],
