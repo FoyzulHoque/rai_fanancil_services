@@ -5,7 +5,6 @@ import '../../../../core/widgets/custom_input_field_widget.dart';
 import '../controller/income_details_property_drop_down_controller.dart';
 import '../controller/tax_region_state_dropdown_controller.dart';
 import '../widget/custom_app_bar_set_before_nave_bar.dart';
-import '../widget/how_many_borrowing_adults_widget.dart';
 import 'living_expenses.dart'; // if not used, you can remove this import
 
 class IncomeDetailsScreen extends StatelessWidget {

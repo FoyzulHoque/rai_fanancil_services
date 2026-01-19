@@ -14,7 +14,6 @@ class AuthController extends GetxController{
   static String? accessKey;
   static const String _isLoginKey = 'isLogin';
   static const String _userIdKey = 'userId';
-  static const String _carTransportKey = 'carTransportId';
   static const String _accessTokenKey = 'access-token';
   static const String _userDataKey = 'user-data';
 
@@ -67,20 +66,7 @@ class AuthController extends GetxController{
     return prefs.getString(_userIdKey);
   }
 
-  /// Save CarTransport ID
-  static Future<void> saveCarTransportId(String id) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(_carTransportKey, id);
-    print("✅ CarTransport ID saved: $id");
-  }
 
-  /// Get CarTransport ID
-  static Future<String?> getCarTransportId() async {
-    final prefs = await SharedPreferences.getInstance();
-    final id = prefs.getString(_carTransportKey);
-    print("📦 CarTransport ID retrieved: $id");
-    return id;
-  }
 
   /// Check login status
   static Future<bool> isUserLogin() async {
@@ -104,13 +90,8 @@ class AuthController extends GetxController{
 
 
 
-  /// Clear only CarTransport ID
-  static Future<void> carTransportClear() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.remove(_carTransportKey);
-    await prefs.remove(_userIdKey);
-    print("🗑️ CarTransport ID cleared");
-  }
+  /// Clear only User ID
+
   static Future<void> idClear() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.clear();

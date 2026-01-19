@@ -24,7 +24,7 @@ class PropertyValueGrowthChart extends StatelessWidget {
       return Card(
         elevation: 4,
         color: AppColors.white,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
         child: const Padding(
           padding: EdgeInsets.all(20),
           child: Center(child: Text("No data available")),
@@ -48,7 +48,7 @@ class PropertyValueGrowthChart extends StatelessWidget {
     return Card(
       elevation: 4,
       color: AppColors.white,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
       child: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(

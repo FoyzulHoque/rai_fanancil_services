@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rai_fanancil_services/core/themes/app_colors.dart';
 import '../../../../core/widgets/custom_input_field_widget.dart';
-import '../controller/property_details_controller.dart';
 import '../widget/custom_app_bar_set_before_nave_bar.dart';
 import 'liabilities.dart';
 

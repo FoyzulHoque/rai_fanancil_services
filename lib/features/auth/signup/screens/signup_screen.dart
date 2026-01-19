@@ -13,17 +13,29 @@ import '../../signin/screens/signin_screens.dart';
 import '../../text editing controller/custom_text_editing_controller.dart';
 import '../controller/signup_api_controller.dart';
 
-class SignUpScreen extends StatelessWidget {
+class SignUpScreen extends StatefulWidget {
   SignUpScreen({Key? key}) : super(key: key);
 
+  @override
+  State<SignUpScreen> createState() => _SignUpScreenState();
+}
+
+class _SignUpScreenState extends State<SignUpScreen> {
   // Inject controllers
-  final CustomTextEditingController controller = Get.put(CustomTextEditingController());
-  final SignupApiController apiController = Get.put(SignupApiController());
+  late final CustomTextEditingController controller;
+  late final SignupApiController apiController;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = Get.put(CustomTextEditingController());
+    apiController = Get.put(SignupApiController());
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.secondaryColors,
+      backgroundColor: AppColors.white,
       appBar: AppBar(
         toolbarHeight: 0,
         backgroundColor: Colors.transparent,
@@ -125,7 +137,7 @@ class SignUpScreen extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 16),
                   decoration: BoxDecoration(
                     color: Colors.grey[200],
-                    borderRadius: BorderRadius.circular(25),
+                    borderRadius: BorderRadius.circular(0),
                   ),
                   child: Row(
                     children: <Widget>[
@@ -180,7 +192,7 @@ class SignUpScreen extends StatelessWidget {
                   filled: true,
                   fillColor: Colors.grey[200],
                   border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(25),
+                    borderRadius: BorderRadius.circular(0),
                     borderSide: BorderSide.none,
                   ),
                   contentPadding: const EdgeInsets.symmetric(vertical: 18, horizontal: 16),
@@ -209,7 +221,7 @@ class SignUpScreen extends StatelessWidget {
                   filled: true,
                   fillColor: Colors.grey[200],
                   border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(25),
+                    borderRadius: BorderRadius.circular(0),
                     borderSide: BorderSide.none,
                   ),
                   contentPadding: const EdgeInsets.symmetric(vertical: 18, horizontal: 16),
@@ -291,13 +303,8 @@ class SignUpScreen extends StatelessWidget {
 
 
   Future<void> _apiCallButton() async{
-    bool isSuccess=await apiController.signupApiMethod();
-    if(isSuccess){
-      Get.snackbar('Success', 'Account created successfully!', backgroundColor: Colors.green);
-      Get.back();
-    }else{
-      Get.snackbar('Error', 'Something went wrong!', backgroundColor: Colors.red);
-    }
+    // The signupApiMethod handles success/error snackbars and navigation internally
+    await apiController.signupApiMethod();
   }
 
   Future<void> _selectDate(BuildContext context) async {

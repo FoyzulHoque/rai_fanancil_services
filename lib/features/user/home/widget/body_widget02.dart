@@ -39,7 +39,7 @@ class BodyWidget02 extends StatelessWidget {
           color: borderColor ?? Colors.grey.shade300,
           width: borderWidth,
         ),
-        borderRadius: BorderRadius.circular(12), // কার্ড লুকের জন্য
+        borderRadius: BorderRadius.circular(0), // কার্ড লুকের জন্য
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

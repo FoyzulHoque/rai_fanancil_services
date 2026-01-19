@@ -1,5 +1,5 @@
 class Urls {
-  static const String _baseUrl = 'http://178.128.254.246:12022/api/v1'; // Re-check this IP and port
+  static const String _baseUrl = 'http://10.0.30.177:12030/api/v1'; // Re-check this IP and port
 
   // Auth URLs
   static const String login = '$_baseUrl/auth/login';

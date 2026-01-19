@@ -10,14 +10,14 @@ import '../../../user/user navbar/user_navbar_screen.dart';
 import '../../text editing controller/custom_text_editing_controller.dart';
 import '../controller/signup_otp_controller.dart';
 
-class SignupOtpScreen extends StatefulWidget {
-  const SignupOtpScreen({super.key});
+class SignupOtpScreens extends StatefulWidget {
+  const SignupOtpScreens({super.key});
 
   @override
   _SignupOtpScreenState createState() => _SignupOtpScreenState();
 }
 
-class _SignupOtpScreenState extends State<SignupOtpScreen> { // Fixed class name
+class _SignupOtpScreenState extends State<SignupOtpScreens> { // Fixed class name
   final SignupOtpController otpController = Get.put(SignupOtpController());
   final CustomTextEditingController textCtrl = Get.find<CustomTextEditingController>();
 
@@ -258,16 +258,17 @@ class _SignupOtpScreenState extends State<SignupOtpScreen> { // Fixed class name
 
     bool isSuccess = await otpController.verifySignupOtp();
     if (isSuccess) {
-      // After successful verification, navigate to bottom navigation bar
       Get.offAll(() => const UserBottomNavbar());
+      // After successful verification, navigate to bottom navigation bar
     } else {
       if (otpController.errorMessage != null) {
-        // Get.snackbar(
-        //   "Error".tr,
-        //   otpController.errorMessage!,
-        //   backgroundColor: Colors.red,
-        //   colorText: Colors.white,
-        // );
+
+        Get.snackbar(
+          "Error".tr,
+          otpController.errorMessage!,
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+        );
       }
     }
   }
@@ -278,12 +279,12 @@ class _SignupOtpScreenState extends State<SignupOtpScreen> { // Fixed class name
 
     bool isSuccess = await otpController.resendOtp();
     if (!isSuccess) {
-      // Get.snackbar(
-      //   "Error".tr,
-      //   "Failed to resend OTP".tr,
-      //   backgroundColor: Colors.red,
-      //   colorText: Colors.white,
-      // );
+      Get.snackbar(
+        "Error".tr,
+        "Failed to resend OTP".tr,
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
     }
   }
 }

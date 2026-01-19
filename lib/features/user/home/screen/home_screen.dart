@@ -1,19 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:rai_fanancil_services/core/themes/app_colors.dart';
+import '../../profile/my_profile/controller/my_profile_controller.dart';
 import '../widget/body_graph_widget01.dart';
 import '../widget/body_graph_widget02.dart';
 import '../widget/body_widget01.dart';
 import '../widget/body_widget02.dart';
 import '../widget/home_app_bar_widget.dart';
+import 'package:get/get.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+class HomeScreen extends StatelessWidget {
+   HomeScreen({super.key});
 
-  @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
+  final ProfileApiController profileApiController=Get.put(ProfileApiController());
 
-class _HomeScreenState extends State<HomeScreen> {
   List<Map<String, dynamic>> cashflowData = [
     {'month': 'Jan', 'amount': 4500},
     {'month': 'Feb', 'amount': 4300},
@@ -24,17 +23,22 @@ class _HomeScreenState extends State<HomeScreen> {
     {'month': 'Jul', 'amount': 6200},
     {'month': 'Aug', 'amount': 5800},
   ];
+
   @override
   Widget build(BuildContext context) {
+    final urlClt=profileApiController.userProfile;
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            HomeAppBarWidget(
-              name: "Zaid Al-Rifai",
-              imageUrl: "https://i.postimg.cc/Y9gNQbDT/Image-(16).png",
-            ),
+
+            Obx((){
+              return HomeAppBarWidget(
+                name: "${urlClt.value.firstName} ${urlClt.value.lastName}",
+                imageUrl: "${urlClt.value.profileImage}",
+              );
+            }),
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
@@ -110,6 +114,4 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
-
-
 }

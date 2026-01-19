@@ -5,7 +5,6 @@ import '../../../../core/themes/app_colors.dart';
 import '../../../../core/themes/text_styles.dart';
 import '../../../../core/widgets/custom_button.dart';
 import '../../../../core/widgets/custom_field.dart';
-import '../../../user/financial data collection/view/set_up_your_financial_profile.dart';
 import '../../../user/user navbar/user_navbar_screen.dart';
 import '../../forget password/screen/forget_password_screen.dart';
 import '../../signup/screens/signup_screen.dart';
@@ -184,16 +183,14 @@ class _LoginScreenState extends State<LoginScreen> {
   }
   Future<void> _apiCallButton() async {
 
-    //Get.offAll(() => const UserBottomNavbar()); // Clears navigation stack
-    Get.offAll(() => const SetUpYourFinancialProfile()); // Clears navigation stack
-    /*final isSuccess = await _loginCtrl.loginApiMethod();
+    final isSuccess = await _loginCtrl.loginApiMethod();
 
     if (isSuccess) {
-      if (_loginCtrl.userModel?.role == 'Client') {
+      if (_loginCtrl.userModel?.role == 'User') {
        Get.to(()=> UserBottomNavbar());
-      } else if (_loginCtrl.userModel?.role == 'Host') {
-        Get.to(()=> HostOwnerSplashScreen());
-      } else {
+      } /*else if (_loginCtrl.userModel?.role == 'Host') {
+        Get.to(()=> SetUpYourFinancialProfile());
+      }*/ else {
         Get.snackbar(
           "Login Failed",
           "Role did not match",
@@ -212,6 +209,6 @@ class _LoginScreenState extends State<LoginScreen> {
         snackPosition: SnackPosition.BOTTOM,
         duration: const Duration(seconds: 2),
       );
-    }*/
+    }
   }
 }

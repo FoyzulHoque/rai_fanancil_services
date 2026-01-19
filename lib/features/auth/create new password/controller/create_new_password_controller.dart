@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../../core/network_caller/network_config.dart';
 import '../../../../core/network_path/natwork_path.dart';
+import '../../../../core/services_class/shared_preferences_data_helper.dart';
+import '../../../../core/services_class/shared_preferences_helper.dart';
+import '../../model/user_model.dart';
 import '../../text editing controller/custom_text_editing_controller.dart';
 
 class AddNewPassword extends GetxController {
@@ -19,6 +22,7 @@ class AddNewPassword extends GetxController {
 
     final email = accountTextEditingController.emailController.text.trim();
     final newPassword = accountTextEditingController.newPasswordController.text;
+    final confirmPassword = accountTextEditingController.newPasswordController.text;
 
     // Validation
     if (email.isEmpty) {
@@ -33,11 +37,11 @@ class AddNewPassword extends GetxController {
       return false;
     }
 
-   /* if (newPassword != confirmPassword) {
+    if (newPassword != confirmPassword) {
       _errorMessage = "Passwords do not match.";
       update();
       return false;
-    }*/
+    }
 
     if (newPassword.length < 8) {
       _errorMessage = "Password must be at least 8 characters.";
@@ -51,7 +55,7 @@ class AddNewPassword extends GetxController {
         "password": newPassword,
       };
 
-      final NetworkResponse response = await NetworkCall.postRequest(
+      final NetworkResponse response = await NetworkCall.putRequest(
         url: Urls.authForgetResetPassword,
         body: mapBody,
       );
@@ -60,16 +64,16 @@ class AddNewPassword extends GetxController {
         _successMessage = response.responseData?['message'] ?? "Password reset successful.";
         var data=response.responseData!['data'];
         isSuccess = true;
-        /*final String? token = data['token'];
+        final String? token = data['token'];
         if (token == null || token.isEmpty) {
           _errorMessage = 'Invalid token received';
           return false;
-        }*/
+        }
 
-       /* UserModel userModel =  UserModel.fromJson(data);
+        UserModel userModel =  UserModel.fromJson(data);
         await AuthController.setUserData(token,userModel);
         await SharedPreferencesHelper.saveAccessToken(token);
-        await AuthController.getUserData();*/
+        await AuthController.getUserData();
       } else {
         _errorMessage = response.responseData?['message'] ??
             response.responseData?['detail'] ??

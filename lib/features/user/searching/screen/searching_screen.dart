@@ -14,7 +14,7 @@ class SearchingScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        toolbarHeight: 158,
+        toolbarHeight: 100,
         backgroundColor: AppColors.secondaryColors,
         centerTitle: true,
         title: Column(
@@ -25,31 +25,36 @@ class SearchingScreen extends StatelessWidget {
               style: TextStyle(color: AppColors.white, fontSize: 22),
             ),
             const SizedBox(height: 12),
-            Row(
-              children: [
-                // Expanded moved here to parent Row
-                Expanded(
-                  child: SearchsWidget(),
-                ),
-                const SizedBox(width: 10),
-                GestureDetector(
-                  onTap: () {
-                    Get.to(() => SearchingFilterScreen());
-                  },
-                  child: SizedBox(
-                    height: 46,
-                    width: 46,
-                    child: Image.asset(
-                      "assets/icons/Scan.png",
-                      fit: BoxFit.contain,
+
+            // ✅ FIX
+            SizedBox(
+              width: double.infinity,
+              child: Row(
+                children: [
+                  Expanded(
+                    child: SearchsWidget(),
+                  ),
+                  const SizedBox(width: 10),
+                  GestureDetector(
+                    onTap: () {
+                      Get.to(() => SearchingFilterScreen());
+                    },
+                    child: SizedBox(
+                      height: 46,
+                      width: 46,
+                      child: Image.asset(
+                        "assets/icons/Scan.png",
+                        fit: BoxFit.contain,
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ],
         ),
       ),
+
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),

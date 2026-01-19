@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../../../core/themes/app_colors.dart';
+
 class ProfileHeadWidget extends StatelessWidget {
   const ProfileHeadWidget({super.key, this.imageUrl, this.email});
 
@@ -11,7 +13,7 @@ class ProfileHeadWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      color: Colors.blue,
+      color: AppColors.secondaryColors,
       padding: const EdgeInsets.fromLTRB(20, 40, 20, 28),
       child: Column(
         children: [

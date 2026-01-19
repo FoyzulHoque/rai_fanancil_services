@@ -13,8 +13,8 @@ class DialogScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      backgroundColor: AppColors.secondaryColors,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      backgroundColor: AppColors.white,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
       contentPadding: EdgeInsets.all(24),
       content: Column(
         mainAxisSize: MainAxisSize.min,

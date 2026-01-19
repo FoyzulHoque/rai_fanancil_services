@@ -28,7 +28,7 @@ class BodyGraphWidget01 extends StatelessWidget {
       return Card(
         color: AppColors.secondaryColors,
         elevation: 4,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
         child: const Padding(
           padding: EdgeInsets.all(20),
           child: Center(child: Text("No data available")),
@@ -54,7 +54,7 @@ class BodyGraphWidget01 extends StatelessWidget {
     return Card(
       elevation: 4, // কার্ডের ছায়া
       color: AppColors.white,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)), // গোলাকার কর্নার
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)), // গোলাকার কর্নার
       child: Padding(
         padding: const EdgeInsets.all(20), // কার্ডের ভিতরে স্পেসিং
         child: Column(

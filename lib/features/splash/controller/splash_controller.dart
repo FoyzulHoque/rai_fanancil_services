@@ -30,7 +30,7 @@ class SplashController extends GetxController {
       Map<String, dynamic> decodedToken = JwtDecoder.decode(token);
       String? role = decodedToken['role'];
 
-      if (role == 'Client') {
+      if (role == 'User') {
         Get.offAll(() =>  UserBottomNavbar());
       } /*else if (role == 'Host') {
         //Get.offAll(() => HostOwnerSplashScreen());

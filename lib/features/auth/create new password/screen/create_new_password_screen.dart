@@ -38,15 +38,19 @@ class _CreateNewPasswordScreenState extends State<CreateNewPasswordScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.secondaryColors,
+      backgroundColor: AppColors.white,
       appBar: AppBar(
         backgroundColor:  AppColors.secondaryColors,
         elevation: 0,
-        leading: CircleAvatar(
-          backgroundColor: Colors.grey.shade200,
-          child: IconButton(
-            icon: Icon(Icons.arrow_back, color: Colors.black),
-            onPressed: () => Navigator.of(context).pop(),
+        toolbarHeight: 100,
+        leading: Padding(
+          padding: const EdgeInsets.all(4.0),
+          child: CircleAvatar(
+            backgroundColor: Colors.grey.shade200,
+            child: IconButton(
+              icon: Icon(Icons.arrow_back, color: Colors.black),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
           ),
         ),
         systemOverlayStyle: SystemUiOverlayStyle.dark,
@@ -88,7 +92,7 @@ class _CreateNewPasswordScreenState extends State<CreateNewPasswordScreen> {
                 controller: accountTextEditingController.newPasswordController,
                 decoration: InputDecoration(
                   focusedBorder: OutlineInputBorder(  // Blue on focus
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(0),
                     borderSide: const BorderSide(color: AppColors.primary),
                   ),
                   hintText: 'Enter new password'.tr,
@@ -104,7 +108,7 @@ class _CreateNewPasswordScreenState extends State<CreateNewPasswordScreen> {
                     },
                   ),
                   border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(0),
                   ),
                   filled: true,
                   fillColor: Colors.grey.shade100,
@@ -121,7 +125,7 @@ class _CreateNewPasswordScreenState extends State<CreateNewPasswordScreen> {
                 controller: accountTextEditingController.passwordController,
                 decoration: InputDecoration(
                   focusedBorder: OutlineInputBorder(  // Blue on focus
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(0),
                     borderSide: const BorderSide(color: AppColors.primary),
                   ),
                   hintText: 'Confirm your password'.tr,
@@ -137,7 +141,7 @@ class _CreateNewPasswordScreenState extends State<CreateNewPasswordScreen> {
                     },
                   ),
                   border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(0),
                   ),
                   filled: true,
                   fillColor: Colors.grey.shade100,
@@ -163,7 +167,7 @@ class _CreateNewPasswordScreenState extends State<CreateNewPasswordScreen> {
                   onPressed: _apiCallMethod,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.primary,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
                   ),
                   child: Text(
                     'Continue'.tr,
@@ -179,13 +183,13 @@ class _CreateNewPasswordScreenState extends State<CreateNewPasswordScreen> {
   }
 
   Future<void> _apiCallMethod() async {
-    _showSuccessDialog();
-    /*bool isSuccess = await addNewPassword.addNewPasswordApiCallMethod();
+   // _showSuccessDialog();
+    bool isSuccess = await addNewPassword.addNewPasswordApiCallMethod();
     if (isSuccess) {
       _showSuccessDialog();
     } else {
-      // Get.snackbar('Error', addNewPassword.errorMessage ?? 'Try again',
-      //     backgroundColor: Colors.red, colorText: Colors.white);
-    }*/
+       Get.snackbar('Error', addNewPassword.errorMessage ?? 'Try again',
+           backgroundColor: Colors.red, colorText: Colors.white);
+    }
   }
 }

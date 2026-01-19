@@ -1,7 +1,5 @@
-/*
 // lib/feature/profile/controllers/edit_profile_controller.dart
 
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:file_picker/file_picker.dart';
@@ -45,7 +43,7 @@ class EditProfileController extends GetxController {
     firstNameCtrl.text = user.firstName ?? '';
     lastNameCtrl.text = user.lastName ?? '';
     location.text = user.location ?? '';
-    dateTime.text = user.datTime?? '';
+    dateTime.text = user.dob?? '';
 
     // Save originals
     _originalFirstName = firstNameCtrl.text.trim();
@@ -119,4 +117,3 @@ class EditProfileController extends GetxController {
     super.onClose();
   }
 }
-*/

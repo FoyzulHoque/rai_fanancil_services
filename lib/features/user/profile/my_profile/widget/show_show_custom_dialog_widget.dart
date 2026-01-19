@@ -16,7 +16,7 @@ Future<void> showCustomDialog({
     barrierDismissible: false, // optional: prevents closing by tapping outside
     builder: (BuildContext context) {
       return Dialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
         child: Padding(
           padding: const EdgeInsets.all(24),
           child: Column(

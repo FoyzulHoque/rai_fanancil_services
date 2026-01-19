@@ -46,23 +46,31 @@ class _OtpScreenState extends State<OtpScreen> {
   @override
   void dispose() {
     _timer.cancel();
+    accountTextEditingController.emailController.dispose();
+    accountTextEditingController.dispose();
     super.dispose();
   }
 
   void _onChanged(String value, int index) {
-    if (value.length == 1 && index < CustomTextEditingController.otpLength - 1) {
-      FocusScope.of(context).requestFocus(accountTextEditingController.focusNodes[index + 1]);
+    if (value.length == 1 &&
+        index < CustomTextEditingController.otpLength - 1) {
+      FocusScope.of(
+        context,
+      ).requestFocus(accountTextEditingController.focusNodes[index + 1]);
     } else if (value.isEmpty && index > 0) {
-      FocusScope.of(context).requestFocus(accountTextEditingController.focusNodes[index - 1]);
+      FocusScope.of(
+        context,
+      ).requestFocus(accountTextEditingController.focusNodes[index - 1]);
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.secondaryColors,
+      backgroundColor: AppColors.white,
       appBar: AppBar(
         backgroundColor: AppColors.secondaryColors,
+
         leading: Padding(
           padding: const EdgeInsets.all(6.0),
           child: Container(
@@ -83,7 +91,7 @@ class _OtpScreenState extends State<OtpScreen> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               const SizedBox(height: 20),
-               Text(
+              Text(
                 'Enter OTP'.tr,
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
@@ -93,30 +101,37 @@ class _OtpScreenState extends State<OtpScreen> {
                 text: TextSpan(
                   style: const TextStyle(color: Colors.grey, fontSize: 14),
                   children: [
-                     TextSpan(text: "OTP code has been sent to".tr),
+                    TextSpan(text: "OTP code has been sent to".tr),
                     TextSpan(
                       text: accountTextEditingController.emailController.text,
-                      style: const TextStyle(color: Colors.black, fontWeight: FontWeight.w500),
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
                   ],
                 ),
               ),
               const SizedBox(height: 30),
-        
-        
+
               // OTP Input Fields
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: List.generate(CustomTextEditingController.otpLength, (index) {
+                children: List.generate(CustomTextEditingController.otpLength, (
+                  index,
+                ) {
                   return SizedBox(
                     width: 56,
                     height: 56,
                     child: TextField(
                       controller: accountTextEditingController[index],
-                      focusNode: accountTextEditingController.focusNodes [index],
+                      focusNode: accountTextEditingController.focusNodes[index],
                       keyboardType: TextInputType.number,
                       textAlign: TextAlign.center,
-                      style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600,
+                      ),
                       inputFormatters: [
                         FilteringTextInputFormatter.digitsOnly,
                         LengthLimitingTextInputFormatter(1),
@@ -130,9 +145,14 @@ class _OtpScreenState extends State<OtpScreen> {
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
-                          borderSide: const BorderSide(color: AppColors.primary, width: 2),
+                          borderSide: const BorderSide(
+                            color: AppColors.primary,
+                            width: 2,
+                          ),
                         ),
-                        contentPadding: const EdgeInsets.symmetric(vertical: 12),
+                        contentPadding: const EdgeInsets.symmetric(
+                          vertical: 12,
+                        ),
                       ),
                       onChanged: (value) {
                         _onChanged(value, index);
@@ -151,7 +171,10 @@ class _OtpScreenState extends State<OtpScreen> {
                     TextSpan(text: 'Resend code in '.tr),
                     TextSpan(
                       text: '$_secondsRemaining s',
-                      style: const TextStyle(color: AppColors.primary, fontWeight: FontWeight.w600),
+                      style: const TextStyle(
+                        color: AppColors.primary,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ],
                 ),
@@ -169,7 +192,7 @@ class _OtpScreenState extends State<OtpScreen> {
                 ),
               ),
               const SizedBox(height: 40),
-        
+
               // Confirm Button
               SizedBox(
                 width: double.infinity,
@@ -178,47 +201,63 @@ class _OtpScreenState extends State<OtpScreen> {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.primary,
                     padding: const EdgeInsets.symmetric(vertical: 16),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(0),
+                    ),
                     elevation: 2,
                   ),
-                  child:  Text(
+                  child: Text(
                     'Confirm Code'.tr,
-                    style: TextStyle(fontSize: 16, color: Colors.white, fontWeight: FontWeight.w600),
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.white,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                 ),
               ),
-        
+
               const SizedBox(height: 20),
-        
+
               // Timer Text
-              /*RichText(
+              RichText(
                 text: TextSpan(
                   style: const TextStyle(color: Colors.black, fontSize: 14),
                   children: [
-                     TextSpan(text: 'Resend code in '.tr),
+                    TextSpan(text: 'Resend code in '.tr),
                     TextSpan(
                       text: '$_secondsRemaining s',
-                      style: const TextStyle(color: AppColors.primary, fontWeight: FontWeight.w600),
+                      style: const TextStyle(
+                        color: AppColors.primary,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ],
                 ),
               ),
-        
-              const SizedBox(height: 12),*/
-        
+
+              const SizedBox(height: 12),
+
               // Resend Code
               GestureDetector(
                 onTap: _secondsRemaining == 0 ? resendOtpApiCallMethod : null,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                     Text("Didn't receive code? ".tr, style: TextStyle(color: Colors.grey)),
+                    Text(
+                      "Didn't receive code? ".tr,
+                      style: TextStyle(color: Colors.grey),
+                    ),
                     GestureDetector(
-                      onTap: _secondsRemaining == 0 ? resendOtpApiCallMethod : null,
+                      onTap: _secondsRemaining == 0
+                          ? resendOtpApiCallMethod
+                          : null,
                       child: Text(
                         'Resend Code'.tr,
                         style: TextStyle(
-                          color: _secondsRemaining == 0 ? AppColors.primary : Colors.grey,
+                          color: _secondsRemaining == 0
+                              ? AppColors.primary
+                              : Colors.grey,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
@@ -235,9 +274,7 @@ class _OtpScreenState extends State<OtpScreen> {
 
   // Confirm Button Action
   Future<void> apiCallButton() async {
-    Get.to(() => CreateNewPasswordScreen());
-
-    /*final otp = accountTextEditingController.getOtpString();
+    final otp = accountTextEditingController.getOtpString();
 
     debugPrint("OTP from getOtpString: '$otp'");
 
@@ -251,7 +288,7 @@ class _OtpScreenState extends State<OtpScreen> {
       Get.to(() => CreateNewPasswordScreen());
     } else {
       Get.snackbar("Error".tr, otpController.errorMessage ?? "Invalid OTP".tr);
-    }*/
+    }
   }
 
   // Resend OTP
@@ -267,9 +304,10 @@ class _OtpScreenState extends State<OtpScreen> {
         _secondsRemaining = 60;
         startTimer();
       });
-    //Get.snackbar("Success", "OTP sent successfully".tr);
+      Get.snackbar("Success", "OTP sent successfully".tr);
     } else {
-    //Get.snackbar("Error", "Failed to resend OTP".tr);
+      Get.snackbar("Error", "Failed to resend OTP".tr);
     }
   }
+
 }

@@ -18,7 +18,7 @@ class ItemMenuWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(12),
+      borderRadius: BorderRadius.circular(0),
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 8),
         child: Row(

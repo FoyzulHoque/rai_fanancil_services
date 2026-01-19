@@ -136,9 +136,9 @@ class PersonalInfoScreen extends StatelessWidget {
                     child: ElevatedButton(
                       onPressed: _saveProfile,
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blue,
+                        backgroundColor: AppColors.primaryDife,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
+                          borderRadius: BorderRadius.circular(0),
                         ),
                         elevation: 0,
                       ),
@@ -215,7 +215,7 @@ class PersonalInfoScreen extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(0),
         border: Border.all(color: Colors.grey.shade300),
       ),
       child: Row(
@@ -252,7 +252,7 @@ class PersonalInfoScreen extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(0),
           border: Border.all(color: Colors.grey.shade300),
         ),
         child: Row(

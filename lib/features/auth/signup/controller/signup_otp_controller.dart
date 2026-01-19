@@ -67,12 +67,12 @@ class SignupOtpController extends GetxController {
     }
 
     if (otpText.isEmpty || otpText.length != 4 || !RegExp(r'^\d{4}$').hasMatch(otpText)) {
-      // Get.snackbar(
-      //   "Error", 
-      //   "Please enter a valid 4-digit OTP",
-      //   backgroundColor: Colors.red,
-      //   colorText: Colors.white,
-      // );
+      Get.snackbar(
+        "Error",
+        "Please enter a valid 4-digit OTP",
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
       isLoading.value = false;
       developer.log("Validation failed: Invalid OTP format", name: 'SignupOtpController');
       return false;
@@ -106,9 +106,11 @@ class SignupOtpController extends GetxController {
         
         // Save token and user data
         await SharedPreferencesHelper.saveAccessToken(token);
+        
         developer.log("Token saved to SharedPreferences", name: 'SignupOtpController');
         
         // Get and save user data from AuthController
+        await AuthController.saveAccessToken(token);
         await AuthController.getUserData();
         developer.log("User data fetched and saved", name: 'SignupOtpController');
         
@@ -136,12 +138,12 @@ class SignupOtpController extends GetxController {
         
         developer.log("OTP verification FAILED: $message", name: 'SignupOtpController');
         
-        // Get.snackbar(
-        //   "Error",
-        //   message,
-        //   backgroundColor: Colors.red,
-        //   colorText: Colors.white,
-        // );
+        Get.snackbar(
+          "Error",
+          message,
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+        );
         
         isLoading.value = false;
         return false;
@@ -174,12 +176,12 @@ class SignupOtpController extends GetxController {
     
     if (!canResend.value && secondsRemaining.value > 0) {
       developer.log("Resend blocked: Timer still running", name: 'SignupOtpController');
-      // Get.snackbar(
-      //   "Wait",
-      //   "Please wait for the timer to finish",
-      //   backgroundColor: Colors.orange,
-      //   colorText: Colors.white,
-      // );
+      Get.snackbar(
+        "Wait",
+        "Please wait for the timer to finish",
+        backgroundColor: Colors.orange,
+        colorText: Colors.white,
+      );
       return false;
     }
     
@@ -229,13 +231,13 @@ class SignupOtpController extends GetxController {
         final successMessage = response.responseData?['message']?.toString() ?? "OTP sent to your email";
         developer.log("Success message: $successMessage", name: 'SignupOtpController');
         
-        // Get.snackbar(
-        //   "Success",
-        //   successMessage,
-        //   backgroundColor: Colors.green,
-        //   colorText: Colors.white,
-        //   snackPosition: SnackPosition.BOTTOM,
-        // );
+        Get.snackbar(
+          "Success",
+          successMessage,
+          backgroundColor: Colors.green,
+          colorText: Colors.white,
+          snackPosition: SnackPosition.BOTTOM,
+        );
         
         isLoading.value = false;
         developer.log("Resend OTP SUCCESSFUL", name: 'SignupOtpController');
@@ -247,12 +249,12 @@ class SignupOtpController extends GetxController {
         
         developer.log("Resend OTP FAILED: $message", name: 'SignupOtpController');
         
-        // Get.snackbar(
-        //   "Error",
-        //   message,
-        //   backgroundColor: Colors.red,
-        //   colorText: Colors.white,
-        // );
+        Get.snackbar(
+          "Error",
+          message,
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+        );
         
         isLoading.value = false;
         return false;

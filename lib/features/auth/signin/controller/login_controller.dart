@@ -1,9 +1,11 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../../core/network_caller/network_config.dart';
 import '../../../../core/network_path/natwork_path.dart';
 import '../../../../core/services_class/shared_preferences_data_helper.dart';
 import '../../../../core/services_class/shared_preferences_helper.dart';
 import '../../model/user_model.dart';
+import '../../signup/screens/signup_otp_screen.dart';
 import '../../text editing controller/custom_text_editing_controller.dart';
 
 class LoginApiController extends GetxController {
@@ -39,12 +41,36 @@ class LoginApiController extends GetxController {
           return false;
         }
 
-        //UserModel userModel =  UserModel.fromJson(response.responseData!['data']);
+        // If server says email not verified, route to OTP flow
+        final bool emailVerified = data['emailVerification'] == true;
+        if (!emailVerified) {
+          _errorMessage = 'Email not verified';
+          Get.snackbar(
+            "Email not verified",
+            "Please verify your email",
+            backgroundColor: Colors.redAccent,
+            colorText: Colors.white,
+            snackPosition: SnackPosition.BOTTOM,
+          );
+          Get.to(() => SignupOtpScreens());
+          return false;
+        }
+
+        // Build minimal user model from login response (API doesn't return full user object)
+        userModel = UserModel(
+          id: data['userId']?.toString(),
+          email: userTextEditingController.emailController.text.trim(),
+          role: data['role']?.toString(),
+        );
+
         await AuthController.saveAccessToken(token);
         await SharedPreferencesHelper.saveAccessToken(token);
-        await SharedPreferencesHelper.saveUserEmail( userTextEditingController.emailController.text);
-        await AuthController.getUserData();
-       // await SharedPreferencesHelper.saveUserId(data['data']['id']); // await AuthController.setUserData(token, userModel);
+        await SharedPreferencesHelper.saveUserEmail(userModel?.email ?? '');
+        if (userModel?.id != null && userModel!.id!.isNotEmpty) {
+          await AuthController.saveUserId(userModel!.id!);
+        }
+        // Save user data + token together for later usage
+        await AuthController.setUserData(token, userModel!);
 
         _errorMessage = null;
         isSuccess = true;

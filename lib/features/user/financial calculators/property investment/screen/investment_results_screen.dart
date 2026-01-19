@@ -7,7 +7,6 @@ import '../../../../../core/widgets/custome_container.dart';
 import '../../../../../core/widgets/full_page_pdf_make_widget.dart';
 import '../../../user navbar/controller/navbar_controller.dart';
 import '../../cash flow calculator/controller/property_dropdown_controller.dart';
-import '../../income calculator/widget/income_cumamary_widget.dart';
 import '../widget/capital_growth_forecast_widget.dart';
 
 class InvestmentResultsScreen extends StatelessWidget {

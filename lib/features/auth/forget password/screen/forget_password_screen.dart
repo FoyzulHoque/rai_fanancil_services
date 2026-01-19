@@ -34,8 +34,9 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.secondaryColors,
+      backgroundColor: AppColors.white,
       appBar: AppBar(
+
         backgroundColor: AppColors.secondaryColors,
         leading: GestureDetector(
           onTap: Get.back,
@@ -101,7 +102,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                 height: 85,
                 width: 343,
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(16),
+                  borderRadius: BorderRadius.circular(0),
                   border: Border.all(color: AppColors.black, width: 1),
                 ),
                 child: Row(
@@ -166,7 +167,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.primary,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(0),
                     ),
                   ),
                   child: Text(
@@ -183,12 +184,12 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
   }
 
   Future<void> _otpApiCallMethod() async {
-    Get.to(() => OtpScreen());
-    /*bool isSuccess = await resetPasswordController.resetPasswordApiCallMethod();
+
+    bool isSuccess = await resetPasswordController.resetPasswordApiCallMethod();
     if (isSuccess) {
       Get.to(() => OtpScreen());
     } else {
-      //Get.snackbar("Error", "Something went wrong".tr);
-    }*/
+      Get.snackbar("Error", "Something went wrong".tr);
+    }
   }
 }

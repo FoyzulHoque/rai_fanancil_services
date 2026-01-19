@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rai_fanancil_services/core/themes/app_colors.dart';
 
 class SubscriptionPlansScreen extends StatefulWidget {
   const SubscriptionPlansScreen({super.key});
@@ -14,16 +15,18 @@ class _SubscriptionPlansScreenState extends State<SubscriptionPlansScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.blue,
+        backgroundColor: AppColors.secondaryColors,
         foregroundColor: Colors.white,
         elevation: 0,
+        toolbarHeight: 100,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back,color: Colors.white,),
           onPressed: () => Navigator.pop(context),
         ),
         title: const Text(
           'Subscription Plans',
           style: TextStyle(
+            color: Colors.white,
             fontSize: 20,
             fontWeight: FontWeight.w600,
           ),
@@ -37,7 +40,7 @@ class _SubscriptionPlansScreenState extends State<SubscriptionPlansScreen> {
             margin: const EdgeInsets.fromLTRB(24, 24, 24, 16),
             decoration: BoxDecoration(
               color: Colors.blue.shade100,
-              borderRadius: BorderRadius.circular(50),
+              borderRadius: BorderRadius.circular(0),
             ),
             child: Row(
               mainAxisSize: MainAxisSize.min,
@@ -111,14 +114,14 @@ class _SubscriptionPlansScreenState extends State<SubscriptionPlansScreen> {
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
           decoration: BoxDecoration(
-            color: isSelected ? Colors.blue : Colors.transparent,
-            borderRadius: BorderRadius.circular(50),
+            color: isSelected ? AppColors.primaryDife : Colors.transparent,
+            borderRadius: BorderRadius.circular(0),
           ),
           child: Text(
             text,
             textAlign: TextAlign.center,
             style: TextStyle(
-              color: isSelected ? Colors.white : Colors.blue.shade800,
+              color: isSelected ? Colors.white : AppColors.primaryDife,
               fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
               fontSize: 15,
             ),
@@ -140,10 +143,10 @@ class _SubscriptionPlansScreenState extends State<SubscriptionPlansScreen> {
       margin: const EdgeInsets.only(bottom: 16),
       decoration: BoxDecoration(
         border: Border.all(
-          color: isRecommended ? Colors.blue : Colors.grey.shade300,
+          color: isRecommended ? AppColors.primaryDife : Colors.grey.shade300,
           width: isRecommended ? 2 : 1,
         ),
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(0),
         boxShadow: isRecommended
             ? [
           BoxShadow(
@@ -161,8 +164,8 @@ class _SubscriptionPlansScreenState extends State<SubscriptionPlansScreen> {
             width: double.infinity,
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
-              color: isRecommended ? Colors.blue : Colors.grey.shade100,
-              borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+              color: isRecommended ? AppColors.primaryDife : Colors.grey.shade100,
+              borderRadius: const BorderRadius.vertical(top: Radius.circular(0)),
             ),
             child: Column(
               children: [
@@ -207,7 +210,7 @@ class _SubscriptionPlansScreenState extends State<SubscriptionPlansScreen> {
                       children: [
                         Icon(
                           Icons.check_circle,
-                          color: isRecommended ? Colors.blue : Colors.green,
+                          color: isRecommended ? AppColors.primaryDife : Colors.green,
                           size: 22,
                         ),
                         const SizedBox(width: 12),
@@ -239,10 +242,10 @@ class _SubscriptionPlansScreenState extends State<SubscriptionPlansScreen> {
                   // TODO: Handle plan selection
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: isRecommended ? Colors.blue : Colors.grey.shade200,
+                  backgroundColor: isRecommended ? AppColors.primaryDife : Colors.grey.shade200,
                   foregroundColor: isRecommended ? Colors.white : Colors.black87,
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(0),
                   ),
                   elevation: isRecommended ? 2 : 0,
                 ),

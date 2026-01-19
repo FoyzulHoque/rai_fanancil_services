@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:get/Get.dart';
 import '../../../../core/themes/app_colors.dart';
-import '../../searching/searching filter/screen/searching_filter_screen.dart';
 import '../../searching/widget/search_screen_body_widget.dart';
-import '../../searching/widget/search_widget.dart';
 
 class PropertyScreen extends StatelessWidget {
   PropertyScreen({super.key});
