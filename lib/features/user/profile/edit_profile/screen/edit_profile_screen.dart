@@ -1,3 +1,4 @@
+/*
 // lib/features/auth/views/edit_profile_screen.dart
 
 import 'dart:io';
@@ -208,4 +209,4 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           colorText: Colors.white);
     }
   }
-}
+}*/

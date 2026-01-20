@@ -44,64 +44,53 @@ class ProfileApiController extends GetxController {
 
   // lib/feature/profile/controllers/profile_controller.dart
 
-Future<bool> editProfile({
+  Future<bool> editProfile({
     required String firstName,
     required String lastName,
-    required String dateTime,
+    required String dateTime,   // ← rename param to dob
     required String location,
     String? profileImagePath,
   }) async {
     isLoading.value = true;
-    errorMessage.value = '';
 
     try {
-      if (profileImagePath != null && profileImagePath.isNotEmpty) {
-        final File imageFile = File(profileImagePath);
+      final fields = {
+        'firstName': firstName,
+        'lastName': lastName,
+        'dob': dateTime,           // ← use correct field name
+        'location': location,
+      };
 
-        final response = await NetworkCall.multipartRequest(
+      NetworkResponse response;
+
+      if (profileImagePath != null && profileImagePath.isNotEmpty) {
+        // Case 1: Send a multipart request WITH the image
+        final imageFile = File(profileImagePath);
+        response = await NetworkCall.multipartRequest(
           url: Urls.editUserDataUrl,
-          fields: {
-            'firstName': firstName,
-            'lastName': lastName,
-            'country': dateTime,
-            'phone': location,
-          },
+          fields: fields,
           imageFile: imageFile,
           methodType: 'PUT',
-          imageFieldName: 'profileImage',
+          // Backend expects the same field name as signup upload
+          imageFieldName: 'image',
         );
+      } else {
+        // Case 2: Send a standard JSON PUT request WITHOUT an image
+        response = await NetworkCall.putRequest(
+          url: Urls.editUserDataUrl,
+          body: fields,
+        );
+      }
 
-        if (!response.isSuccess) {
-          errorMessage.value = response.errorMessage ?? 'Image upload failed';
-          return false;
-        }
-
+      if (response.isSuccess) {
         _updateUserFromResponse(response);
         return true;
-      }
-
-      else {
-        final response = await NetworkCall.putRequest(
-          url: Urls.editUserDataUrl,
-          body: {
-            'firstName': firstName,
-            'lastName': lastName,
-            'location': location,
-            'dateTime': dateTime,
-          },
-        );
-
-        if (response.isSuccess) {
-          _updateUserFromResponse(response);
-          return true;
-        } else {
-          errorMessage.value = response.errorMessage ?? 'Update failed';
-          if (response.statusCode == 401) Get.offAllNamed('/login');
-          return false;
-        }
+      } else {
+        errorMessage.value = response.errorMessage ?? 'Update failed';
+        return false;
       }
     } catch (e) {
-      errorMessage.value = 'Exception: $e';
+      errorMessage.value = '$e';
       return false;
     } finally {
       isLoading.value = false;

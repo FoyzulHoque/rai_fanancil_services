@@ -1,16 +1,17 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:rai_fanancil_services/core/themes/app_colors.dart';
-import '../../../../../auth/text editing controller/custom_text_editing_controller.dart';
 
+import '../../controller/edit_profile_controller.dart';
+
+// ────────────────────────────────────────────────
 
 class PersonalInfoScreen extends StatelessWidget {
   PersonalInfoScreen({super.key});
 
-  final CustomTextEditingController controller = Get.find<CustomTextEditingController>();
+  final EditProfileController controller = Get.find<EditProfileController>();
 
   @override
   Widget build(BuildContext context) {
@@ -27,22 +28,29 @@ class PersonalInfoScreen extends StatelessWidget {
                 Row(
                   children: [
                     IconButton(
-                      icon: const Icon(Icons.arrow_back,color: AppColors.white,),
+                      icon: const Icon(Icons.arrow_back, color: AppColors.white),
                       onPressed: () => Navigator.pop(context),
                     ),
                     const SizedBox(width: 26),
-                    Align(
-                      alignment: Alignment.topCenter,
-                      child: const Text(
-                        'Your personal info',
-                        style: TextStyle(fontSize: 20, color:AppColors.white,fontWeight: FontWeight.w600),
+                    const Expanded(
+                      child: Align(
+                        alignment: Alignment.topCenter,
+                        child: Text(
+                          'Your personal info',
+                          style: TextStyle(
+                            fontSize: 20,
+                            color: AppColors.white,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
                       ),
                     ),
                   ],
-                ),Stack(
+                ),
+                const SizedBox(height: 16),
+                Stack(
                   alignment: Alignment.bottomRight,
                   children: [
-                    // শুধু পরিবর্তনশীল অংশটাই Obx দিয়ে wrap করা হয়েছে
                     Obx(
                           () => CircleAvatar(
                         radius: 50,
@@ -50,16 +58,20 @@ class PersonalInfoScreen extends StatelessWidget {
                         child: CircleAvatar(
                           radius: 46,
                           backgroundColor: Colors.grey.shade300,
-                          backgroundImage: controller.profileImagePath.value.isNotEmpty
-                              ? FileImage(File(controller.profileImagePath.value))
-                              : null,
-                          child: controller.profileImagePath.value.isEmpty
+                          backgroundImage:
+                          controller.newProfileImagePath.value.isNotEmpty
+                              ? FileImage(
+                              File(controller.newProfileImagePath.value)) 
+                              : (controller.profileCtrl.userProfile.value.profileImage != null
+                              ? NetworkImage(controller.profileCtrl.userProfile.value.profileImage!)
+                              : null) as ImageProvider?,
+                          child: controller.newProfileImagePath.value.isEmpty &&
+                              controller.profileCtrl.userProfile.value.profileImage == null
                               ? const Icon(Icons.person, size: 50, color: Colors.white)
                               : null,
                         ),
                       ),
                     ),
-
                     Positioned(
                       bottom: 4,
                       right: 4,
@@ -87,67 +99,63 @@ class PersonalInfoScreen extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
               child: Column(
                 children: [
-                  // First Name
                   _buildTextField(
                     icon: Icons.person_outline,
                     label: "First name",
-                    controller: controller.firstNameController,
+                    controller: controller.firstNameCtrl,
                     hint: "Enter first name",
                   ),
                   const SizedBox(height: 16),
-
-                  // Last Name
                   _buildTextField(
                     icon: Icons.person_outline,
                     label: "Last name",
-                    controller: controller.lastNameController,
+                    controller: controller.lastNameCtrl,
                     hint: "Enter last name",
                   ),
                   const SizedBox(height: 16),
-
-                  // Date of Birth - Reactive
                   Obx(
                         () => _buildSelectableField(
                       icon: Icons.calendar_today_outlined,
                       label: "Date of birth",
-                      value: controller.dateOfBirth.value.isEmpty
-                          ? "Select date"
-                          : controller.dateOfBirth.value,
+                      value: controller.dateTime.value.isEmpty ? "Select date" : controller.dateTime.value,
                       onTap: () => _selectDate(context),
                       trailing: const Icon(Icons.chevron_right),
                     ),
                   ),
                   const SizedBox(height: 16),
-
-                  // Location
                   _buildTextField(
                     icon: Icons.location_on_outlined,
                     label: "Location",
-                    controller: controller.locationController,
+                    controller: controller.location,
                     hint: "Enter your location",
                   ),
-
                   const SizedBox(height: 40),
-
-                  // Save button
-                  SizedBox(
-                    width: double.infinity,
-                    height: 54,
-                    child: ElevatedButton(
-                      onPressed: _saveProfile,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.primaryDife,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(0),
+                  Obx(
+                        () => SizedBox(
+                      width: double.infinity,
+                      height: 54,
+                      child: ElevatedButton(
+                        onPressed: controller.hasChanges.value
+                            ? () => controller.saveChanges()
+                            : null,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: controller.hasChanges.value
+                              ? AppColors.primary
+                              : Colors.grey.shade400,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(0),
+                          ),
+                          elevation: 0,
                         ),
-                        elevation: 0,
-                      ),
-                      child: const Text(
-                        'Save changes',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.white,
+                        child: controller.isLoading.value
+                            ? const CircularProgressIndicator(color: Colors.white)
+                            : const Text(
+                          'Save changes',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.white,
+                          ),
                         ),
                       ),
                     ),
@@ -162,49 +170,28 @@ class PersonalInfoScreen extends StatelessWidget {
   }
 
   // ────────────────────────────────────────────────
-  //                HELPER FUNCTIONS
+  // HELPER FUNCTIONS
   // ────────────────────────────────────────────────
 
   Future<void> _pickImage() async {
-    try {
-      final ImagePicker picker = ImagePicker();
-      final XFile? image = await picker.pickImage(source: ImageSource.gallery);
-
-      if (image != null) {
-        controller.profileImagePath.value = image.path;
-      }
-    } catch (e) {
-      Get.snackbar("Error", "Failed to pick image: $e",
-          backgroundColor: Colors.red, colorText: Colors.white);
-    }
+    await controller.pickImage();
   }
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
-      initialDate: DateTime.now(),
+      initialDate: controller.dateTime.value.isNotEmpty
+          ? DateFormat('dd/MM/yyyy').parse(controller.dateTime.value)
+          : DateTime.now(),
       firstDate: DateTime(1900),
       lastDate: DateTime.now(),
     );
 
     if (picked != null) {
-      final formattedDate = DateFormat('dd/MM/yyyy').format(picked);
-      controller.dateOfBirth.value = formattedDate;
+      controller.dateTime.value = DateFormat('dd/MM/yyyy').format(picked);
     }
   }
 
-  Future<void> _saveProfile() async {
-    // এখানে আসল সেভ লজিক লিখবে (API call, validation ইত্যাদি)
-    Get.snackbar(
-      "Success",
-      "Profile updated successfully!",
-      backgroundColor: Colors.green,
-      colorText: Colors.white,
-      duration: const Duration(seconds: 2),
-    );
-  }
-
-  // Basic Text Field
   Widget _buildTextField({
     required IconData icon,
     required String label,
@@ -238,7 +225,6 @@ class PersonalInfoScreen extends StatelessWidget {
     );
   }
 
-  // Selectable Field (for date, location, etc.)
   Widget _buildSelectableField({
     required IconData icon,
     required String label,

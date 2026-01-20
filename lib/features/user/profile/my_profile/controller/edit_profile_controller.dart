@@ -12,12 +12,13 @@ class EditProfileController extends GetxController {
   final RxString newProfileImagePath = ''.obs;
   final RxString gender = ''.obs;
   final RxBool isLoading = false.obs;
+  final RxBool hasChanges = false.obs;
+  final RxString dateTime = ''.obs; // Changed to RxString
 
   // Text Controllers
   late final TextEditingController firstNameCtrl;
   late final TextEditingController lastNameCtrl;
   late final TextEditingController location;
-  late final TextEditingController dateTime;
 
   // Original values for change detection
   String _originalFirstName = '';
@@ -32,28 +33,34 @@ class EditProfileController extends GetxController {
     firstNameCtrl = TextEditingController();
     lastNameCtrl = TextEditingController();
     location = TextEditingController();
-    dateTime = TextEditingController();
     _loadProfileData();
+
+    // Add listeners to check for changes automatically
+    firstNameCtrl.addListener(_checkForChanges);
+    lastNameCtrl.addListener(_checkForChanges);
+    location.addListener(_checkForChanges);
+    dateTime.listen((_) => _checkForChanges()); // Listen to RxString
+    newProfileImagePath.listen((_) => _checkForChanges());
   }
 
   void _loadProfileData() {
     final user = profileCtrl.userProfile.value;
 
-    // সরাসরি firstName & lastName নাও — splitting বাদ!
     firstNameCtrl.text = user.firstName ?? '';
     lastNameCtrl.text = user.lastName ?? '';
     location.text = user.location ?? '';
-    dateTime.text = user.dob?? '';
+    dateTime.value = user.dob ?? ''; // Set RxString value
 
     // Save originals
     _originalFirstName = firstNameCtrl.text.trim();
     _originalLastName = lastNameCtrl.text.trim();
-    _originalDateTime = dateTime.text.trim();
+    _originalDateTime = dateTime.value.trim();
     _originalLocation = location.text.trim();
     _originalImage = user.profileImage ?? '';
 
-    // Reset new image
+    // Reset new image and check initial state
     newProfileImagePath.value = '';
+    _checkForChanges();
   }
 
   Future<void> pickImage() async {
@@ -67,11 +74,11 @@ class EditProfileController extends GetxController {
     }
   }
 
-  bool get hasChanges {
-    return firstNameCtrl.text.trim() != _originalFirstName ||
+  void _checkForChanges() {
+    hasChanges.value = firstNameCtrl.text.trim() != _originalFirstName ||
         lastNameCtrl.text.trim() != _originalLastName ||
         location.text.trim() != _originalLocation ||
-        dateTime.text.trim() != _originalDateTime ||
+        dateTime.value.trim() != _originalDateTime ||
         newProfileImagePath.isNotEmpty;
   }
 
@@ -91,7 +98,7 @@ class EditProfileController extends GetxController {
       firstName: first,
       lastName: last,
       location: location.text.trim(),
-      dateTime: dateTime.text.trim(),
+      dateTime: dateTime.value.trim(),
       profileImagePath:
       newProfileImagePath.isNotEmpty ? newProfileImagePath.value : null,
     );
@@ -112,7 +119,6 @@ class EditProfileController extends GetxController {
   void onClose() {
     firstNameCtrl.dispose();
     lastNameCtrl.dispose();
-    dateTime.dispose();
     location.dispose();
     super.onClose();
   }
