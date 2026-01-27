@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:rai_fanancil_services/core/themes/app_colors.dart';
 import 'package:rai_fanancil_services/features/user/financial%20data%20collection/view/property_details.dart';
 import '../../../../core/widgets/custom_input_field_widget.dart';
+import '../controller/finacial_data_collection_text_editing_controller.dart';
 import '../controller/income_details_property_drop_down_controller.dart';
 import '../controller/tax_region_state_dropdown_controller.dart';
 import '../widget/check_box_widget.dart';
@@ -16,8 +17,11 @@ class LivingExpensesScreen extends StatefulWidget {
 }
 
 class _LivingExpensesScreenState extends State<LivingExpensesScreen> {
-  final TextEditingController _propertyController1 = TextEditingController();
-  List<String> _selectedResidences = []; // Changed to a list
+
+  final FinacialDataCollectionTextEditingController finacialDataCollectionTextEditingController = Get.put(FinacialDataCollectionTextEditingController());
+
+  //final TextEditingController _propertyController1 = TextEditingController();
+  //List<String> selectedResidences = []; // Changed to a list
   final IncomeDetailsPropertyDropdownController propertyDropdownController = Get.put(
     IncomeDetailsPropertyDropdownController(),
   );
@@ -57,16 +61,16 @@ class _LivingExpensesScreenState extends State<LivingExpensesScreen> {
                         child: Padding(
                           padding: const EdgeInsets.all(16.0),
                           child: CheckBoxWidget(
-                            selectedOptions: _selectedResidences, // Pass the list
+                            selectedOptions: finacialDataCollectionTextEditingController.selectedResidences, // Pass the list
                             onChanged: (newValue) {
                               setState(() {
-                                if (_selectedResidences.contains(newValue)) {
-                                  _selectedResidences.remove(newValue); // Unselect
+                                if (finacialDataCollectionTextEditingController.selectedResidences.contains(newValue)) {
+                                  finacialDataCollectionTextEditingController.selectedResidences.remove(newValue); // Unselect
                                 } else {
-                                  _selectedResidences.add(newValue); // Select
+                                  finacialDataCollectionTextEditingController.selectedResidences.add(newValue); // Select
                                 }
                               });
-                              print("Selected residences: $_selectedResidences"); // for debug
+                              print("Selected residences: ${finacialDataCollectionTextEditingController.selectedResidences}"); // for debug
                             },
                           ),
                         ),
@@ -102,7 +106,7 @@ class _LivingExpensesScreenState extends State<LivingExpensesScreen> {
                               const SizedBox(height: 8),
                               CustomInputField(
                                 prefixIcon: const Icon(Icons.monetization_on_outlined),
-                                controller: _propertyController1,
+                                controller: finacialDataCollectionTextEditingController.foodController,
                                 keyboardType: TextInputType.number,
                                 hintText: "0",
                               ),
@@ -119,7 +123,7 @@ class _LivingExpensesScreenState extends State<LivingExpensesScreen> {
                               const SizedBox(height: 8),
                               CustomInputField(
                                 prefixIcon: const Icon(Icons.monetization_on_outlined),
-                                controller: _propertyController1,
+                                controller: finacialDataCollectionTextEditingController.transportController,
                                 keyboardType: TextInputType.number,
                                 hintText: "0",
                               ),
@@ -136,7 +140,7 @@ class _LivingExpensesScreenState extends State<LivingExpensesScreen> {
                               const SizedBox(height: 8),
                               CustomInputField(
                                 prefixIcon: const Icon(Icons.monetization_on_outlined),
-                                controller: _propertyController1,
+                                controller: finacialDataCollectionTextEditingController.utilitiesController,
                                 keyboardType: TextInputType.number,
                                 hintText: "0",
                               ),
@@ -153,7 +157,7 @@ class _LivingExpensesScreenState extends State<LivingExpensesScreen> {
                               const SizedBox(height: 8),
                               CustomInputField(
                                 prefixIcon: const Icon(Icons.monetization_on_outlined),
-                                controller: _propertyController1,
+                                controller:finacialDataCollectionTextEditingController.insuranceController,
                                 keyboardType: TextInputType.number,
                                 hintText: "0",
                               ),
@@ -170,7 +174,7 @@ class _LivingExpensesScreenState extends State<LivingExpensesScreen> {
                               const SizedBox(height: 8),
                               CustomInputField(
                                 prefixIcon: const Icon(Icons.monetization_on_outlined),
-                                controller: _propertyController1,
+                                controller: finacialDataCollectionTextEditingController.entertainmentController,
                                 keyboardType: TextInputType.number,
                                 hintText: "0",
                               ),
@@ -208,7 +212,7 @@ class _LivingExpensesScreenState extends State<LivingExpensesScreen> {
                               const SizedBox(height: 16),
                               CustomInputField(
                                 prefixIcon: const Icon(Icons.monetization_on_outlined),
-                                controller: _propertyController1,
+                                controller: finacialDataCollectionTextEditingController.monthlyMortgagePaymentController,
                                 keyboardType: TextInputType.number,
                                 hintText: "0",
                               ),
@@ -270,10 +274,4 @@ class _LivingExpensesScreenState extends State<LivingExpensesScreen> {
     );
   }
 
-  @override
-  void dispose() {
-    _propertyController1.dispose();
-    //_livingExpensesController.dispose();
-    super.dispose();
-  }
 }

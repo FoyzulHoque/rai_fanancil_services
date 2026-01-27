@@ -35,10 +35,8 @@ class IncomeDetailsPropertyDropdownController extends GetxController {
 
 
 class PrimaryIncomeDropdownController extends GetxController {
-  // RxList<String> hishebe declare koro (observable)
   final RxList<String> propertiesIcom = <String>[].obs;  // .obs add koro – eta RxList banay
 
-  // Optional: nullable selected value (previous suggestion hishebe)
   final Rx<String?> selectedProperty = Rx<String?>(null);
 
   @override
