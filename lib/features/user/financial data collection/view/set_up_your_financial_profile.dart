@@ -19,12 +19,11 @@ class SetUpYourFinancialProfile extends StatelessWidget {
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  // ── Header Section ────────────────────────────────────────
                   Container(
                     width: double.infinity,
                     padding: const EdgeInsets.symmetric(
                       horizontal: 24,
-                      vertical: 32,
+                      vertical: 55,
                     ),
                     decoration: BoxDecoration(
                       color: AppColors.secondaryColors,
@@ -40,7 +39,7 @@ class SetUpYourFinancialProfile extends StatelessWidget {
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 22,
-                            fontWeight: FontWeight.w700,
+                            fontWeight: FontWeight.w900,
                             letterSpacing: 0.3,
                           ),
                           textAlign: TextAlign.center,
@@ -51,7 +50,7 @@ class SetUpYourFinancialProfile extends StatelessWidget {
                           style: TextStyle(
                             color: Colors.white.withOpacity(0.92),
                             fontSize: 15,
-                            fontWeight: FontWeight.w400,
+                            fontWeight: FontWeight.w600,
                             height: 1.45,
                           ),
                           textAlign: TextAlign.center,

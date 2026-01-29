@@ -1,62 +1,102 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
-
+import '../../core/services_class/shared_preferences_helper.dart';
 import '../../core/themes/app_colors.dart';
-import 'controller/splash_controller.dart';
+import '../onboarding/onboarding_screen.dart';
 
-class SplashScreen extends StatelessWidget {
-  SplashScreen({super.key});
+class SplashScreen extends StatefulWidget {
+  const SplashScreen({super.key});
 
-  final SplashController controller = Get.put(SplashController());
+  @override
+  State<SplashScreen> createState() => _SplashScreenState();
+}
+
+class _SplashScreenState extends State<SplashScreen>
+    with TickerProviderStateMixin {
+  late AnimationController _logoController;
+  late AnimationController _textController;
+  late Animation<double> _scaleAnimation;
+  late Animation<Offset> _slideAnimation;
+  late Animation<double> _fadeAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _logoController = AnimationController(
+      duration: const Duration(milliseconds: 1600),
+      vsync: this,
+    );
+
+    _textController = AnimationController(
+      duration: const Duration(milliseconds: 1000),
+      vsync: this,
+    );
+
+    _scaleAnimation = Tween<double>(begin: 0.5, end: 1.0).animate(
+      CurvedAnimation(parent: _logoController, curve: Curves.easeOutBack),
+    );
+
+    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _textController, curve: Curves.easeIn),
+    );
+
+    _slideAnimation = Tween<Offset>(
+      begin: const Offset(0, 0.5),
+      end: Offset.zero,
+    ).animate(
+      CurvedAnimation(parent: _textController, curve: Curves.easeInOut),
+    );
+
+    _logoController.forward();
+    Future.delayed(const Duration(milliseconds: 500), () {
+      _textController.forward();
+    });
+
+    // ✅ After splash delay, decide navigation
+    Timer(const Duration(seconds: 3), () async {
+      bool? isLoggedIn = await SharedPreferencesHelper.isLoggedIn();
+      final role = await SharedPreferencesHelper.getUserRole();
+
+      // You can modify this part to handle role-based navigation
+      if (isLoggedIn == true) {
+        if(role == "USER"){}
+         // Get.offAll(() => BuyerNavBar());
+        else if(role == "SELLER"){}
+        //  Get.offAll(() => SellerNavBar());
+        else if(role == "SERVICE_PROVIDER"){}
+         // Get.offAll(() => ServiceProviderNavBar());
+      } else {
+        Get.offAll(() => OnboardingScreen());
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _logoController.dispose();
+    _textController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.white,
-      body: Stack(
+      body: Column(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          // Top Text
-          Positioned(
-            top: 380,
-            left: 0,
-            right: 0,
-            child: Center(
-              child: Text(
-                "R-Money by",
-                style: TextStyle(
-                  fontWeight: FontWeight.w700,
-                  fontSize: 28,
-                  // Fix: pick a single Color from colorList
-                  color: AppColors.colorList.isNotEmpty
-                      ? AppColors.colorList[0]
-                      : Colors.black,
-                ),
-              ),
-            ),
-          ),
-
-          // Centered Logo
+          SizedBox(height: 400),
           Center(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24),
+            child: ScaleTransition(
+              scale: _scaleAnimation,
               child: Image.asset(
-                'assets/logos/Primary-Logo 1.png',
-                height: 150,
-                width: 150,
-              ),
-            ),
-          ),
-
-          // Loader at the bottom
-          Positioned(
-            bottom: 60,
-            left: 0,
-            right: 0,
-            child: Center(
-              child: SpinKitCircle(
-                color: AppColors.primary,
-                size: 50.0,
+                'assets/icons/logo_withtext.png',
+                width: 250,
+                fit: BoxFit.contain,
               ),
             ),
           ),

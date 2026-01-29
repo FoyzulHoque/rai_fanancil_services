@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rai_fanancil_services/core/themes/app_colors.dart';
+import '../controller/borrowing_dependents_controller.dart';
 
-import '../controller/borrowing_adults_controller.dart';
-
-class BorrowingAdultsForm extends StatelessWidget {
-  const BorrowingAdultsForm({
+class BorrowingDependentsForm extends StatelessWidget {
+  const BorrowingDependentsForm({
     super.key,
     this.minAdults = 1,
     this.maxAdults = 10,
@@ -26,13 +25,13 @@ class BorrowingAdultsForm extends StatelessWidget {
   final EdgeInsets padding;
   final TextStyle? labelStyle;
   final TextStyle? hintStyle;
-  final BorrowingAdultsController? controller;
+  final BorrowingDependentsController? controller;
 
   @override
   Widget build(BuildContext context) {
     // Safe creation – controller is always non-null after this line
     final ctrl = controller ?? Get.put(
-      BorrowingAdultsController(
+      BorrowingDependentsController(
         minAdults: minAdults,
         maxAdults: maxAdults,
       ),
@@ -53,7 +52,7 @@ class BorrowingAdultsForm extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "How many borrowing adults?",
+                    "How many dependents?",
                     style: labelStyle ??
                         const TextStyle(
                           fontSize: 17,
@@ -62,7 +61,7 @@ class BorrowingAdultsForm extends StatelessWidget {
                   ),
                   const SizedBox(height: 6),
                   Text(
-                    "Include all adults applying for the loan",
+                    "Children or others financially dependent on you",
                     style: hintStyle ??
                         TextStyle(
                           fontSize: 13,
@@ -77,7 +76,7 @@ class BorrowingAdultsForm extends StatelessWidget {
                       children: [
                         _buildControlButton(
                           icon: Icons.remove,
-                          onPressed: ctrl!.removeAdult,
+                          onPressed: ctrl!.removeDependents,
                           backgroundColor: Colors.grey.shade200,
                           foregroundColor: Colors.black87,
                         ),
@@ -93,7 +92,7 @@ class BorrowingAdultsForm extends StatelessWidget {
                         const SizedBox(width: 48),
                         _buildControlButton(
                           icon: Icons.add,
-                          onPressed: ctrl.addAdult,
+                          onPressed: ctrl.addDependents,
                           backgroundColor: AppColors.primaryDife,
                           foregroundColor: Colors.white,
                         ),
@@ -113,7 +112,7 @@ class BorrowingAdultsForm extends StatelessWidget {
                 (index) => _buildAdultCard(ctrl, index, borderRadius),
           ),
 
-
+          const SizedBox(height: 100), // space for bottom buttons if needed
         ],
       ),
     );
@@ -141,7 +140,7 @@ class BorrowingAdultsForm extends StatelessWidget {
   }
 
   Widget _buildAdultCard(
-      BorrowingAdultsController ctrl,
+      BorrowingDependentsController ctrl,
       int index,
       double borderRadius,
       ) {
@@ -158,7 +157,7 @@ class BorrowingAdultsForm extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "Adult ${index + 1}",
+              "Dependents ${index + 1}",
               style: const TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
@@ -190,27 +189,6 @@ class BorrowingAdultsForm extends StatelessWidget {
               },
             ),
             const SizedBox(height: 12),
-
-            TextFormField(
-              controller: ctrls['email'],
-              decoration: InputDecoration(
-                labelText: "Email Address",
-                prefixIcon: const Icon(Icons.email_outlined),
-                border: OutlineInputBorder(borderRadius: BorderRadius.circular(0)),
-              ),
-              keyboardType: TextInputType.emailAddress,
-            ),
-            const SizedBox(height: 12),
-
-            TextFormField(
-              controller: ctrls['phone'],
-              decoration: InputDecoration(
-                labelText: "Phone Number",
-                prefixIcon: const Icon(Icons.phone_outlined),
-                border: OutlineInputBorder(borderRadius: BorderRadius.circular(0)),
-              ),
-              keyboardType: TextInputType.phone,
-            ),
           ],
         ),
       ),

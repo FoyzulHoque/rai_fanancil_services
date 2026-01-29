@@ -107,7 +107,7 @@ class SignupOtpController extends GetxController {
         developer.log("Token received: $token", name: 'SignupOtpController');
         
         // Save token and user data
-        await SharedPreferencesHelper.saveAccessToken(token);
+        await SharedPreferencesHelper.saveToken(token);
         
         developer.log("Token saved to SharedPreferences", name: 'SignupOtpController');
         

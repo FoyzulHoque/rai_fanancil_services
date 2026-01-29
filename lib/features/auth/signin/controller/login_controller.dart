@@ -51,8 +51,8 @@ class LoginApiController extends GetxController {
         );
 
         await AuthController.saveAccessToken(token);
-        await SharedPreferencesHelper.saveAccessToken(token);
-        await SharedPreferencesHelper.saveUserEmail(userModel?.email ?? '');
+        await SharedPreferencesHelper.saveToken(token);
+        await SharedPreferencesHelper.saveEmail(userModel?.email ?? '');
         if (userModel?.id != null && userModel!.id!.isNotEmpty) {
           await AuthController.saveUserId(userModel!.id!);
         }
@@ -62,7 +62,7 @@ class LoginApiController extends GetxController {
         _errorMessage = null;
         isSuccess = true;
 
-        // If server says email not verified, route to OTP flow
+       /* // If server says email not verified, route to OTP flow
         final bool emailVerified = data['emailVerification'] == true;
         final bool isFinancialProfileCompletes = data['isFinancialProfileComplete'] == true;
         if (!emailVerified) {
@@ -88,7 +88,7 @@ class LoginApiController extends GetxController {
           Get.to(()=>SetUpYourFinancialProfile());
         }else{
           Get.offAll(()=>UserBottomNavbar());
-        }
+        }*/
 
         update();
       } else {

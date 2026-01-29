@@ -46,19 +46,50 @@ class _LiabilitiesScreenState extends State<LiabilitiesScreen> {
                     ..._loans.asMap().entries.map((e) => _buildLoanCard(e.key, e.value)),
 
                     const SizedBox(height: 32),
-
+                    // ── Credit Cards ─────────────────────────────────────────────────
+                    _buildSectionHeader("Buy now pay later", "+Add others", _addNewCard),
+                    const SizedBox(height: 16),
+                    ..._creditCards.asMap().entries.map((e) => _buildByNowPayLater(e.key, e.value)),
                     // ── Credit Cards ─────────────────────────────────────────────────
                     _buildSectionHeader("Credit Cards", "+ Add Card", _addNewCard),
                     const SizedBox(height: 16),
                     ..._creditCards.asMap().entries.map((e) => _buildCreditCardCard(e.key, e.value)),
-
-                    const SizedBox(height: 32),
-
+                    const SizedBox(height: 16),
                     // ── SMSF ─────────────────────────────────────────────────────────
                     _buildSectionHeader("SMSF", "+ Add SMSF", _addNewSMSF),
                     const SizedBox(height: 16),
                     ..._smsfs.asMap().entries.map((e) => _buildSMSFCard(e.key, e.value)),
+                    const SizedBox(height:16),
+                    _buildSectionHeader("HECS Debt", "", (){}),
+                    const SizedBox(height: 16),
+                    Card(
+                      elevation: 5,
+                      color: AppColors.white,
+                      shape: const Border(),
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Balance",
+                              style: TextStyle(
+                                color: AppColors.grey,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            const SizedBox(height: 16),
+                            CustomInputField(
+                              prefixIcon: const Icon(Icons.monetization_on_outlined),
+                              keyboardType: TextInputType.number,
+                              hintText: "0",
+                            ),
 
+                          ],
+                        ),
+                      ),
+                    ),
                     const SizedBox(height: 60),
                   ],
                 ),
@@ -82,7 +113,7 @@ class _LiabilitiesScreenState extends State<LiabilitiesScreen> {
             ),
             child: ElevatedButton(
               onPressed: () {
-                Get.to(()=>UserBottomNavbar());
+                Get.offAll(()=>UserBottomNavbar());
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primary,
@@ -91,7 +122,7 @@ class _LiabilitiesScreenState extends State<LiabilitiesScreen> {
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
                 textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
               ),
-              child: const Text("Continue"),
+              child: const Text("Save & Go to Dashboard"),
             ),
           ),
         ],
@@ -189,6 +220,44 @@ class _LiabilitiesScreenState extends State<LiabilitiesScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text("Card ${index + 1}", style: _titleStyle()),
+                  const SizedBox(height: 16),
+                  _buildField("Bank", card.bankController, "e.g., ANZ", TextInputType.text),
+                  _buildField("Credit Limit", card.limitController, "0", TextInputType.number, Icons.monetization_on_outlined),
+                  _buildField("Current Balance", card.balanceController, "0.00", TextInputType.number, Icons.monetization_on_outlined),
+                  _buildField("Monthly Payment (%)", card.monthlyPaymentController, "What % do you pay each month?", TextInputType.number, Icons.calculate_sharp),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  // ── Credit Card Card ─────────────────────────────────────────────────────────
+  Widget _buildByNowPayLater(int index, CreditCardModel card) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 16.0),
+      child: Card(
+        elevation: 5,
+        color: AppColors.white,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Stack(
+            children: [
+              Positioned(
+                right: 0,
+                top: 0,
+                child: IconButton(
+                  icon: Icon(Icons.delete, color: AppColors.red, size: 20),
+                  onPressed: () => _removeCard(index),
+                ),
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text("Buy now pay later ${index + 1}", style: _titleStyle()),
                   const SizedBox(height: 16),
                   _buildField("Bank", card.bankController, "e.g., ANZ", TextInputType.text),
                   _buildField("Credit Limit", card.limitController, "0", TextInputType.number, Icons.monetization_on_outlined),

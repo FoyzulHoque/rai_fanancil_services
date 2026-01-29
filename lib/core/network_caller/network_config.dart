@@ -50,7 +50,7 @@ class NetworkCall {
   }
 
   static Future<void> _logOut() async {
-    await SharedPreferencesHelper.clearAccessToken();
+    await SharedPreferencesHelper.clearAllData();
     Get.offAll(() =>  LoginScreen());
   }
 

@@ -1,32 +1,39 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SharedPreferencesHelper {
-  // Keys
   static const String _accessTokenKey = 'token';
   static const String _isLoginKey = 'isLogin';
-
-  static const String _userTypeKey = 'userType';
+  static const String _roleKey = 'role';
   static const String _userIdKey = 'userId';
-  static const String _userEmailKey = 'userEmail';
-  static const String _userSummaryKey = 'audio_summary'; // Clear & descriptive
-  static const String _pickerLocationUuidKey = 'pickerLocationUuid';
+  static const _emailKey = 'email';
+  static const _passwordKey = 'password';
+  static const _rememberMeKey = 'rememberMe';
 
-  // MARK: - Access Token
-  static Future<void> saveAccessToken(String token) async {
+  // Retrieve access token
+  static Future<String?> getAccessToken() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString(_accessTokenKey);
+  }
+
+  static Future<void> saveToken(String token) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(_accessTokenKey, token);
     await prefs.setBool(_isLoginKey, true);
   }
 
-  static Future<String?> getAccessToken() async {
+  static Future<void> saveUserRole(String role) async {
     final prefs = await SharedPreferences.getInstance();
-    return prefs.getString(_accessTokenKey);
+    await prefs.setString(_roleKey, role);
   }
 
-  // MARK: - User ID
-  static Future<void> saveUserId(String id) async {
+  static Future<String?> getUserRole() async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(_userIdKey, id);
+    return prefs.getString(_roleKey);
+  }
+
+  static Future<void> saveUserId(String userId) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_userIdKey, userId);
   }
 
   static Future<String?> getUserId() async {
@@ -34,102 +41,52 @@ class SharedPreferencesHelper {
     return prefs.getString(_userIdKey);
   }
 
-  // MARK: - User Email
-  static Future<void> saveUserEmail(String email) async {
+  // Save email and password
+  static Future<void> saveEmail(String email) async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(_userEmailKey, email);
+    prefs.setString(_emailKey, email);
   }
 
-  static Future<String?> getUserEmail() async {
+  static Future<void> savePassword(String password) async {
     final prefs = await SharedPreferences.getInstance();
-    return prefs.getString(_userEmailKey);
+    prefs.setString(_passwordKey, password);
   }
 
-  // MARK: - User Type
-  static Future<void> saveUserType(String userType) async {
+  // Retrieve saved email and password
+  static Future<String?> getEmail() async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(_userTypeKey, userType);
+    return prefs.getString(_emailKey);
   }
 
-  static Future<String?> getUserType() async {
+  static Future<String?> getPassword() async {
     final prefs = await SharedPreferences.getInstance();
-    return prefs.getString(_userTypeKey);
+    return prefs.getString(_passwordKey);
   }
 
-  // MARK: - Audio Summary (String version - simple & fast)
-  static Future<void> saveAudioSummary(String summary) async {
+  // Save the 'Remember Me' state
+  static Future<void> saveRememberMe(bool rememberMe) async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(_userSummaryKey, summary);
+    prefs.setBool(_rememberMeKey, rememberMe);
   }
 
-  /// Async getter - Use in FutureBuilder
-  static Future<String?> getAudioSummaryAsync() async {
+  // Retrieve 'Remember Me' state
+  static Future<bool?> getRememberMe() async {
     final prefs = await SharedPreferences.getInstance();
-    return prefs.getString(_userSummaryKey);
+    return prefs.getBool(_rememberMeKey);
   }
 
-  /// Sync getter (if you have a sync wrapper elsewhere)
-  // static String? getAudioSummary() => SharedPrefs.instance.getString(_userSummaryKey);
-
-  // MARK: - Optional: Save full PodcastTranscriptModel as JSON
-  /*static Future<void> saveAudioSummaryModel(PodcastTranscriptModel model) async {
-    final prefs = await SharedPreferences.getInstance();
-    final jsonString = jsonEncode(model.toJson());
-    await prefs.setString(_userSummaryKey, jsonString);
-  }
-
-  static Future<PodcastTranscriptModel?> getAudioSummaryModel() async {
-    final prefs = await SharedPreferences.getInstance();
-    final jsonString = prefs.getString(_userSummaryKey);
-    if (jsonString == null || jsonString.isEmpty) return null;
-    try {
-      final Map<String, dynamic> jsonMap = jsonDecode(jsonString);
-      return PodcastTranscriptModel.fromJson(jsonMap);
-    } catch (e) {
-      print('Error parsing summary model: $e');
-      return null;
-    }
-  }*/
-
-  // MARK: - Picker Location
-  static Future<void> savePickerLocationUuid(String uuid) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(_pickerLocationUuidKey, uuid);
-  }
-
-  static Future<String?> getPickerLocationUuid() async {
-    final prefs = await SharedPreferences.getInstance();
-    return prefs.getString(_pickerLocationUuidKey);
-  }
-
-  // MARK: - Login Status
-  static Future<bool> checkLogin() async {
-    final prefs = await SharedPreferences.getInstance();
-    return prefs.getBool(_isLoginKey) ?? false;
-  }
-
-  // MARK: - Clear Methods
-  static Future<void> clearAccessToken() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.remove(_accessTokenKey);
-    await prefs.remove(_isLoginKey);
-  }
-
-  static Future<void> clearSummary() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.remove(_userSummaryKey);
-  }
-
+  // Clear all stored data (e.g., token, login status, role, etc.)
   static Future<void> clearAllData() async {
-    final prefs = await SharedPreferences.getInstance();
-    await Future.wait([
-      prefs.remove(_accessTokenKey),
-      prefs.remove(_userTypeKey),
-      prefs.remove(_userIdKey),
-      prefs.remove(_userEmailKey),
-      prefs.remove(_userSummaryKey),
-      prefs.remove(_isLoginKey),
-      prefs.remove(_pickerLocationUuidKey),
-    ]);
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.remove(_accessTokenKey);  // Clear the token
+    await prefs.remove(_isLoginKey);  // Clear the login status
+    await prefs.remove(_roleKey);  // Clear the role
+    await prefs.remove(_userIdKey);
+  }
+
+  // Check if the user is logged in
+  static Future<bool?> isLoggedIn() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getBool(_isLoginKey) ?? false;
   }
 }

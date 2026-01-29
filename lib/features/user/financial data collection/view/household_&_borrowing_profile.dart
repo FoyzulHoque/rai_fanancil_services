@@ -3,6 +3,7 @@ import 'package:get/Get.dart';
 import 'package:rai_fanancil_services/core/themes/app_colors.dart';
 import '../widget/custom_app_bar_set_before_nave_bar.dart';
 import '../widget/how_many_borrowing_adults_widget.dart';
+import '../widget/how_many_borrowing_dependents_widget.dart';
 import 'income_details.dart';
 
 class HouseholdBorrowingProfile extends StatelessWidget {
@@ -14,6 +15,7 @@ class HouseholdBorrowingProfile extends StatelessWidget {
       backgroundColor: AppColors.white,
       body: Column(
         children: [
+
           //-------------header part------------------
           CustomAppBarSetBeforeNaveBar(
             title: "Household & Borrowing Profile",
@@ -24,12 +26,23 @@ class HouseholdBorrowingProfile extends StatelessWidget {
           //----------Body part---------------
           Expanded(
             child: SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-              child: BorrowingAdultsForm(
-                minAdults: 1,
-                maxAdults: 8,
-                borderRadius: 16,
-                padding: const EdgeInsets.all(20),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+              child: Column(
+                children: [
+                  BorrowingAdultsForm(
+                    minAdults: 0,
+                    maxAdults: 8,
+                    borderRadius: 16,
+                    padding: const EdgeInsets.all(20),
+                  ),
+                  SizedBox(height: 12),
+                  BorrowingDependentsForm(
+                    minAdults: 0,
+                    maxAdults: 8,
+                    borderRadius: 16,
+                    padding: const EdgeInsets.all(20),
+                  ),
+                ],
               ),
             ),
           ),

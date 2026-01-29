@@ -35,7 +35,7 @@ class ProfileApiController extends GetxController {
         final data = response.responseData?['data'] ?? response.responseData ?? {};
         userProfile.value = UserModel.fromJson(data);
 
-        final bool emailVerified = data['emailVerification'] == true;
+        /*final bool emailVerified = data['emailVerification'] == true;
         final bool isFinancialProfileCompletes = data['isFinancialProfileComplete'] == true;
         if (!emailVerified) {
           Get.snackbar(
@@ -58,7 +58,7 @@ class ProfileApiController extends GetxController {
           Get.to(()=>SetUpYourFinancialProfile());
         }else{
           Get.offAll(()=>UserBottomNavbar());
-        }
+        }*/
 
       } else {
         errorMessage.value = response.errorMessage ?? 'Failed to load profile';
@@ -139,7 +139,7 @@ class ProfileApiController extends GetxController {
     isLoading.value = true;
     try {
       await Future.delayed(const Duration(milliseconds: 500));
-      await SharedPreferencesHelper.clearAccessToken();
+      await SharedPreferencesHelper.clearAllData();
       await AuthController.dataClear();
       Get.offAll(() =>  LoginScreen());
       return true;
@@ -157,7 +157,7 @@ class ProfileApiController extends GetxController {
       if (response.isSuccess) {
         final token = await SharedPreferencesHelper.getAccessToken();
         print("-----------$token");
-        await SharedPreferencesHelper.clearAccessToken();
+        await SharedPreferencesHelper.clearAllData();
         //Get.offAll(() => LoginScreen());
         Get.snackbar('Success', 'Account deleted successfully.',
             backgroundColor: Colors.green, colorText: Colors.white);
