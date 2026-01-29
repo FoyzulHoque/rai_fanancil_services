@@ -9,6 +9,7 @@ import '../../../../core/widgets/custom_button.dart';
 import '../../../user/user navbar/user_navbar_screen.dart';
 import '../../text editing controller/custom_text_editing_controller.dart';
 import '../controller/signup_otp_controller.dart';
+import 'disclaimer_screen.dart';
 
 class SignupOtpScreens extends StatefulWidget {
   const SignupOtpScreens({super.key});
@@ -43,19 +44,15 @@ class _SignupOtpScreenState extends State<SignupOtpScreens> { // Fixed class nam
 
         leading: Padding(
           padding: const EdgeInsets.all(6.0),
-          child: Container(
-            decoration: BoxDecoration(
-              color: Colors.grey[300],
-              borderRadius: BorderRadius.circular(50),
-            ),
-            child: IconButton(
-              icon: const Icon(Icons.arrow_back, color: Colors.black),
-              onPressed: () {
-                Get.back();
-              },
-            ),
+          child: IconButton(
+            icon: const Icon(Icons.arrow_back, color: Colors.black),
+            onPressed: () {
+              Get.back();
+            },
           ),
         ),
+        centerTitle: false,
+        title: Text("OTP Code Verification"),
         backgroundColor: Colors.white,
         elevation: 0,
         systemOverlayStyle: SystemUiOverlayStyle.dark,
@@ -69,15 +66,11 @@ class _SignupOtpScreenState extends State<SignupOtpScreens> { // Fixed class nam
             children: [
               const SizedBox(height: 40),
               Text(
-                'Verify Your Email'.tr,
+                'Code has been send to and***ley@yourdomain.com',
                 style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 16),
-              Text(
-                'We\'ve sent a verification code to your email. Please check your inbox and enter the code below to verify your account.'.tr,
-                style: const TextStyle(color: Colors.grey, fontSize: 14),
                 textAlign: TextAlign.center,
               ),
+
               const SizedBox(height: 8),
               Text(
                 textCtrl.emailController.text,
@@ -111,11 +104,9 @@ class _SignupOtpScreenState extends State<SignupOtpScreens> { // Fixed class nam
                       decoration: InputDecoration(
                         counterText: '',
                         enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
                           borderSide: const BorderSide(color: Colors.grey),
                         ),
                         focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
                           borderSide: const BorderSide(color: AppColors.primary, width: 2),
                         ),
                         contentPadding: const EdgeInsets.symmetric(vertical: 12),
@@ -221,8 +212,8 @@ class _SignupOtpScreenState extends State<SignupOtpScreens> { // Fixed class nam
                     child: CustomFloatingButton(
                       customBackgroundColor: AppColors.primary,
                       textColors: Colors.white,
-                      onPressed: () => _handleVerifyOtp(),
-                      buttonText: 'Verify & Continue'.tr,
+                      onPressed: (){Get.offAll(() => DisclaimerPage());}, //=> _handleVerifyOtp(),
+                      buttonText: 'Verify'.tr,
                       height: 50.0,
                     ),
                   );

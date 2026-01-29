@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
+import 'package:rai_fanancil_services/features/auth/signup/screens/signup_otp_screen.dart';
 import '../../../../core/themes/app_colors.dart';
 import '../../../../core/themes/text_styles.dart';
 import '../../../../core/widgets/custom_button.dart';
@@ -48,35 +49,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Center(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    SizedBox(
-                      height: 83,
-                      width: 76.78,
-                      child: Image.asset("assets/logos/Primary-Logo 1.png"),
-                    ),
-                    const SizedBox(height: 10,),
-                    Text(
-                      'Register Your Account',
-                      style: AppTextStyles.title.copyWith(
-                        fontSize: 32,
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.primary,
-                      ),
-                    ),const SizedBox(height: 10,),
-                    Text(
-                      'Enter your information below',
-                      style: AppTextStyles.title.copyWith(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.primary,
-                      ),
-                    ),
-                  ],
+                child: Text(
+                  'Create New Account',
+                  style: AppTextStyles.title.copyWith(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.black,
+                  ),
                 ),
               ),
-
               const SizedBox(height: 20),
 
               // Profile Picture with Camera
@@ -136,7 +117,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 child: Container(
                   padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 16),
                   decoration: BoxDecoration(
-                    color: Colors.grey[200],
+                    color: Color(0xFF24BAED).withOpacity(0.12),
                     borderRadius: BorderRadius.circular(0),
                   ),
                   child: Row(
@@ -145,7 +126,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         'assets/icons/calendar-03.png',
                         width: 24.0,
                         height: 24.0,
-                        color: AppColors.primary,
+                        color: Color(0xFF24BAED),
                       ),
                       const SizedBox(width: 12.0),
                       Obx(() => Text(
@@ -187,10 +168,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   hintText: 'Gender',
                   prefixIcon: const Padding(
                     padding: EdgeInsets.all(12),
-                    child: Icon(Icons.person, color: AppColors.primary),
+                    child: Icon(Icons.person, color: Color(0xFF24BAED),),
                   ),
                   filled: true,
-                  fillColor: Colors.grey[200],
+                  fillColor: Color(0xFF24BAED).withOpacity(0.12),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(0),
                     borderSide: BorderSide.none,
@@ -217,9 +198,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 keyboardType: TextInputType.phone,
                 inputDecoration: InputDecoration(
                   hintText: 'Phone Number',
-                  prefixIcon: const Icon(Icons.phone, color: AppColors.primary),
+                  prefixIcon: const Icon(Icons.phone, color: Color(0xFF24BAED),),
                   filled: true,
-                  fillColor: Colors.grey[200],
+                  fillColor: Color(0xFF24BAED).withOpacity(0.12),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(0),
                     borderSide: BorderSide.none,
@@ -275,7 +256,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               Obx(() => CustomFloatingButton(
                 customBackgroundColor: AppColors.primary,
                 textColors: AppColors.white,
-                onPressed: _apiCallButton,
+                onPressed: (){ Get.off(() => const SignupOtpScreens());},//_apiCallButton,
                 buttonText: apiController.isLoading.value
                     ? 'Creating Account...'
                     : 'Sign Up',
@@ -289,7 +270,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   const Text('Already have an account? ', style: TextStyle(color: Colors.grey)),
                   TextButton(
                     onPressed: () => Get.to(()=>LoginScreen()),
-                    child: const Text('Log In', style: TextStyle(fontWeight: FontWeight.bold)),
+                    child: const Text('Log In', style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF24BAED) )),
                   ),
                 ],
               ),

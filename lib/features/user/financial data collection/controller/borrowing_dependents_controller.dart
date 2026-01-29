@@ -1,11 +1,11 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 
-class BorrowingAdultsController extends GetxController {
+class BorrowingDependentsController extends GetxController {
   final int minAdults;
   final int maxAdults;
 
-  BorrowingAdultsController({
+  BorrowingDependentsController({
     this.minAdults = 1,
     this.maxAdults = 10,
   });
@@ -17,17 +17,17 @@ class BorrowingAdultsController extends GetxController {
   void onInit() {
     super.onInit();
     for (int i = 0; i < minAdults; i++) {
-      addAdult();
+      addDependents();
     }
   }
 
-  void addAdult() {
+  void addDependents() {
     if (adultCount.value >= maxAdults) return;
     adultCount.value++;
     adultControllers.add(_createNewAdult());
   }
 
-  void removeAdult() {
+  void removeDependents() {
     if (adultCount.value <= minAdults) return;
     adultCount.value--;
     final removed = adultControllers.removeLast();
@@ -38,8 +38,6 @@ class BorrowingAdultsController extends GetxController {
     return {
       'name': TextEditingController(),
       'dob': TextEditingController(),
-      'email': TextEditingController(),
-      'phone': TextEditingController(),
     };
   }
 
@@ -56,8 +54,6 @@ class BorrowingAdultsController extends GetxController {
     return {
       'name': c['name']!.text.trim(),
       'dob': c['dob']!.text.trim(),
-      'email': c['email']!.text.trim(),
-      'phone': c['phone']!.text.trim(),
     };
   }).toList();
 }

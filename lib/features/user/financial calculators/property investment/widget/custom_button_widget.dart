@@ -13,23 +13,23 @@ class CustomSegmentSelector extends StatelessWidget {
 
   const CustomSegmentSelector({
     super.key,
-    this.height = 44,
+    this.height = 70,
     this.borderRadius = 6,
-    this.backgroundColor = const Color(0xFFEAF4FB),
+    this.backgroundColor = const Color(0xFF24BAED),
     this.selectedColor = const Color(0xFF0E77B7),
     this.selectedTextColor = Colors.white,
-    this.unSelectedTextColor = Colors.grey,
+    this.unSelectedTextColor = Colors.black,
   });
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.find<LoanTypeController>();
+    final controller = Get.put(LoanTypeController());
 
     return Container(
       height: height,
       padding: const EdgeInsets.all(4),
       decoration: BoxDecoration(
-        color: backgroundColor,
+        color: backgroundColor.withOpacity(0.45),
         borderRadius: BorderRadius.circular(borderRadius),
       ),
       child: Obx(
@@ -94,10 +94,10 @@ class _CustomSegmentButton extends StatelessWidget {
           child: Text(
             title,
             style: TextStyle(
-              fontSize: 14,
+              fontSize: 16,
               fontWeight: FontWeight.w600,
               color:
-              isSelected ? selectedTextColor : unSelectedTextColor,
+              isSelected ? selectedTextColor : Colors.black,
             ),
           ),
         ),

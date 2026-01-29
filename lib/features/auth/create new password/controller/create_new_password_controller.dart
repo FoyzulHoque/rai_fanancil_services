@@ -72,7 +72,7 @@ class AddNewPassword extends GetxController {
 
         UserModel userModel =  UserModel.fromJson(data);
         await AuthController.setUserData(token,userModel);
-        await SharedPreferencesHelper.saveAccessToken(token);
+        await SharedPreferencesHelper.saveToken(token);
         await AuthController.getUserData();
       } else {
         _errorMessage = response.responseData?['message'] ??

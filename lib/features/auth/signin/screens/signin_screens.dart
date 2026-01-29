@@ -5,6 +5,7 @@ import '../../../../core/themes/app_colors.dart';
 import '../../../../core/themes/text_styles.dart';
 import '../../../../core/widgets/custom_button.dart';
 import '../../../../core/widgets/custom_field.dart';
+import '../../../user/financial data collection/view/set_up_your_financial_profile.dart';
 import '../../../user/user navbar/user_navbar_screen.dart';
 import '../../forget password/screen/forget_password_screen.dart';
 import '../../signup/screens/signup_screen.dart';
@@ -35,53 +36,43 @@ class _LoginScreenState extends State<LoginScreen> {
         child: Padding(
           padding: const EdgeInsets.all(24.0),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               // Logo at the top (centered)
               Center(
                 child: Padding(
                   padding: const EdgeInsets.only(top: 40.0), // Top padding
                   child: Image.asset(
-                    'assets/logos/Primary-Logo 1.png', // Path to your logo image
-                    height: 83, // Increased logo size
-                    width: 76.78, // Increased logo size
+                    'assets/icons/logo_withtext.png', // Path to your logo image
+                    height: 200, // Increased logo size
+                    width: 200, // Increased logo size
                   ),
                 ),
               ),
-              SizedBox(height: 40), // Gap between logo and text fields
+              SizedBox(height: 20), // Gap between logo and text fields
 
-              // Title: Welcome Back (Bolder)
               Text(
-                'Let’s Get You Login!',
+                'Login to Your Account',
                 style: AppTextStyles.title.copyWith(
-                  fontSize: 32, // Adjust title size
+                  fontSize: 24, // Adjust title size
                   fontWeight: FontWeight.bold, // Make it bolder
-                  color: AppColors.primary
+                  color: Colors.black
                 ),
               ),
-              SizedBox(height: 8), // Gap between title and subtitle
-
-              // Subtitle text
-              Text(
-                'Enter your information below',
-                style: AppTextStyles.subtitle,
-              ),
               SizedBox(height: 32), // Gap before text fields
-              Text("Email Address",style: TextStyle(color: AppColors.secondaryColors),),
+
               // Custom Email Text Field
               CustomTextField(
                 controller: customTextEditingController.emailController,
                 hintText: 'Enter Email Address',
-                prefixIcon: 'assets/icons/email.png', // Replace with your prefix icon path
+                prefixIcon: 'assets/icons/email.png',
               ),
-              SizedBox(height: 16), // Gap between email and password field
-              Text("Password",style: TextStyle(color: AppColors.secondaryColors),),
-              // Custom Password Text Field with Eye Icon as suffix
+              SizedBox(height: 16),
               CustomTextField(
                 controller: customTextEditingController.passwordController,
                 hintText: 'Enter Password',
-                prefixIcon: 'assets/icons/lock.png', // Replace with your prefix icon path
-                obscureText: !_isPasswordVisible, // Toggle password visibility
+                prefixIcon: 'assets/icons/lock.png',
+                obscureText: !_isPasswordVisible,
                 suffixIcon: GestureDetector(
                   onTap: () {
                     setState(() {
@@ -98,41 +89,23 @@ class _LoginScreenState extends State<LoginScreen> {
 
               // Remember Me and Forgot Password
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  // Remember Me with round checkbox
-                  Row(
-                    children: [
-                      Checkbox(
-                        value: _isRememberMeChecked,
-                        onChanged: (bool? value) {
-                          setState(() {
-                            _isRememberMeChecked = value ?? false;
-                          });
-                        },
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(6),
-                        ),
-                      ),
-                      Text(
-                        'Remember Me',
-                        style: AppTextStyles.body.copyWith(fontSize: 16,color: AppColors.primary),
-                      ),
-                    ],
-                  ),
-                  // Forgot Password
-                  TextButton(
-                    onPressed: () {
-                      Get.to(()=>ForgetPasswordScreen());
-                      print('Forgot Password?');
+                  Checkbox(
+                    value: _isRememberMeChecked,
+                    onChanged: (bool? value) {
+                      setState(() {
+                        _isRememberMeChecked = value ?? false;
+                      });
                     },
-                    child: Text(
-                      'Forgot Password?',
-                      style: AppTextStyles.body.copyWith(
-                        fontSize: 16,
-                       color: AppColors.primary // Color for the link
-                      ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(6),
+                      side: BorderSide(color: AppColors.primary),
                     ),
+                  ),
+                  Text(
+                    'Remember Me',
+                    style: AppTextStyles.body.copyWith(fontSize: 16,color: AppColors.primary),
                   ),
                 ],
               ),
@@ -142,12 +115,27 @@ class _LoginScreenState extends State<LoginScreen> {
               CustomFloatingButton(
                 customBackgroundColor: AppColors.primary,
                 textColors: AppColors.white,
-                onPressed: _apiCallButton,
+                onPressed:(){
+                  Get.to(()=> SetUpYourFinancialProfile());
+                }, // _apiCallButton,
                 buttonText: 'Log in',
                  
               ),
-              SizedBox(height: 24), // Gap after the login button
-
+              SizedBox(height: 10), // Gap after the login button
+              TextButton(
+                onPressed: () {
+                  Get.to(()=>ForgetPasswordScreen());
+                  print('Forgot Password?');
+                },
+                child: Text(
+                  'Forgot the password?',
+                  style: AppTextStyles.body.copyWith(
+                      fontSize: 16,
+                      color: AppColors.primary // Color for the link
+                  ),
+                ),
+              ),
+              SizedBox(height: 12), // Gap after the login button
               // Text: Already have an account? + Sign Up link
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -161,7 +149,6 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   TextButton(
                     onPressed: () {
-
                       Get.to((SignUpScreen()));
                     },
                     child: Text(

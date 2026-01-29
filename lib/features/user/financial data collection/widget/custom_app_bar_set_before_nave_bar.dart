@@ -8,7 +8,7 @@ class CustomAppBarSetBeforeNaveBar extends StatelessWidget {
     this.appBarColor,
     required this.currentStep,    // changed to int for easy calculation
     required this.totalSteps,     // changed to int
-    this.appBarHeight = 140,      // adjustable
+    this.appBarHeight = 150,      // adjustable
   });
 
   final String? title;
@@ -36,17 +36,20 @@ class CustomAppBarSetBeforeNaveBar extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
 
         children: [
+          SizedBox(height: 12),
           // Title
           if (title != null && title!.isNotEmpty)
-            Text(
-              title!,
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 22,
-                fontWeight: FontWeight.w700,
-                letterSpacing: 0.3,
+            Center(
+              child: Text(
+                title!,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 22,
+                  fontWeight: FontWeight.w700,
+                  letterSpacing: 0.3,
+                ),
+                textAlign: TextAlign.center,
               ),
-              textAlign: TextAlign.center,
             ),
           const Spacer(), // Use Spacer to fill available space
           // Step text + Progress bar
@@ -79,8 +82,8 @@ class CustomAppBarSetBeforeNaveBar extends StatelessWidget {
                 borderRadius: BorderRadius.circular(3),
                 child: LinearProgressIndicator(
                   value: progress,
-                  backgroundColor: Colors.white.withOpacity(0.30),
-                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                  backgroundColor: Colors.white,
+                  valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
                   minHeight: 6,
                 ),
               ),
