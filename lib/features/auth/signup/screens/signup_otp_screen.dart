@@ -212,7 +212,7 @@ class _SignupOtpScreenState extends State<SignupOtpScreens> { // Fixed class nam
                     child: CustomFloatingButton(
                       customBackgroundColor: AppColors.primary,
                       textColors: Colors.white,
-                      onPressed: (){Get.offAll(() => DisclaimerPage());}, //=> _handleVerifyOtp(),
+                      onPressed: ()=> _handleVerifyOtp(),
                       buttonText: 'Verify'.tr,
                       height: 50.0,
                     ),
@@ -252,7 +252,7 @@ class _SignupOtpScreenState extends State<SignupOtpScreens> { // Fixed class nam
 
     bool isSuccess = await otpController.verifySignupOtp();
     if (isSuccess) {
-      Get.offAll(() => const UserBottomNavbar());
+      Get.offAll(() => DisclaimerPage());
       // After successful verification, navigate to bottom navigation bar
     } else {
       if (otpController.errorMessage != null) {
