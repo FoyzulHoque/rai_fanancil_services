@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rai_fanancil_services/core/themes/app_colors.dart';
 import '../../../../core/widgets/custom_input_field_widget.dart';
+import '../controller/finacial_data_collection_text_editing_controller.dart';
 import '../controller/income_details_property_drop_down_controller.dart';
 import '../controller/tax_region_state_dropdown_controller.dart';
 import '../widget/custom_app_bar_set_before_nave_bar.dart';
@@ -9,8 +10,9 @@ import 'living_expenses.dart'; // if not used, you can remove this import
 
 class IncomeDetailsScreen extends StatelessWidget {
   IncomeDetailsScreen({super.key});
+  final FinacialDataCollectionTextEditingController finacialDataCollectionTextEditingController = Get.put(FinacialDataCollectionTextEditingController());
 
-  final TextEditingController _propertyController1 = TextEditingController();
+
 
   final IncomeDetailsPropertyDropdownController propertyDropdownController = Get.put(
     IncomeDetailsPropertyDropdownController(),
@@ -190,6 +192,27 @@ class IncomeDetailsScreen extends StatelessWidget {
                                     borderRadius: BorderRadius.circular(0),
                                     borderSide: const BorderSide(color: Colors.blueGrey, width: 2),
                                   ),
+
+                                  isExpanded: true,
+                                  items: props.map((String value) {
+                                    return DropdownMenuItem<String>(
+                                      value: value,
+                                      child: Text(value),
+                                    );
+                                  }).toList(),
+                                  onChanged: primaryIncomeDropdownController.changeProperty,
+                                );
+                              }),
+                              const SizedBox(height: 8),
+                              CustomInputField(
+                                prefixIcon: const Icon(Icons.monetization_on_outlined),
+                                controller: finacialDataCollectionTextEditingController.propertyController1,
+                                keyboardType: TextInputType.number,
+                                hintText: "0",
+                              ),
+                            ],
+                          ),
+
                                   filled: true,
                                   fillColor: Colors.grey.shade50,
                                   contentPadding: const EdgeInsets.symmetric(
@@ -343,6 +366,13 @@ class IncomeDetailsScreen extends StatelessWidget {
                                 fontSize: 22,
                                 fontWeight: FontWeight.w600,
                               ),
+
+                              const SizedBox(height: 16),
+                              CustomInputField(
+                                prefixIcon: const Icon(Icons.monetization_on_outlined),
+                                controller: finacialDataCollectionTextEditingController.otherIncomeController,
+                                keyboardType: TextInputType.number,
+                                hintText: "0",
                             ),
                             const SizedBox(height: 8),
                             Text(
@@ -351,6 +381,7 @@ class IncomeDetailsScreen extends StatelessWidget {
                                 color: AppColors.grey,
                                 fontSize: 16,
                                 fontWeight: FontWeight.w600,
+
                               ),
                             ),
                             const SizedBox(height: 16),

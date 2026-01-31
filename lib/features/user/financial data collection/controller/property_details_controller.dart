@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class PropertyController extends GetxController {
+
   final RxList<Property> properties = <Property>[].obs;
 
   @override

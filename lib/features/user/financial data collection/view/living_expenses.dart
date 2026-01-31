@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:rai_fanancil_services/core/themes/app_colors.dart';
 import 'package:rai_fanancil_services/features/user/financial%20data%20collection/view/property_details.dart';
 import '../../../../core/widgets/custom_input_field_widget.dart';
+import '../controller/finacial_data_collection_text_editing_controller.dart';
 import '../controller/income_details_property_drop_down_controller.dart';
 import '../controller/tax_region_state_dropdown_controller.dart';
 import '../widget/check_box_widget.dart';
@@ -16,10 +17,21 @@ class LivingExpensesScreen extends StatefulWidget {
 }
 
 class _LivingExpensesScreenState extends State<LivingExpensesScreen> {
+
+
+  final FinacialDataCollectionTextEditingController finacialDataCollectionTextEditingController = Get.put(FinacialDataCollectionTextEditingController());
+
+  //final TextEditingController _propertyController1 = TextEditingController();
+  //List<String> selectedResidences = []; // Changed to a list
+  final IncomeDetailsPropertyDropdownController propertyDropdownController = Get.put(
+    IncomeDetailsPropertyDropdownController(),
+  );
+
   final TextEditingController _propertyController1 = TextEditingController();
   List<String> _selectedResidences = []; // Changed to a list
   final IncomeDetailsPropertyDropdownController propertyDropdownController =
       Get.put(IncomeDetailsPropertyDropdownController());
+
 
   final TaxRegionStateDropdownController taxRegionStateDropdownController =
       Get.put(TaxRegionStateDropdownController());
@@ -38,6 +50,36 @@ class _LivingExpensesScreenState extends State<LivingExpensesScreen> {
             totalSteps: 6,
             appBarColor: AppColors.secondaryColors,
           ),
+
+
+            // Scrollable body
+            Expanded(
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      //---Check box field-----------------------
+                      Card(
+                        elevation: 5,
+                        color: AppColors.white,
+                        shape: const Border(),
+                        child: Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: CheckBoxWidget(
+                            selectedOptions: finacialDataCollectionTextEditingController.selectedResidences, // Pass the list
+                            onChanged: (newValue) {
+                              setState(() {
+                                if (finacialDataCollectionTextEditingController.selectedResidences.contains(newValue)) {
+                                  finacialDataCollectionTextEditingController.selectedResidences.remove(newValue); // Unselect
+                                } else {
+                                  finacialDataCollectionTextEditingController.selectedResidences.add(newValue); // Select
+                                }
+                              });
+                              print("Selected residences: ${finacialDataCollectionTextEditingController.selectedResidences}"); // for debug
+                            },
+                          ),
 
           // Scrollable body
           Expanded(
@@ -93,6 +135,7 @@ class _LivingExpensesScreenState extends State<LivingExpensesScreen> {
                               },
                             ),
                           ],
+
                         ),
                       ),
                     ),
@@ -191,6 +234,13 @@ class _LivingExpensesScreenState extends State<LivingExpensesScreen> {
                                 fontSize: 16,
                                 fontWeight: FontWeight.w600,
                               ),
+
+                              const SizedBox(height: 8),
+                              CustomInputField(
+                                prefixIcon: const Icon(Icons.monetization_on_outlined),
+                                controller: finacialDataCollectionTextEditingController.foodController,
+                                keyboardType: TextInputType.number,
+                                hintText: "0",
                             ),
                             const SizedBox(height: 8),
                             CustomInputField(
@@ -278,6 +328,14 @@ class _LivingExpensesScreenState extends State<LivingExpensesScreen> {
                                 fontSize: 16,
                                 fontWeight: FontWeight.w600,
                               ),
+
+                              const SizedBox(height: 8),
+                              CustomInputField(
+                                prefixIcon: const Icon(Icons.monetization_on_outlined),
+                                controller: finacialDataCollectionTextEditingController.transportController,
+                                keyboardType: TextInputType.number,
+                                hintText: "0",
+
                             ),
                             const SizedBox(height: 8),
                             CustomInputField(
@@ -365,11 +423,20 @@ class _LivingExpensesScreenState extends State<LivingExpensesScreen> {
                                 fontSize: 16,
                                 fontWeight: FontWeight.w600,
                               ),
+
+                              const SizedBox(height: 8),
+                              CustomInputField(
+                                prefixIcon: const Icon(Icons.monetization_on_outlined),
+                                controller: finacialDataCollectionTextEditingController.utilitiesController,
+                                keyboardType: TextInputType.number,
+                                hintText: "0",
+
                             ),
                             const SizedBox(height: 8),
                             CustomInputField(
                               prefixIcon: const Icon(
                                 Icons.calendar_month,
+
                               ),
                               keyboardType: TextInputType.number,
                               hintText: "Expense Date",
@@ -452,6 +519,14 @@ class _LivingExpensesScreenState extends State<LivingExpensesScreen> {
                                 fontSize: 16,
                                 fontWeight: FontWeight.w600,
                               ),
+
+                              const SizedBox(height: 8),
+                              CustomInputField(
+                                prefixIcon: const Icon(Icons.monetization_on_outlined),
+                                controller:finacialDataCollectionTextEditingController.insuranceController,
+                                keyboardType: TextInputType.number,
+                                hintText: "0",
+
                             ),
                             const SizedBox(height: 8),
                             CustomInputField(
@@ -539,11 +614,20 @@ class _LivingExpensesScreenState extends State<LivingExpensesScreen> {
                                 fontSize: 16,
                                 fontWeight: FontWeight.w600,
                               ),
+
+                              const SizedBox(height: 8),
+                              CustomInputField(
+                                prefixIcon: const Icon(Icons.monetization_on_outlined),
+                                controller: finacialDataCollectionTextEditingController.entertainmentController,
+                                keyboardType: TextInputType.number,
+                                hintText: "0",
+
                             ),
                             const SizedBox(height: 8),
                             CustomInputField(
                               prefixIcon: const Icon(
                                 Icons.calendar_month,
+
                               ),
                               keyboardType: TextInputType.number,
                               hintText: "Expense Date",
@@ -578,11 +662,20 @@ class _LivingExpensesScreenState extends State<LivingExpensesScreen> {
                                 fontSize: 16,
                                 fontWeight: FontWeight.w600,
                               ),
+
+                              const SizedBox(height: 16),
+                              CustomInputField(
+                                prefixIcon: const Icon(Icons.monetization_on_outlined),
+                                controller: finacialDataCollectionTextEditingController.monthlyMortgagePaymentController,
+                                keyboardType: TextInputType.number,
+                                hintText: "0",
+
                             ),
                             const SizedBox(height: 16),
                             CustomInputField(
                               prefixIcon: const Icon(
                                 Icons.monetization_on_outlined,
+
                               ),
                               controller: _propertyController1,
                               keyboardType: TextInputType.number,
@@ -642,10 +735,4 @@ class _LivingExpensesScreenState extends State<LivingExpensesScreen> {
     );
   }
 
-  @override
-  void dispose() {
-    _propertyController1.dispose();
-    //_livingExpensesController.dispose();
-    super.dispose();
-  }
 }
