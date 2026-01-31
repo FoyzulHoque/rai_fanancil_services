@@ -35,7 +35,7 @@ class AllPropertiesController extends GetxController {
         );
 
         allPropertiesData.assignAll(parsed.data?.data ?? []);
-        meta = parsed.data?.meta;
+        // meta = parsed.data?.meta;
       } else {
         log("Error: ${response.errorMessage}");
       }
