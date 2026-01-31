@@ -14,7 +14,7 @@ class AllPropertiesResponse {
   int? statusCode;
   bool? success;
   String? message;
-  Data? data;
+  AllPropertiesResult? data;
   Stats? stats;
 
   AllPropertiesResponse({
@@ -30,7 +30,7 @@ class AllPropertiesResponse {
         statusCode: json["statusCode"],
         success: json["success"],
         message: json["message"],
-        data: json["data"] == null ? null : Data.fromJson(json["data"]),
+        data: json["data"] == null ? null : AllPropertiesResult.fromJson(json["data"]),
         stats: json["stats"] == null ? null : Stats.fromJson(json["stats"]),
       );
 
@@ -43,13 +43,13 @@ class AllPropertiesResponse {
   };
 }
 
-class Data {
+class AllPropertiesResult {
   Meta? meta;
   List<Datum>? data;
 
-  Data({this.meta, this.data});
+  AllPropertiesResult({this.meta, this.data});
 
-  factory Data.fromJson(Map<String, dynamic> json) => Data(
+  factory AllPropertiesResult.fromJson(Map<String, dynamic> json) => AllPropertiesResult(
     meta: json["meta"] == null ? null : Meta.fromJson(json["meta"]),
     data: json["data"] == null
         ? []
