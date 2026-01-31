@@ -5,6 +5,7 @@ import 'package:rai_fanancil_services/core/network_musfik/service.dart';
 import 'package:rai_fanancil_services/core/network_path/natwork_path.dart';
 import 'package:rai_fanancil_services/features/user/home/model/user_cash_flow_trend_modal.dart';
 import 'package:rai_fanancil_services/features/user/home/model/user_dashboard_modal.dart';
+import 'package:rai_fanancil_services/features/user/home/model/user_property_value_trend_modal.dart';
 
 class HomeDashboardController extends GetxController {
   final isLoading = false.obs;
@@ -13,7 +14,16 @@ class HomeDashboardController extends GetxController {
   void onInit() {
     userDashboardData();
     cashFlowTrend();
+    propertyValueTrend();
     super.onInit();
+  }
+
+  Future<void> refreshData() async {
+    await Future.wait([
+      userDashboardData(),
+      cashFlowTrend(),
+      propertyValueTrend(),
+    ]);
   }
 
   final NetworkCaller networkCaller = NetworkCaller();
@@ -73,7 +83,7 @@ class HomeDashboardController extends GetxController {
     }
   }
 
-  final propertyValueData = <Datum>[].obs;
+  final propertyValueData = <UserPropertyValueDetum>[].obs;
   Future<void> propertyValueTrend() async {
     isLoading.value = true;
     try {
@@ -84,13 +94,18 @@ class HomeDashboardController extends GetxController {
 
       log(response.responseData.toString());
       if (response.statusCode == 200 || response.isSuccess) {
-        final List list = response.responseData as List;
+        if (response.statusCode == 200 || response.isSuccess) {
+          final List list = response.responseData as List;
 
-        final parsed = list
-            .map((e) => Datum.fromJson(e as Map<String, dynamic>))
-            .toList();
+          final parsed = list
+              .map(
+                (e) =>
+                    UserPropertyValueDetum.fromJson(e as Map<String, dynamic>),
+              )
+              .toList();
 
-        cashFlowTrendData.assignAll(parsed);
+          propertyValueData.assignAll(parsed);
+        }
       } else {
         // showError(response.errorMessage);
       }
@@ -100,7 +115,6 @@ class HomeDashboardController extends GetxController {
       isLoading.value = false;
     }
   }
-  
 
   @override
   void onClose() {

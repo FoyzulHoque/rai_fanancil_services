@@ -14,7 +14,7 @@ class UserPropertyValueResponse {
   int? statusCode;
   bool? success;
   String? message;
-  List<Datum>? data;
+  List<UserPropertyValueDetum>? data;
   Stats? stats;
 
   UserPropertyValueResponse({
@@ -32,7 +32,7 @@ class UserPropertyValueResponse {
         message: json["message"],
         data: json["data"] == null
             ? []
-            : List<Datum>.from(json["data"]!.map((x) => Datum.fromJson(x))),
+            : List<UserPropertyValueDetum>.from(json["data"]!.map((x) => UserPropertyValueDetum.fromJson(x))),
         stats: json["stats"] == null ? null : Stats.fromJson(json["stats"]),
       );
 
@@ -47,14 +47,14 @@ class UserPropertyValueResponse {
   };
 }
 
-class Datum {
+class UserPropertyValueDetum {
   String? date;
   int? propertyValue;
 
-  Datum({this.date, this.propertyValue});
+  UserPropertyValueDetum({this.date, this.propertyValue});
 
-  factory Datum.fromJson(Map<String, dynamic> json) =>
-      Datum(date: json["date"], propertyValue: json["propertyValue"]);
+  factory UserPropertyValueDetum.fromJson(Map<String, dynamic> json) =>
+      UserPropertyValueDetum(date: json["date"], propertyValue: json["propertyValue"]);
 
   Map<String, dynamic> toJson() => {
     "date": date,

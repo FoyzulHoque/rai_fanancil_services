@@ -112,7 +112,7 @@ class BodyGraphWidget01 extends StatelessWidget {
                     bottomTitles: AxisTitles(
                       sideTitles: SideTitles(
                         showTitles: true,
-                        interval: 4, // প্রতিটি পয়েন্টে লেবেল
+                        interval: 3, // প্রতিটি পয়েন্টে লেবেল
                         getTitlesWidget: (value, meta) {
                           final index = value.toInt();
                           if (index < 0 || index >= months.length)

@@ -32,186 +32,211 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final urlClt = profileApiController.userProfile;
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Obx(() {
-              return HomeAppBarWidget(
-                name: "${urlClt.value.firstName} ${urlClt.value.lastName}",
-                imageUrl: "${urlClt.value.profileImage}",
-              );
-            }),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                spacing: 10,
-                children: [
-                  Row(
-                    children: [
-                      Obx(() {
-                        final data = homeDashboardController.userDashboard;
+      body: RefreshIndicator(
+        onRefresh: () {
+          return homeDashboardController.refreshData();
+        },
+        color: AppColors.primary,
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Obx(() {
+                return HomeAppBarWidget(
+                  name: "${urlClt.value.firstName} ${urlClt.value.lastName}",
+                  imageUrl: "${urlClt.value.profileImage}",
+                );
+              }),
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  spacing: 10,
+                  children: [
+                    Row(
+                      children: [
+                        Obx(() {
+                          final data = homeDashboardController.userDashboard;
 
-                        if (data.isEmpty) {
+                          if (data.isEmpty) {
+                            return UserBodyWidget(
+                              boxColor: AppColors.thirdColors,
+                              image: "assets/icons/home2.png",
+                              title: "Total Properties",
+                              totalNumber: "0",
+                              iconColor: AppColors.primary,
+                            );
+                          }
+
                           return UserBodyWidget(
                             boxColor: AppColors.thirdColors,
                             image: "assets/icons/home2.png",
                             title: "Total Properties",
-                            totalNumber: "0",
+                            totalNumber: data.first.totalProperties.toString(),
                             iconColor: AppColors.primary,
                           );
-                        }
+                        }),
 
-                        return UserBodyWidget(
-                          boxColor: AppColors.thirdColors,
-                          image: "assets/icons/home2.png",
-                          title: "Total Properties",
-                          totalNumber: data.first.totalProperties.toString(),
-                          iconColor: AppColors.primary,
-                        );
-                      }),
+                        Spacer(),
+                        Obx(() {
+                          final data = homeDashboardController.userDashboard;
 
-                      Spacer(),
-                      Obx(() {
-                        final data = homeDashboardController.userDashboard;
+                          if (data.isEmpty) {
+                            return UserBodyWidget(
+                              boxColor: AppColors.thirdColors,
+                              image: "assets/icons/home2.png",
+                              title: "Total Properties",
+                              totalNumber: "0",
+                              iconColor: AppColors.primary,
+                            );
+                          }
 
-                        if (data.isEmpty) {
                           return UserBodyWidget(
                             boxColor: AppColors.thirdColors,
-                            image: "assets/icons/home2.png",
-                            title: "Total Properties",
-                            totalNumber: "0",
+                            image: "assets/icons/dollar_Icon.png",
+                            title: "Total Loans",
+                            totalNumber: data.first.totalActiveLoans.toString(),
                             iconColor: AppColors.primary,
                           );
-                        }
+                        }),
+                      ],
+                    ),
 
-                        return UserBodyWidget(
-                          boxColor: AppColors.thirdColors,
-                          image: "assets/icons/dollar_Icon.png",
-                          title: "Total Loans",
-                          totalNumber: data.first.totalActiveLoans.toString(),
-                          iconColor: AppColors.primary,
-                        );
-                      }),
-                    ],
-                  ),
+                    Obx(() {
+                      final data = homeDashboardController.userDashboard;
 
-                  Obx(() {
-                    final data = homeDashboardController.userDashboard;
+                      if (data.isEmpty) {
+                        return const SizedBox();
+                      }
 
-                    if (data.isEmpty) {
-                      return const SizedBox();
-                    }
+                      final monthly = data.first.comparisons!.monthlyCashflow;
 
-                    final monthly = data.first.comparisons!.monthlyCashflow;
+                      return BodyWidget02(
+                        containerColor: AppColors.veryLightCyanBlueColor,
+                        borderColor: Colors.grey.shade300,
+                        boxColor: monthly!.isIncrease!
+                            ? AppColors.greenLowLight
+                            : AppColors.peachPuff,
+                        iconColor: monthly.isIncrease!
+                            ? Colors.green
+                            : AppColors.red,
+                        textColor3: monthly.isIncrease!
+                            ? Colors.green
+                            : Colors.red,
+                        title: "Monthly Cashflow",
+                        image: monthly.isIncrease!
+                            ? "assets/icons/up_graph.png"
+                            : "assets/icons/down_graph.png",
+                        totalAmount: "\$${monthly.value!.toStringAsFixed(2)}",
+                        totalPercent:
+                            "${monthly.changePercentage!.toStringAsFixed(2)}%",
+                        totalPercentText: "last month",
+                      );
+                    }),
 
-                    return BodyWidget02(
-                      containerColor: AppColors.veryLightCyanBlueColor,
-                      borderColor: Colors.grey.shade300,
-                      boxColor: monthly!.isIncrease!
-                          ? AppColors.greenLowLight
-                          : AppColors.peachPuff,
-                      iconColor: monthly.isIncrease!
-                          ? Colors.green
-                          : AppColors.red,
-                      textColor3: monthly.isIncrease!
-                          ? Colors.green
-                          : Colors.red,
-                      title: "Monthly Cashflow",
-                      image: monthly.isIncrease!
-                          ? "assets/icons/up_graph.png"
-                          : "assets/icons/down_graph.png",
-                      totalAmount: "\$${monthly.value!.toStringAsFixed(2)}",
-                      totalPercent:
-                          "${monthly.changePercentage!.toStringAsFixed(2)}%",
-                      totalPercentText: "last month",
-                    );
-                  }),
+                    // BodyWidget02(
+                    //   containerColor: AppColors.veryLightCyanBlueColor,
+                    //   borderColor: Colors.grey.shade300,
+                    //   boxColor: AppColors.peachPuff,
+                    //   iconColor: AppColors.red,
+                    //   textColor3: Colors.red,
+                    //   title: "Annual Cashflow",
+                    //   image: "assets/icons/down_graph.png",
+                    //   totalAmount: "\$58,200",
+                    //   totalPercent: "-8.3%",
+                    //   totalPercentText: "last month",
+                    // ),
+                    Obx(() {
+                      final data = homeDashboardController.userDashboard;
+                      if (data.isEmpty) return const SizedBox();
 
-                  // BodyWidget02(
-                  //   containerColor: AppColors.veryLightCyanBlueColor,
-                  //   borderColor: Colors.grey.shade300,
-                  //   boxColor: AppColors.peachPuff,
-                  //   iconColor: AppColors.red,
-                  //   textColor3: Colors.red,
-                  //   title: "Annual Cashflow",
-                  //   image: "assets/icons/down_graph.png",
-                  //   totalAmount: "\$58,200",
-                  //   totalPercent: "-8.3%",
-                  //   totalPercentText: "last month",
-                  // ),
-                  Obx(() {
-                    final data = homeDashboardController.userDashboard;
-                    if (data.isEmpty) return const SizedBox();
+                      final annual = data.first.comparisons!.annualCashflow;
 
-                    final annual = data.first.comparisons!.annualCashflow;
+                      return BodyWidget02(
+                        containerColor: AppColors.veryLightCyanBlueColor,
+                        borderColor: Colors.grey.shade300,
+                        boxColor: annual!.isIncrease!
+                            ? AppColors.greenLowLight
+                            : AppColors.peachPuff,
+                        iconColor: annual.isIncrease!
+                            ? Colors.green
+                            : AppColors.red,
+                        textColor3: annual.isIncrease!
+                            ? Colors.green
+                            : Colors.red,
+                        title: "Annual Cashflow",
+                        image: annual.isIncrease!
+                            ? "assets/icons/up_graph.png"
+                            : "assets/icons/down_graph.png",
+                        totalAmount: "\$${annual.value!.toStringAsFixed(0)}",
+                        totalPercent:
+                            "${annual.changePercentage!.toStringAsFixed(2)}%",
+                        totalPercentText: "last month",
+                      );
+                    }),
 
-                    return BodyWidget02(
-                      containerColor: AppColors.veryLightCyanBlueColor,
-                      borderColor: Colors.grey.shade300,
-                      boxColor: annual!.isIncrease!
-                          ? AppColors.greenLowLight
-                          : AppColors.peachPuff,
-                      iconColor: annual.isIncrease!
-                          ? Colors.green
-                          : AppColors.red,
-                      textColor3: annual.isIncrease!
-                          ? Colors.green
-                          : Colors.red,
-                      title: "Annual Cashflow",
-                      image: annual.isIncrease!
-                          ? "assets/icons/up_graph.png"
-                          : "assets/icons/down_graph.png",
-                      totalAmount: "\$${annual.value!.toStringAsFixed(0)}",
-                      totalPercent:
-                          "${annual.changePercentage!.toStringAsFixed(2)}%",
-                      totalPercentText: "last month",
-                    );
-                  }),
+                    // BodyGraphWidget01(
+                    //   title: "Cash Flow Trend",
+                    //   monthlyData: cashflowData,
+                    //   lineColor: Colors.cyan,
+                    //   fillOpacity: 0.3,
+                    // ),
+                    Obx(() {
+                      final data = homeDashboardController.cashFlowTrendData;
 
-                  // BodyGraphWidget01(
-                  //   title: "Cash Flow Trend",
-                  //   monthlyData: cashflowData,
-                  //   lineColor: Colors.cyan,
-                  //   fillOpacity: 0.3,
-                  // ),
-                  Obx(() {
-                    final data = homeDashboardController.cashFlowTrendData;
+                      if (data.isEmpty) {
+                        return const SizedBox();
+                      }
 
-                    if (data.isEmpty) {
-                      return const SizedBox();
-                    }
+                      final graphData = data.map((e) {
+                        return {
+                          'month': e.date ?? '',
+                          'amount': e.monthlyCashflow ?? 0,
+                        };
+                      }).toList();
 
-                    final graphData = data.map((e) {
-                      return {
-                        'month': e.date ?? '',
-                        'amount': e.monthlyCashflow ?? 0,
-                      };
-                    }).toList();
+                      return BodyGraphWidget01(
+                        title: "Cash Flow Trend",
+                        monthlyData: graphData,
+                        lineColor: Colors.cyan,
+                        fillOpacity: 0.3,
+                      );
+                    }),
 
-                    return BodyGraphWidget01(
-                      title: "Cash Flow Trend",
-                      monthlyData: graphData,
-                      lineColor: Colors.cyan,
-                      fillOpacity: 0.3,
-                    );
-                  }),
+                    // PropertyValueGrowthChart(
+                    //   title: "Property Value Growth",
+                    //   monthlyData: [
+                    //     {'month': 'Jan', 'amount': 450000},
+                    //     {'month': 'Feb', 'amount': 520000},
+                    //     {'month': 'Mar', 'amount': 850000},
+                    //     {'month': 'Apr', 'amount': 920000},
+                    //     {'month': 'May', 'amount': 780000},
+                    //     {'month': 'Jun', 'amount': 650000},
+                    //   ],
+                    // ),
+                    Obx(() {
+                      final data = homeDashboardController.propertyValueData;
 
-                  PropertyValueGrowthChart(
-                    title: "Property Value Growth",
-                    monthlyData: [
-                      {'month': 'Jan', 'amount': 450000},
-                      {'month': 'Feb', 'amount': 520000},
-                      {'month': 'Mar', 'amount': 850000},
-                      {'month': 'Apr', 'amount': 920000},
-                      {'month': 'May', 'amount': 780000},
-                      {'month': 'Jun', 'amount': 650000},
-                    ],
-                  ),
-                ],
+                      if (data.isEmpty) {
+                        return const SizedBox();
+                      }
+
+                      final graphData = data.map((e) {
+                        return {
+                          'month': e.date ?? '',
+                          'amount': e.propertyValue ?? 0,
+                        };
+                      }).toList();
+
+                      return PropertyValueGrowthChart(
+                        title: "Property Value Growth",
+                        monthlyData: graphData,
+                      );
+                    }),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
