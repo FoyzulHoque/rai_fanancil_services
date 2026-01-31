@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:rai_fanancil_services/core/themes/app_colors.dart';
 import '../../../../core/widgets/custom_input_field_widget.dart';
 import '../../financial calculators/property investment/widget/custom_button_widget.dart';
-import '../controller/finacial_data_collection_text_editing_controller.dart';
 import '../controller/property_details_controller.dart';
 import '../widget/custom_app_bar_set_before_nave_bar.dart';
 import '../widget/select_button_widget.dart';
@@ -13,7 +12,6 @@ class PropertyDetailsScreen extends StatelessWidget {
   PropertyDetailsScreen({super.key});
 
   final PropertyController propertyController = Get.put(PropertyController());
-  final FinacialDataCollectionTextEditingController finacialDataCollectionTextEditingController = Get.put(FinacialDataCollectionTextEditingController());
 
   @override
   Widget build(BuildContext context) {
@@ -31,84 +29,15 @@ class PropertyDetailsScreen extends StatelessWidget {
             child: SingleChildScrollView(
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
-
-                child: Obx(() => Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text("Property Type",style: TextStyle(fontSize: 16,fontWeight: FontWeight.w500,color: AppColors.black),),
-                    const SizedBox(height: 16,),
-                    //-------------------Select Button-----------------
-                    SelectButtonWidget(
-                      onSelected: (value) {
-                        finacialDataCollectionTextEditingController.selectedPropertyButton.add(value);
-                      },   // ← fixed: added empty function (or null)
-                    ),
-                    const SizedBox(height: 16,),
-                    //-------------------Increment Addon Property-----------------
-                    for (int i = 0; i < propertyController.properties.length; i++)
-                      _buildPropertyCard(i),
-                    const SizedBox(height: 8),
-                    //-------------------Loan Structure Property-----------------
-                    Card(
-                      elevation: 5,
-                      color: AppColors.white,
-                      shape: Border.all(style: BorderStyle.none),
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "Loan Structure",
-                              style: TextStyle(
-                                color: AppColors.black,
-                                fontSize: 22,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                            const SizedBox(height: 4),
-                            Text(
-                              "Interest Type",
-                              style: TextStyle(
-                                color: Colors.black54,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                            CustomSegmentSelector(
-                              height: 42,
-                              borderRadius: 6,
-                              backgroundColor: AppColors.btncolor,
-                              selectedColor: AppColors.primary,
-                              selectedTextColor: Colors.white,
-                              unSelectedTextColor: Colors.grey,
-                            ),
-                            const SizedBox(height: 4),
-                            Text(
-                              "Remaining Loan Term (Years)",
-                              style: TextStyle(
-                                color: AppColors.grey,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                            const SizedBox(height: 4),
-                            CustomInputField(
-                              controller: propertyController.properties.isNotEmpty
-                                  ? propertyController.properties.last.loanTermController
-                                  : TextEditingController(),  // ← fixed: using correct controller
-                              keyboardType: TextInputType.text,
-                              hintText: "5",
-
                 child: Obx(
-                  () => Column(
+                      () => Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       //-------------------Increment Addon Property-----------------
                       for (
-                        int i = 0;
-                        i < propertyController.properties.length;
-                        i++
+                      int i = 0;
+                      i < propertyController.properties.length;
+                      i++
                       )
                         _buildPropertyCard(i),
                       const SizedBox(height: 12),
@@ -123,7 +52,6 @@ class PropertyDetailsScreen extends StatelessWidget {
                               color: Colors.black.withOpacity(0.08),
                               blurRadius: 12,
                               offset: const Offset(0, -4),
-
                             ),
                           ],
                         ),
