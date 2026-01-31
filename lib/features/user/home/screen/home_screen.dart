@@ -17,16 +17,16 @@ class HomeScreen extends StatelessWidget {
     ProfileApiController(),
   );
 
-  List<Map<String, dynamic>> cashflowData = [
-    {'month': 'Jan', 'amount': 4500},
-    {'month': 'Feb', 'amount': 4300},
-    {'month': 'Mar', 'amount': 4000},
-    {'month': 'Apr', 'amount': 4200},
-    {'month': 'May', 'amount': 4800},
-    {'month': 'Jun', 'amount': 5500},
-    {'month': 'Jul', 'amount': 6200},
-    {'month': 'Aug', 'amount': 5800},
-  ];
+  // List<Map<String, dynamic>> cashflowData = [
+  //   {'month': 'Jan', 'amount': 4500},
+  //   {'month': 'Feb', 'amount': 4300},
+  //   {'month': 'Mar', 'amount': 4000},
+  //   {'month': 'Apr', 'amount': 4200},
+  //   {'month': 'May', 'amount': 4800},
+  //   {'month': 'Jun', 'amount': 5500},
+  //   {'month': 'Jul', 'amount': 6200},
+  //   {'month': 'Aug', 'amount': 5800},
+  // ];
 
   @override
   Widget build(BuildContext context) {
@@ -169,12 +169,34 @@ class HomeScreen extends StatelessWidget {
                     );
                   }),
 
-                  BodyGraphWidget01(
-                    title: "Cash Flow Trend",
-                    monthlyData: cashflowData,
-                    lineColor: Colors.cyan,
-                    fillOpacity: 0.3,
-                  ),
+                  // BodyGraphWidget01(
+                  //   title: "Cash Flow Trend",
+                  //   monthlyData: cashflowData,
+                  //   lineColor: Colors.cyan,
+                  //   fillOpacity: 0.3,
+                  // ),
+                  Obx(() {
+                    final data = homeDashboardController.cashFlowTrendData;
+
+                    if (data.isEmpty) {
+                      return const SizedBox();
+                    }
+
+                    final graphData = data.map((e) {
+                      return {
+                        'month': e.date ?? '',
+                        'amount': e.monthlyCashflow ?? 0,
+                      };
+                    }).toList();
+
+                    return BodyGraphWidget01(
+                      title: "Cash Flow Trend",
+                      monthlyData: graphData,
+                      lineColor: Colors.cyan,
+                      fillOpacity: 0.3,
+                    );
+                  }),
+
                   PropertyValueGrowthChart(
                     title: "Property Value Growth",
                     monthlyData: [

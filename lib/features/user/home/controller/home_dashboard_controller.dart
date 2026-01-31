@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:get/get.dart';
 import 'package:rai_fanancil_services/core/network_musfik/service.dart';
 import 'package:rai_fanancil_services/core/network_path/natwork_path.dart';
+import 'package:rai_fanancil_services/features/user/home/model/user_cash_flow_trend_modal.dart';
 import 'package:rai_fanancil_services/features/user/home/model/user_dashboard_modal.dart';
 
 class HomeDashboardController extends GetxController {
@@ -11,6 +12,7 @@ class HomeDashboardController extends GetxController {
   @override
   void onInit() {
     userDashboardData();
+    cashFlowTrend();
     super.onInit();
   }
 
@@ -43,16 +45,24 @@ class HomeDashboardController extends GetxController {
     }
   }
 
+  final cashFlowTrendData = <Datum>[].obs;
   Future<void> cashFlowTrend() async {
     isLoading.value = true;
     try {
       final response = await networkCaller.getRequest(
-        Urls.addressCreateUrl,
+        Urls.userCashFlowTrend('2026'),
         token: token,
       );
-        
+
+      log(response.responseData.toString());
       if (response.statusCode == 200 || response.isSuccess) {
-        
+        final List list = response.responseData as List;
+
+        final parsed = list
+            .map((e) => Datum.fromJson(e as Map<String, dynamic>))
+            .toList();
+
+        cashFlowTrendData.assignAll(parsed);
       } else {
         // showError(response.errorMessage);
       }

@@ -52,4 +52,6 @@ class Urls {
 
   //user dashboard
   static const String userDashboard = '$_baseUrl/dashboard/user-dashboard';
+  static String userCashFlowTrend(String? year) =>
+      '$_baseUrl/dashboard/user-cashflow-trend?year=$year';
 }
