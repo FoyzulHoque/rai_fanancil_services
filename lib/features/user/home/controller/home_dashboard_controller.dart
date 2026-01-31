@@ -43,6 +43,26 @@ class HomeDashboardController extends GetxController {
     }
   }
 
+  Future<void> cashFlowTrend() async {
+    isLoading.value = true;
+    try {
+      final response = await networkCaller.getRequest(
+        Urls.addressCreateUrl,
+        token: token,
+      );
+        
+      if (response.statusCode == 200 || response.isSuccess) {
+        
+      } else {
+        // showError(response.errorMessage);
+      }
+    } catch (e) {
+      log(e.toString());
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
   @override
   void onClose() {
     super.onClose();
