@@ -1,42 +1,69 @@
 import 'package:flutter/material.dart';
 
-
 class CustomFloatingButton extends StatelessWidget {
-  final VoidCallback onPressed;
-  final String buttonText; // Text to be displayed inside the button
+  final Future<void> Function()? onPressed; // ✅ async + nullable
+  final String buttonText;
   final double height;
-  final Color? customBackgroundColor;  // Height of the button
-  final Color? textColors;  // Height of the button
+  final Color? customBackgroundColor;
+  final Color? textColors;
+
+  // ✅ added
+  final bool isLoading;
 
   const CustomFloatingButton({
+    Key? key,
     required this.onPressed,
     required this.buttonText,
-    this.height = 50.0,  // Default height of the button
-    Key? key,
-     this.customBackgroundColor,
+    this.height = 50.0,
+    this.customBackgroundColor,
     this.textColors,
+    this.isLoading = false,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: double.infinity, // Make the button take the full width
-      height: height, // Height of the button
+      width: double.infinity,
+      height: height,
       child: ElevatedButton(
-        onPressed: onPressed,
+        onPressed: isLoading
+            ? null
+            : (onPressed == null ? null : () async => await onPressed!()),
         style: ElevatedButton.styleFrom(
-          backgroundColor:customBackgroundColor, // Use AppColors.btncolor for button color
+          backgroundColor: customBackgroundColor,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(0), // Rounded corners
+            borderRadius: BorderRadius.circular(0),
           ),
-         // elevation: 6.0, // Shadow below the button
         ),
-        child: Text(
-          buttonText, // Button text
+        child: isLoading
+            ? Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const SizedBox(
+              height: 20,
+              width: 20,
+              child: CircularProgressIndicator(
+                strokeWidth: 2.5,
+                valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+              ),
+            ),
+            const SizedBox(width: 12),
+            Text(
+              buttonText,
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: textColors ?? Colors.white,
+              ),
+            ),
+          ],
+        )
+            : Text(
+          buttonText,
           style: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.bold,
-            color: textColors
+            color: textColors ?? Colors.white,
           ),
         ),
       ),

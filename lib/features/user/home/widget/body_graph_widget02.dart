@@ -35,7 +35,12 @@ class PropertyValueGrowthChart extends StatelessWidget {
     final List<FlSpot> spots = monthlyData
         .asMap()
         .entries
-        .map((entry) => FlSpot(entry.key.toDouble(), (entry.value['amount'] as num).toDouble()))
+        .map(
+          (entry) => FlSpot(
+            entry.key.toDouble(),
+            (entry.value['amount'] as num).toDouble(),
+          ),
+        )
         .toList();
 
     final List<String> months = monthlyData
@@ -43,7 +48,8 @@ class PropertyValueGrowthChart extends StatelessWidget {
         .toList();
 
     // Y-axis এর সর্বোচ্চ ভ্যালু + প্যাডিং যাতে লাইন উপরে না লাগে
-    final double maxY = spots.map((spot) => spot.y).reduce((a, b) => a > b ? a : b) * 1.1;
+    final double maxY =
+        spots.map((spot) => spot.y).reduce((a, b) => a > b ? a : b) * 1.1;
 
     return Card(
       elevation: 4,
@@ -88,7 +94,10 @@ class PropertyValueGrowthChart extends StatelessWidget {
                         getTitlesWidget: (value, meta) {
                           return Text(
                             _formatLargeNumber(value.toInt()),
-                            style: const TextStyle(fontSize: 12, color: Colors.grey),
+                            style: const TextStyle(
+                              fontSize: 12,
+                              color: Colors.grey,
+                            ),
                           );
                         },
                       ),
@@ -97,22 +106,30 @@ class PropertyValueGrowthChart extends StatelessWidget {
                     bottomTitles: AxisTitles(
                       sideTitles: SideTitles(
                         showTitles: true,
-                        interval: 1,
+                        interval: 3,
                         getTitlesWidget: (value, meta) {
                           final index = value.toInt();
-                          if (index < 0 || index >= months.length) return const Text('');
+                          if (index < 0 || index >= months.length)
+                            return const Text('');
                           return Padding(
                             padding: const EdgeInsets.only(top: 8),
                             child: Text(
                               months[index],
-                              style: const TextStyle(fontSize: 12, color: Colors.grey),
+                              style: const TextStyle(
+                                fontSize: 12,
+                                color: Colors.grey,
+                              ),
                             ),
                           );
                         },
                       ),
                     ),
-                    topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                    rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                    topTitles: const AxisTitles(
+                      sideTitles: SideTitles(showTitles: false),
+                    ),
+                    rightTitles: const AxisTitles(
+                      sideTitles: SideTitles(showTitles: false),
+                    ),
                   ),
                   borderData: FlBorderData(show: false),
                   minX: 0,
@@ -130,12 +147,13 @@ class PropertyValueGrowthChart extends StatelessWidget {
                       // ডটগুলো visible + white inner circle সাথে blue outer ring
                       dotData: FlDotData(
                         show: true,
-                        getDotPainter: (spot, percent, barData, index) => FlDotCirclePainter(
-                          radius: 7,
-                          color: dotInnerColor,
-                          strokeWidth: 3.5,
-                          strokeColor: dotOuterColor,
-                        ),
+                        getDotPainter: (spot, percent, barData, index) =>
+                            FlDotCirclePainter(
+                              radius: 7,
+                              color: dotInnerColor,
+                              strokeWidth: 3.5,
+                              strokeColor: dotOuterColor,
+                            ),
                       ),
                       belowBarData: BarAreaData(show: false), // কোনো ফিল নেই
                     ),
@@ -143,12 +161,16 @@ class PropertyValueGrowthChart extends StatelessWidget {
                   lineTouchData: LineTouchData(
                     enabled: true,
                     touchTooltipData: LineTouchTooltipData(
-                      getTooltipColor: (touchedSpot) => Colors.blueAccent.withOpacity(0.8),
+                      getTooltipColor: (touchedSpot) =>
+                          Colors.blueAccent.withOpacity(0.8),
                       getTooltipItems: (touchedSpots) {
                         return touchedSpots.map((touchedSpot) {
                           return LineTooltipItem(
                             _formatLargeNumber(touchedSpot.y.toInt()),
-                            const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                            const TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
                           );
                         }).toList();
                       },

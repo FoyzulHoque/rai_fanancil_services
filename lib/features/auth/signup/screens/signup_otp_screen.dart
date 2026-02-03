@@ -6,7 +6,6 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import '../../../../core/themes/app_colors.dart';
 import '../../../../core/widgets/custom_button.dart';
-import '../../../user/user navbar/user_navbar_screen.dart';
 import '../../text editing controller/custom_text_editing_controller.dart';
 import '../controller/signup_otp_controller.dart';
 import 'disclaimer_screen.dart';
@@ -18,19 +17,20 @@ class SignupOtpScreens extends StatefulWidget {
   _SignupOtpScreenState createState() => _SignupOtpScreenState();
 }
 
-class _SignupOtpScreenState extends State<SignupOtpScreens> { // Fixed class name
+class _SignupOtpScreenState extends State<SignupOtpScreens> {
   final SignupOtpController otpController = Get.put(SignupOtpController());
-  final CustomTextEditingController textCtrl = Get.find<CustomTextEditingController>();
+  final CustomTextEditingController textCtrl =
+  Get.find<CustomTextEditingController>();
 
   @override
   void initState() {
     super.initState();
-    // Clear any previous OTP when view loads
     textCtrl.clearOtpFields();
   }
 
   void _onChanged(String value, int index) {
-    if (value.length == 1 && index < CustomTextEditingController.otpLength - 1) {
+    if (value.length == 1 &&
+        index < CustomTextEditingController.otpLength - 1) {
       FocusScope.of(context).requestFocus(textCtrl.focusNodes[index + 1]);
     } else if (value.isEmpty && index > 0) {
       FocusScope.of(context).requestFocus(textCtrl.focusNodes[index - 1]);
@@ -41,7 +41,6 @@ class _SignupOtpScreenState extends State<SignupOtpScreens> { // Fixed class nam
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-
         leading: Padding(
           padding: const EdgeInsets.all(6.0),
           child: IconButton(
@@ -52,7 +51,7 @@ class _SignupOtpScreenState extends State<SignupOtpScreens> { // Fixed class nam
           ),
         ),
         centerTitle: false,
-        title: Text("OTP Code Verification"),
+        title: const Text("OTP Code Verification"),
         backgroundColor: Colors.white,
         elevation: 0,
         systemOverlayStyle: SystemUiOverlayStyle.dark,
@@ -67,10 +66,10 @@ class _SignupOtpScreenState extends State<SignupOtpScreens> { // Fixed class nam
               const SizedBox(height: 40),
               Text(
                 'Code has been send to and***ley@yourdomain.com',
-                style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                style:
+                const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                 textAlign: TextAlign.center,
               ),
-
               const SizedBox(height: 8),
               Text(
                 textCtrl.emailController.text,
@@ -86,7 +85,8 @@ class _SignupOtpScreenState extends State<SignupOtpScreens> { // Fixed class nam
               // OTP Input Fields
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: List.generate(CustomTextEditingController.otpLength, (index) {
+                children:
+                List.generate(CustomTextEditingController.otpLength, (index) {
                   return SizedBox(
                     width: 56,
                     height: 56,
@@ -95,7 +95,8 @@ class _SignupOtpScreenState extends State<SignupOtpScreens> { // Fixed class nam
                       focusNode: textCtrl.focusNodes[index],
                       keyboardType: TextInputType.number,
                       textAlign: TextAlign.center,
-                      style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+                      style: const TextStyle(
+                          fontSize: 20, fontWeight: FontWeight.w600),
                       inputFormatters: [
                         FilteringTextInputFormatter.digitsOnly,
                         LengthLimitingTextInputFormatter(1),
@@ -103,13 +104,15 @@ class _SignupOtpScreenState extends State<SignupOtpScreens> { // Fixed class nam
                       maxLength: 1,
                       decoration: InputDecoration(
                         counterText: '',
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(color: Colors.grey),
+                        enabledBorder: const OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.grey),
                         ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(color: AppColors.primary, width: 2),
+                        focusedBorder: const OutlineInputBorder(
+                          borderSide:
+                          BorderSide(color: AppColors.primary, width: 2),
                         ),
-                        contentPadding: const EdgeInsets.symmetric(vertical: 12),
+                        contentPadding:
+                        const EdgeInsets.symmetric(vertical: 12),
                       ),
                       onChanged: (value) {
                         _onChanged(value, index);
@@ -126,7 +129,8 @@ class _SignupOtpScreenState extends State<SignupOtpScreens> { // Fixed class nam
                 children: [
                   RichText(
                     text: TextSpan(
-                      style: const TextStyle(color: Colors.black, fontSize: 14),
+                      style: const TextStyle(
+                          color: Colors.black, fontSize: 14),
                       children: [
                         TextSpan(text: 'Resend code in '.tr),
                         TextSpan(
@@ -139,18 +143,21 @@ class _SignupOtpScreenState extends State<SignupOtpScreens> { // Fixed class nam
                       ],
                     ),
                   ),
-
                   const SizedBox(height: 16),
 
                   // Resend Code Button
                   GestureDetector(
-                    onTap: otpController.canResend.value && !otpController.isLoading.value
-                        ? () => _handleResendOtp()
+                    onTap: otpController.canResend.value &&
+                        !otpController.isLoading.value
+                        ? () async {
+                      await resendOtp();
+                    }
                         : null,
                     child: Text(
                       'Resend Code'.tr,
                       style: TextStyle(
-                        color: otpController.canResend.value && !otpController.isLoading.value
+                        color: otpController.canResend.value &&
+                            !otpController.isLoading.value
                             ? AppColors.primary
                             : Colors.grey,
                         fontSize: 14,
@@ -164,76 +171,28 @@ class _SignupOtpScreenState extends State<SignupOtpScreens> { // Fixed class nam
 
               const SizedBox(height: 40),
 
-              // Verify Button using CustomFloatingButton
-              Obx(() {
-                // Create a different widget when loading
-                if (otpController.isLoading.value) {
-                  return Padding(
-                    padding: const EdgeInsets.only(bottom: 20),
-                    child: SizedBox(
-                      width: double.infinity,
-                      height: 50.0,
-                      child: ElevatedButton(
-                        onPressed: null, // Disabled during loading
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.btncolor.withOpacity(0.7),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30.0),
-                          ),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const SizedBox(
-                              height: 20,
-                              width: 20,
-                              child: CircularProgressIndicator(
-                                color: AppColors.primary,
-                                strokeWidth: 2,
-                              ),
-                            ),
-                            const SizedBox(width: 10),
-                            Text(
-                              'Verifying...'.tr,
-                              style: const TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: AppColors.primary,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  );
-                } else {
-                  return Padding(
-                    padding: const EdgeInsets.only(bottom: 20),
-                    child: CustomFloatingButton(
-                      customBackgroundColor: AppColors.primary,
-                      textColors: Colors.white,
-                      onPressed: ()=> _handleVerifyOtp(),
-                      buttonText: 'Verify'.tr,
-                      height: 50.0,
-                    ),
-                  );
-                }
-              }),
+              // Verify Button
+              Obx(() => Padding(
+                padding: const EdgeInsets.only(bottom: 20),
+                child: CustomFloatingButton(
+                  customBackgroundColor: AppColors.primary,
+                  textColors: Colors.white,
+                  isLoading: otpController.isLoading.value,
+                  onPressed: () async {
+                    if (otpController.isLoading.value) return;
+                    await verifyOtp();
+                  },
+                  buttonText: otpController.isLoading.value
+                      ? 'Verifying...'.tr
+                      : 'Verify'.tr,
+                  height: 50.0,
+                ),
+              )),
             ],
           ),
         ),
       ),
     );
-  }
-
-  // Wrap verifyOtp in a void-returning function
-  void _handleVerifyOtp() {
-    verifyOtp();
-  }
-
-  // Wrap resendOtp in a void-returning function
-  void _handleResendOtp() {
-    resendOtp();
   }
 
   // Verify OTP
@@ -250,13 +209,11 @@ class _SignupOtpScreenState extends State<SignupOtpScreens> { // Fixed class nam
       return;
     }
 
-    bool isSuccess = await otpController.verifySignupOtp();
+    final bool isSuccess = await otpController.verifySignupOtp();
     if (isSuccess) {
       Get.offAll(() => DisclaimerPage());
-      // After successful verification, navigate to bottom navigation bar
     } else {
       if (otpController.errorMessage != null) {
-
         Get.snackbar(
           "Error".tr,
           otpController.errorMessage!,
@@ -271,7 +228,7 @@ class _SignupOtpScreenState extends State<SignupOtpScreens> { // Fixed class nam
   Future<void> resendOtp() async {
     if (otpController.isLoading.value) return;
 
-    bool isSuccess = await otpController.resendOtp();
+    final bool isSuccess = await otpController.resendOtp();
     if (!isSuccess) {
       Get.snackbar(
         "Error".tr,
