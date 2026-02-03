@@ -1,261 +1,277 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import '../../../../../core/themes/app_colors.dart';
-import '../../../../../core/widgets/custom_break_down_row_container.dart';
-import '../../../../../core/widgets/custome_container.dart';
 import '../../../../../core/widgets/full_page_pdf_make_widget.dart';
 import '../../../user navbar/controller/navbar_controller.dart';
-import '../../cash flow calculator/controller/property_dropdown_controller.dart';
 import '../widget/stamp_duty_calculator_result_break_down_chart_widget.dart';
 
 class StampDutyCalculatorResultScreen extends StatelessWidget {
   StampDutyCalculatorResultScreen({super.key});
 
-  final PropertyDropdownController propertyDropdownController = Get.put(
-    PropertyDropdownController(),
-  );
   final UserBottomNavbarController navbarController =
   Get.find<UserBottomNavbarController>();
 
-  final items = [
+  // ✅ UI demo values (you will replace with API later)
+  final double totalStampDuty = 27850;
+  final double loanAmount = 450000;
+  final double interestRate = 5.5;
+
+  final List<ChartItem> items = [
     ChartItem(
       label: "Stamp Duty",
       value: 27500,
-      color: Colors.blue.shade700,
+      color: Color(0xFF1565C0),
     ),
     ChartItem(
       label: "Registration Fees",
-      value: 7137.5,
-      color: Colors.purple.shade400,
+      value: 150,
+      color: Color(0xFF7E57C2),
     ),
     ChartItem(
       label: "Transfer Fees",
-      value:7137.5,
-      color: Colors.pink.shade400,
+      value: 200,
+      color: Color(0xFFEC407A),
     ),
   ];
 
   @override
   Widget build(BuildContext context) {
+    final totalAmount =
+    items.fold<double>(0, (sum, item) => sum + item.value);
+
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.only(left: 16, right: 16, top: 20),
-        child: Column(
-          children: [
-            Container(
-              height: 70,
-              decoration: BoxDecoration(color: AppColors.indicator),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const SizedBox(width: 10),
-                  GestureDetector(
-                    onTap: () {
-                      Get.back();
-                    },
-                    child: Image.asset(
-                      "assets/icons/moves_right.png",
-                      width: 20,
-                      height: 20,
-                      fit: BoxFit.contain,
+      backgroundColor: Colors.white,
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.only(left: 16, right: 16, top: 10),
+          child: Column(
+            children: [
+              // ✅ Header (pink)
+              Container(
+                height: 56,
+                width: double.infinity,
+                decoration: const BoxDecoration(color: AppColors.deepPink),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const SizedBox(width: 10),
+                    GestureDetector(
+                      onTap: () => Get.back(),
+                      child: const Icon(Icons.arrow_back,
+                          color: Colors.white, size: 22),
                     ),
-                  ),
-                  const Expanded(
-                    child: Align(
-                      alignment: Alignment.center,
-                      child: Text(
-                        "Investment Results",
-                        style: TextStyle(
-                          color: AppColors.white,
-                          fontSize: 20,
-                          fontWeight: FontWeight.w600,
+                    const Expanded(
+                      child: Align(
+                        alignment: Alignment.center,
+                        child: Text(
+                          "Stamp Duty Results",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ],
+                    const SizedBox(width: 32),
+                  ],
+                ),
               ),
-            ),
-            const SizedBox(height: 10),
-            Expanded(
-              child: SingleChildScrollView(
-                child: RepaintBoundary(
-                  key: pageKey, // Attach the key here
-                  child: Column(
-                    children: [
-                      Container(
-                        height: 78.5,
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          color: AppColors.colorList[0],
-                          borderRadius: BorderRadius.circular(0),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 8.0, top: 4.0),
+
+              const SizedBox(height: 12),
+
+              Expanded(
+                child: SingleChildScrollView(
+                  child: RepaintBoundary(
+                    key: pageKey,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // ✅ Total Stamp Duty (gradient top card)
+                        Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.all(14),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(0),
+                            gradient: LinearGradient(
+                              colors: [
+                                AppColors.primary.withOpacity(0.95),
+                                AppColors.blue.withOpacity(0.85),
+                              ],
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                            ),
+                          ),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
-                                "Net Annual Income",
+                              const Text(
+                                "Total Stamp Duty",
                                 style: TextStyle(
-                                  color: AppColors.white,
-                                  fontSize: 22,
+                                  color: Colors.white,
+                                  fontSize: 13,
                                   fontWeight: FontWeight.w600,
                                 ),
                               ),
-                              const SizedBox(height: 4),
+                              const SizedBox(height: 6),
                               Text(
-                                "\$81,873",
-                                style: TextStyle(
-                                  color: AppColors.white,
+                                "\$${_money(totalStampDuty)}",
+                                style: const TextStyle(
+                                  color: Colors.white,
                                   fontSize: 22,
-                                  fontWeight: FontWeight.w600,
+                                  fontWeight: FontWeight.w800,
                                 ),
                               ),
                             ],
                           ),
                         ),
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const SizedBox(height: 20),
-                          Row(
-                            children: [
-                              customContainer(
-                                AppColors.greenDip,
-                                1,
-                                "Gross Income",
-                                "\$109,000",
-                                70,
-                                173,
-                              ),
-                              const SizedBox(width: 10),
-                              customContainer(
-                                AppColors.warning,
-                                1,
-                                "Tax Rate",
-                                "\$24.89%",
-                                70,
-                                163,
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 12),
 
+                        const SizedBox(height: 12),
 
-                          Card(
-                            elevation: 5,
-                            color: AppColors.white,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(0),
+                        // ✅ Loan Amount + Interest Rate boxes
+                        Row(
+                          children: [
+                            Expanded(
+                              child: _SmallStatBox(
+                                title: "Loan Amount",
+                                value: "\$${_money(loanAmount)}",
+                                borderColor: const Color(0xFF4CAF50),
+                              ),
                             ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(20),
-                              child: Column(
-                                children: [
-                                  const Text(
-                                    "Duty Breakdown",
-                                    style: TextStyle(
-                                      fontSize: 22,
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: _SmallStatBox(
+                                title: "Interest Rate",
+                                value: "${interestRate.toStringAsFixed(1)}%",
+                                borderColor: const Color(0xFF42A5F5),
+                              ),
+                            ),
+                          ],
+                        ),
+
+                        const SizedBox(height: 12),
+
+                        // ✅ Duty Breakdown card (donut + legend)
+                        Card(
+                          elevation: 2,
+                          color: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(0),
+                            side: const BorderSide(color: Color(0xFFE6E6E6)),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(12),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text(
+                                  "Duty Breakdown",
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w800,
+                                    color: Colors.black87,
                                   ),
-                                  const SizedBox(height: 24),
-                                  StampDutyCalculatorResultBreakDownChartWidget(
-                                    totalAmount: 41775, // 27500 + 150 + 200
+                                ),
+                                const SizedBox(height: 12),
+
+                                Center(
+                                  child: StampDutyCalculatorResultBreakDownChartWidget(
+                                    totalAmount: totalAmount,
                                     items: items,
                                   ),
-                                ],
-                              ),
+                                ),
+                              ],
                             ),
                           ),
+                        ),
 
-                          const SizedBox(height: 12),
-                          Column(
+                        const SizedBox(height: 12),
+
+                        // ✅ Detailed Breakdown (blue light container)
+                        Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.all(12),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFD9EEF8),
+                            borderRadius: BorderRadius.circular(0),
+                          ),
+                          child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              //Capital Growth Forecast
-
-                              //------------------------------------Insurance Estimate--------------
-                              Text(
+                              const Text(
                                 "Detailed Breakdown",
                                 style: TextStyle(
-                                  color: AppColors.black,
-                                  fontSize: 22,
-                                  fontWeight: FontWeight.w600,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w800,
+                                  color: Colors.black87,
                                 ),
                               ),
-                              const SizedBox(height: 12),
-                              breakdownRow(
-                                containerColors: AppColors.infoLight,
-                                title: "Stamp Duty Amount",
-                                value: "\$27500",
-                              ),
-                              breakdownRow(
-                                containerColors: AppColors.infoLight,
-                                title: "Registration Fees",
-                                value: "\$7,137.5",
-                                valueColor: AppColors.warning,
-                              ),
-                              breakdownRow(
-                                containerColors: AppColors.infoLight,
-                                title: "Transfer Fees",
-                                value: "\$7,137.5",
-                                valueColor: AppColors.warning,
-                              ),
-                              Divider(),
-                              breakdownRow(
-                                containerColors: AppColors.infoLight,
-                                title: "Total Taxes & Fees",
-                                value: "\$41,775",
-                              ),
+                              const SizedBox(height: 10),
+                              _LineRow(
+                                  label: "Stamp Duty Amount",
+                                  value: "\$${_money(27500)}"),
+                              const SizedBox(height: 6),
+                              _LineRow(
+                                  label: "Registration Fees",
+                                  value: "\$${_money(150)}"),
+                              const SizedBox(height: 6),
+                              _LineRow(
+                                  label: "Transfer Fees",
+                                  value: "\$${_money(200)}"),
+                              const SizedBox(height: 10),
+                              const Divider(height: 16),
+                              _LineRow(
+                                  label: "Total Taxes & Fees",
+                                  value: "\$${_money(totalStampDuty)}"),
                             ],
                           ),
-                        ],
-                      ),
-                      const SizedBox(height: 20),
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 20),
-                        child: SizedBox(
+                        ),
+
+                        const SizedBox(height: 14),
+
+                        // ✅ Export PDF (outlined)
+                        SizedBox(
                           width: double.infinity,
-                          height: 56,
-                          child: ElevatedButton.icon(
+                          height: 48,
+                          child: OutlinedButton.icon(
                             onPressed: () async {
-                              // Add a small delay to ensure the UI is stable
                               await Future.delayed(
-                                const Duration(milliseconds: 50),
-                              );
+                                  const Duration(milliseconds: 50));
                               final imageBytes = await captureFullPage();
                               if (imageBytes != null) {
                                 final pdfFile = await generatePdf(imageBytes);
                                 await printPdf(pdfFile);
                               }
                             },
-                            icon: const Icon(Icons.print, color: Colors.blue),
-                            label: const Text("Print Full Page"),
-                            style: ElevatedButton.styleFrom(
+                            icon: const Icon(Icons.download,
+                                color: Colors.black54),
+                            label: const Text(
+                              "Export PDF",
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.black87,
+                              ),
+                            ),
+                            style: OutlinedButton.styleFrom(
                               side: BorderSide(
-                                color: AppColors.primary,
+                                color: AppColors.primary.withOpacity(0.35),
                                 width: 1,
                               ),
-                              backgroundColor: AppColors.white,
-                              foregroundColor: AppColors.black,
-                              elevation: 4,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(0),
                               ),
+                              backgroundColor: Colors.white,
                             ),
                           ),
                         ),
-                      ),
-                      const SizedBox(height: 10),
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 20),
-                        child: SizedBox(
+
+                        const SizedBox(height: 14),
+
+                        // ✅ Done button
+                        SizedBox(
                           width: double.infinity,
-                          height: 56,
+                          height: 48,
                           child: ElevatedButton(
                             onPressed: () {
                               navbarController.financialCalculatorsScreen();
@@ -263,28 +279,127 @@ class StampDutyCalculatorResultScreen extends StatelessWidget {
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: AppColors.primary,
-                              foregroundColor: AppColors.white,
-                              elevation: 4,
+                              foregroundColor: Colors.white,
+                              elevation: 0,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(0),
                               ),
                               textStyle: const TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w700,
                               ),
                             ),
-                            child: const Text("Down"),
+                            child: const Text("Done"),
                           ),
                         ),
-                      ),
-                    ],
+
+                        const SizedBox(height: 18),
+                      ],
+                    ),
                   ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  static String _money(num v) {
+    final s = v.toStringAsFixed(0);
+    final reg = RegExp(r'\B(?=(\d{3})+(?!\d))');
+    return s.replaceAllMapped(reg, (m) => ',');
+  }
+}
+
+// ---------------- UI Helpers (match screenshot sizes) ----------------
+
+class _SmallStatBox extends StatelessWidget {
+  final String title;
+  final String value;
+  final Color borderColor;
+
+  const _SmallStatBox({
+    required this.title,
+    required this.value,
+    required this.borderColor,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 56,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        border: Border.all(color: borderColor.withOpacity(0.65), width: 1.2),
+      ),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+      child: Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Text(
+                title,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(
+                  fontSize: 11,
+                  color: Colors.black54,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+            const SizedBox(height: 4),
+            FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Text(
+                value,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(
+                  fontSize: 14,
+                  color: Colors.black87,
+                  fontWeight: FontWeight.w800,
                 ),
               ),
             ),
           ],
         ),
       ),
+    );
+  }
+}
+
+class _LineRow extends StatelessWidget {
+  final String label;
+  final String value;
+  const _LineRow({required this.label, required this.value});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          label,
+          style: const TextStyle(
+            fontSize: 12,
+            color: Colors.black45,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        Text(
+          value,
+          style: const TextStyle(
+            fontSize: 12,
+            color: Colors.black87,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+      ],
     );
   }
 }

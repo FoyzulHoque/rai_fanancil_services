@@ -1,249 +1,387 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import '../../../../../core/themes/app_colors.dart';
-import '../../../../../core/widgets/custom_break_down_row_container.dart';
-import '../../../../../core/widgets/custome_container.dart';
 import '../../../../../core/widgets/full_page_pdf_make_widget.dart';
 import '../../../user navbar/controller/navbar_controller.dart';
-import '../../cash flow calculator/controller/property_dropdown_controller.dart';
 import '../widget/payment_breakdown_chart_widget.dart';
 
 class MortgageResultScreen extends StatelessWidget {
   MortgageResultScreen({super.key});
 
-  final PropertyDropdownController propertyDropdownController = Get.put(
-    PropertyDropdownController(),
-  );
   final UserBottomNavbarController navbarController =
-  Get.find<UserBottomNavbarController>();
+      Get.find<UserBottomNavbarController>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.only(left: 16, right: 16, top: 20),
-        child: Column(
-          children: [
-            Container(
-              height: 70,
-              decoration: BoxDecoration(color: AppColors.warning),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const SizedBox(width: 10),
-                  GestureDetector(
-                    onTap: () {
-                      Get.back();
-                    },
-                    child: Image.asset(
-                      "assets/icons/moves_right.png",
-                      width: 20,
-                      height: 20,
-                      fit: BoxFit.contain,
+      backgroundColor: Colors.white,
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.only(left: 16, right: 16, top: 10),
+          child: Column(
+            children: [
+              // ✅ Header (orange)
+              Container(
+                height: 56,
+                width: double.infinity,
+                decoration: const BoxDecoration(color: AppColors.warning),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const SizedBox(width: 10),
+                    GestureDetector(
+                      onTap: () => Get.back(),
+                      child: const Icon(
+                        Icons.arrow_back,
+                        color: Colors.white,
+                        size: 22,
+                      ),
                     ),
-                  ),
-                  const Expanded(
-                    child: Align(
-                      alignment: Alignment.center,
-                      child: Text(
-                        "Mortgage Results",
-                        style: TextStyle(
-                          color: AppColors.white,
-                          fontSize: 20,
-                          fontWeight: FontWeight.w600,
+                    const Expanded(
+                      child: Align(
+                        alignment: Alignment.center,
+                        child: Text(
+                          "Mortgage Results",
+                          style: TextStyle(
+                            color: AppColors.white,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ],
+                    const SizedBox(width: 32),
+                  ],
+                ),
               ),
-            ),
-            const SizedBox(height: 10),
-            Expanded(
-              child: SingleChildScrollView(
-                child: RepaintBoundary(
-                  key: pageKey, // Attach the key here
-                  child: Column(
-                    children: [
-                      Container(
-                        height: 78.5,
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          color: AppColors.colorList[0],
-                          borderRadius: BorderRadius.circular(0),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 8.0, top: 4.0),
-                          child: Column(
+
+              const SizedBox(height: 10),
+
+              Expanded(
+                child: SingleChildScrollView(
+                  child: RepaintBoundary(
+                    key: pageKey,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // ✅ Monthly Repayment gradient card
+                        Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.all(12),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(0),
+                            gradient: LinearGradient(
+                              colors: [
+                                AppColors.primary.withOpacity(0.95),
+                                AppColors.blue.withOpacity(0.85),
+                              ],
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                            ),
+                          ),
+                          child: const Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                "Net Annual Income",
+                                "Monthly Repayment",
                                 style: TextStyle(
-                                  color: AppColors.white,
-                                  fontSize: 22,
+                                  color: Colors.white,
+                                  fontSize: 12,
                                   fontWeight: FontWeight.w600,
                                 ),
                               ),
-                              const SizedBox(height: 4),
+                              SizedBox(height: 6),
                               Text(
-                                "\$81,873",
+                                "\$2,908",
                                 style: TextStyle(
-                                  color: AppColors.white,
+                                  color: Colors.white,
                                   fontSize: 22,
-                                  fontWeight: FontWeight.w600,
+                                  fontWeight: FontWeight.w800,
                                 ),
                               ),
                             ],
                           ),
                         ),
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const SizedBox(height: 20),
-                          Row(
-                            children: [
-                              customContainer(
-                                AppColors.greenDip,
-                                1,
-                                "Gross Income",
-                                "\$109,000",
-                                70,
-                                173,
-                              ),
-                              const SizedBox(width: 10),
-                              customContainer(
-                                AppColors.warning,
-                                1,
-                                "Tax Rate",
-                                "\$24.89%",
-                                70,
-                                163,
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 12),
-                         Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: PaymentBreakdownChart(
-                                principalAmount: 450000,
-                                interestAmount: 423000,
 
-                                pieSize: 260,
+                        const SizedBox(height: 10),
+
+                        // ✅ Loan Amount + Interest Rate boxes
+                        Row(
+                          children: const [
+                            Expanded(
+                              child: _SmallStatBox(
+                                title: "Loan Amount",
+                                value: "\$450,000",
+                                borderColor: AppColors.greenDip,
                               ),
                             ),
-                          const SizedBox(height: 12),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              //Capital Growth Forecast
-
-                              //------------------------------------Insurance Estimate--------------
-                              Text(
-                                "Insurance Estimate",
-                                style: TextStyle(
-                                  color: AppColors.black,
-                                  fontSize: 22,
-                                  fontWeight: FontWeight.w600,
-                                ),
+                            SizedBox(width: 12),
+                            Expanded(
+                              child: _SmallStatBox(
+                                title: "Interest Rate",
+                                value: "5.5%",
+                                borderColor: AppColors.primary,
                               ),
-                              const SizedBox(height: 12),
-                              breakdownRow(
-                                containerColors: AppColors.infoLight,
-                                title: "Monthly Rental Income",
-                                value: "\$2,800",
-                              ),
-                              breakdownRow(
-                                containerColors: AppColors.infoLight,
-                                title: "Total Expenses",
-                                value: "\$930",
-                                valueColor: AppColors.warning,
-                              ),
-                              breakdownRow(
-                                containerColors: AppColors.infoLight,
-                                title: "Loan Repayment",
-                                value: "\$2,063",
-                                valueColor: AppColors.warning,
-                              ),
-                              breakdownRow(
-                                containerColors: AppColors.infoLight,
-                                title: "Other Income",
-                                value: "\$818",
-                              ),
-                              breakdownRow(
-                                containerColors: AppColors.infoLight,
-                                title: "Net Cashflow",
-                                value: "\$625",
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 20),
-                      /*Card(
-                        elevation: 5,
-                        color: AppColors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(0),
+                            ),
+                          ],
                         ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
+
+                        const SizedBox(height: 12),
+
+                        // ✅ Monthly Payment Options card
+                        Container(
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            border: Border.all(color: const Color(0xFFE6E6E6)),
+                          ),
+                          padding: const EdgeInsets.all(12),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
-                                "Tax Impact (Annual)",
+                              const Text(
+                                "Monthly Payment Options",
                                 style: TextStyle(
-                                  color: AppColors.black,
-                                  fontSize: 22,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w800,
+                                  color: Colors.black87,
+                                ),
+                              ),
+                              const SizedBox(height: 6),
+                              const Text(
+                                "For the first 10 months for Interest Only (IO)",
+                                style: TextStyle(
+                                  fontSize: 11.5,
+                                  color: Colors.black54,
                                   fontWeight: FontWeight.w600,
                                 ),
                               ),
-                              const SizedBox(height: 12),
-                              breakdownRow(
-                                title: "Rental income",
-                                value: "\$33,800",
-                              ),
-                              const Divider(),
-                              breakdownRow(
-                                title: "Deductible Expenses",
-                                value: "\$15,200",
-                                valueColor: AppColors.warning,
-                              ),
-                              const Divider(),
+                              const SizedBox(height: 8),
 
-                              breakdownRow(
-                                title: "Depreciation",
-                                value: "\$8,500",
-                                valueColor: AppColors.warning,
+                              // IO block (blue light)
+                              Container(
+                                width: double.infinity,
+                                padding: const EdgeInsets.all(10),
+                                decoration: BoxDecoration(
+                                  color: const Color(0xFFE8F6FB),
+                                  border: Border.all(
+                                    color: const Color(0xFFCFEAF5),
+                                  ),
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: const [
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              "Interest Only (IO)",
+                                              style: TextStyle(
+                                                fontSize: 12,
+                                                color: Colors.black54,
+                                                fontWeight: FontWeight.w700,
+                                              ),
+                                            ),
+                                            SizedBox(height: 4),
+                                            Text(
+                                              "\$2,063",
+                                              style: TextStyle(
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.w800,
+                                                color: AppColors.primary,
+                                              ),
+                                            ),
+                                            SizedBox(height: 2),
+                                            Text(
+                                              "per month",
+                                              style: TextStyle(
+                                                fontSize: 11,
+                                                color: Colors.black54,
+                                                fontWeight: FontWeight.w600,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        Icon(
+                                          Icons.attach_money,
+                                          color: AppColors.primary,
+                                          size: 22,
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(height: 8),
+                                    const _MiniRow(
+                                      label: "Total Interest (30 years)",
+                                      value: "\$742,500",
+                                      valueColor: Colors.red,
+                                    ),
+                                    const _MiniRow(
+                                      label: "Principal Still Owing",
+                                      value: "\$450,000",
+                                    ),
+                                    const _MiniRow(
+                                      label: "Total to Repay",
+                                      value: "\$1,192,500",
+                                    ),
+                                  ],
+                                ),
                               ),
-                              const Divider(),
 
-                              breakdownRow(
-                                title: "Taxable Income",
-                                value: "\$10,100",
+                              const SizedBox(height: 10),
+
+                              const Text(
+                                "From months 10-1 to the end",
+                                style: TextStyle(
+                                  fontSize: 11.5,
+                                  color: Colors.black54,
+                                  fontWeight: FontWeight.w600,
+                                ),
                               ),
-                              const Divider(),
+                              const SizedBox(height: 8),
 
-                              breakdownRow(
-                                title: "Estimated Tax(32.5%)",
-                                value: "\$3,283",
+                              // P&I block (green light)
+                              Container(
+                                width: double.infinity,
+                                padding: const EdgeInsets.all(10),
+                                decoration: BoxDecoration(
+                                  color: const Color(0xFFEAF9F0),
+                                  border: Border.all(
+                                    color: const Color(0xFFCFEFDB),
+                                  ),
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: const [
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              "Principal & Interest (P&I)",
+                                              style: TextStyle(
+                                                fontSize: 12,
+                                                color: Colors.black54,
+                                                fontWeight: FontWeight.w700,
+                                              ),
+                                            ),
+                                            SizedBox(height: 4),
+                                            Text(
+                                              "\$2,555",
+                                              style: TextStyle(
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.w800,
+                                                color: Colors.green,
+                                              ),
+                                            ),
+                                            SizedBox(height: 2),
+                                            Text(
+                                              "per month",
+                                              style: TextStyle(
+                                                fontSize: 11,
+                                                color: Colors.black54,
+                                                fontWeight: FontWeight.w600,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        Icon(
+                                          Icons.attach_money,
+                                          color: Colors.green,
+                                          size: 22,
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(height: 8),
+                                    const _MiniRow(
+                                      label: "Total Interest (30 years)",
+                                      value: "\$469,818",
+                                      valueColor: Colors.red,
+                                    ),
+                                    const _MiniRow(
+                                      label: "Principal Paid",
+                                      value: "\$450,000",
+                                    ),
+                                    const _MiniRow(
+                                      label: "Total to Repay",
+                                      value: "\$919,818",
+                                    ),
+                                  ],
+                                ),
                               ),
                             ],
                           ),
                         ),
-                      ),
-                      const SizedBox(height: 20),*/
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 20),
-                        child: SizedBox(
+
+                        const SizedBox(height: 12),
+
+                        // ✅ Payment Breakdown card (pie)
+                        PaymentBreakdownChart(
+                          principalAmount: 450000,
+                          interestAmount: 423000,
+                          pieSize: 220,
+                        ),
+
+                        const SizedBox(height: 12),
+
+                        // ✅ Borrowing Position card (blue light)
+                        Container(
                           width: double.infinity,
-                          height: 56,
-                          child: ElevatedButton.icon(
+                          padding: const EdgeInsets.all(12),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFD9EEF8),
+                            borderRadius: BorderRadius.circular(0),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: const [
+                              Text(
+                                "Your Borrowing Position",
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w800,
+                                  color: Colors.black87,
+                                ),
+                              ),
+                              SizedBox(height: 10),
+                              _BorrowRow(
+                                label: "Deposit (LVR)",
+                                value: "\$90,000 (16.7%)",
+                              ),
+                              SizedBox(height: 6),
+                              _BorrowRow(
+                                label: "Loan Amount",
+                                value: "\$450,000",
+                              ),
+                              SizedBox(height: 6),
+                              _BorrowRow(
+                                label: "Property Value",
+                                value: "\$540,000",
+                              ),
+                            ],
+                          ),
+                        ),
+
+                        const SizedBox(height: 14),
+
+                        // ✅ Export PDF button (outlined)
+                        SizedBox(
+                          width: double.infinity,
+                          height: 48,
+                          child: OutlinedButton.icon(
                             onPressed: () async {
-                              // Add a small delay to ensure the UI is stable
                               await Future.delayed(
                                 const Duration(milliseconds: 50),
                               );
@@ -253,29 +391,37 @@ class MortgageResultScreen extends StatelessWidget {
                                 await printPdf(pdfFile);
                               }
                             },
-                            icon: const Icon(Icons.print, color: Colors.blue),
-                            label: const Text("Print Full Page"),
-                            style: ElevatedButton.styleFrom(
+                            icon: const Icon(
+                              Icons.download,
+                              color: Colors.black54,
+                            ),
+                            label: const Text(
+                              "Export PDF",
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.black87,
+                              ),
+                            ),
+                            style: OutlinedButton.styleFrom(
                               side: BorderSide(
-                                color: AppColors.primary,
+                                color: AppColors.primary.withOpacity(0.35),
                                 width: 1,
                               ),
-                              backgroundColor: AppColors.white,
-                              foregroundColor: AppColors.black,
-                              elevation: 4,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(0),
                               ),
+                              backgroundColor: Colors.white,
                             ),
                           ),
                         ),
-                      ),
-                      const SizedBox(height: 10),
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 20),
-                        child: SizedBox(
+
+                        const SizedBox(height: 12),
+
+                        // ✅ Done button
+                        SizedBox(
                           width: double.infinity,
-                          height: 56,
+                          height: 48,
                           child: ElevatedButton(
                             onPressed: () {
                               navbarController.financialCalculatorsScreen();
@@ -283,28 +429,162 @@ class MortgageResultScreen extends StatelessWidget {
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: AppColors.primary,
-                              foregroundColor: AppColors.white,
-                              elevation: 4,
+                              foregroundColor: Colors.white,
+                              elevation: 0,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(0),
                               ),
                               textStyle: const TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w700,
                               ),
                             ),
-                            child: const Text("Down"),
+                            child: const Text("Done"),
                           ),
                         ),
-                      ),
-                    ],
+
+                        const SizedBox(height: 18),
+                      ],
+                    ),
                   ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// ---------------- small widgets ----------------
+
+class _SmallStatBox extends StatelessWidget {
+  final String title;
+  final String value;
+  final Color borderColor;
+
+  const _SmallStatBox({
+    required this.title,
+    required this.value,
+    required this.borderColor,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 65,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        border: Border.all(color: borderColor.withOpacity(0.45), width: 1.2),
+      ),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+      child: Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Text(
+                title,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(
+                  fontSize: 11,
+                  color: Colors.black54,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+            const SizedBox(height: 4),
+            FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Text(
+                value,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(
+                  fontSize: 14,
+                  color: Colors.black87,
+                  fontWeight: FontWeight.w800,
                 ),
               ),
             ),
           ],
         ),
       ),
+    );
+  }
+}
+
+class _MiniRow extends StatelessWidget {
+  final String label;
+  final String value;
+  final Color valueColor;
+
+  const _MiniRow({
+    required this.label,
+    required this.value,
+    this.valueColor = Colors.black87,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 4),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            label,
+            style: const TextStyle(
+              fontSize: 11.5,
+              color: Colors.black54,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          Text(
+            value,
+            style: TextStyle(
+              fontSize: 11.5,
+              color: valueColor,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _BorrowRow extends StatelessWidget {
+  final String label;
+  final String value;
+
+  const _BorrowRow({required this.label, required this.value});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          label,
+          style: const TextStyle(
+            fontSize: 12,
+            color: Colors.black54,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        Text(
+          value,
+          style: const TextStyle(
+            fontSize: 12,
+            color: Colors.black87,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+      ],
     );
   }
 }

@@ -9,6 +9,7 @@ import '../../loan & comparison/screen/loan_&_comparison.dart';
 import '../../mortage calculator/screen/mortage_calculator.dart';
 import '../../property investment/screen/property_investment.dart';
 import '../../stamp duty calculator/screen/stamp_duty_calculator.dart';
+import '../../suburb_profile_screen/screen/suburb_profile_screen.dart';
 import '../../tax calculator/screen/tax_calculator.dart';
 import '../widget/financial_calculators_body_widget.dart';
 
@@ -21,7 +22,12 @@ class FinancialCalculatorsScreen extends StatelessWidget {
       appBar: AppBar(
         toolbarHeight: 100,
           backgroundColor: AppColors.secondaryColors,
-          title: const Text('Financial Calculators')),
+          title: Column(
+            children: [
+              const Text('Financial Calculators', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),),
+              const Text('Choose a calculator to get started', style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal, color: Colors.white),),
+            ],
+          )),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -95,7 +101,7 @@ class FinancialCalculatorsScreen extends StatelessWidget {
               FinancialCalculatorsBodyWidget(
                 title: "Tax Calculator",
                 subTitle:'Income, investment & land tax' ,
-                image: 'assets/icons/dollar4.png',
+                image: 'assets/icons/profile_icons.jpg',
                 iconColor:AppColors.infoLightMore,
                 boxColor:AppColors.primaryDife ,
                 containerCustomColor:AppColors.primaryDife,
@@ -111,7 +117,18 @@ class FinancialCalculatorsScreen extends StatelessWidget {
                 boxColor:AppColors.greyAndGreen ,
                 containerCustomColor:AppColors.infoLightMore,
                 onTab: (){
-                  Get.to(()=>BorrowingHealthCalculatorScreen());
+                  Get.to(()=>BorrowingOverviewResultScreen());
+                },
+              ),
+              FinancialCalculatorsBodyWidget(
+                title: "Suburb Profile",
+                subTitle:'Market insights and demographics' ,
+                image: 'assets/icons/tax_icons.jpg',
+                iconColor:AppColors.infoLightMore,
+                boxColor:AppColors.greyAndGreen ,
+                containerCustomColor:Color(0xFF009689),
+                onTab: (){
+                  Get.to(()=>SuburbProfileScreen());
                 },
               ),
               FinancialCalculatorsBodyWidget(

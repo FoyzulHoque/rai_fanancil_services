@@ -3,287 +3,305 @@ import 'package:get/get.dart';
 import 'package:rai_fanancil_services/features/user/financial%20calculators/tax%20calculator/screen/tax_summary_result.dart';
 import '../../../../../core/themes/app_colors.dart';
 import '../../../../../core/widgets/custom_input_field_widget.dart';
-import '../../cash flow calculator/controller/property_dropdown_controller.dart';
-import '../../property investment/controller/select_custom_button_controller.dart';
 
 class TaxCalculatorScreen extends StatelessWidget {
   TaxCalculatorScreen({super.key});
 
-  final PropertyDropdownController propertyDropdownController = Get.put(
-    PropertyDropdownController(),
-  );
-  final LoanTypeController loanTypeController = Get.put(LoanTypeController());
-  TextEditingController propertyController = TextEditingController();
+  // ✅ controllers (NO initial value, only from input)
+  final TextEditingController primaryIncomeCtrl = TextEditingController();
+  final TextEditingController otherIncomeCtrl = TextEditingController();
+  final TextEditingController depreciationCtrl = TextEditingController();
+
+  final TextEditingController totalRentCtrl = TextEditingController();
+  final TextEditingController totalExpensesCtrl = TextEditingController();
+  final TextEditingController loanInterestCtrl = TextEditingController();
+
+  final TextEditingController capitalGainsCtrl = TextEditingController();
+  final TextEditingController landTaxValueCtrl = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.only(left: 16, right: 16, top: 20),
-        child: Column(
-          children: [
-            Container(
-              height: 70,
-              decoration: BoxDecoration(color: AppColors.infoLightMore),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const SizedBox(width: 10),
-                  GestureDetector(
-                    onTap: () {
-                      Get.back();
-                    },
-                    child: Image.asset(
-                      "assets/icons/moves_right.png",
-                      width: 20,
-                      height: 20,
-                      fit: BoxFit.contain,
+      backgroundColor: Colors.white,
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.only(left: 16, right: 16, top: 10),
+          child: Column(
+            children: [
+              // ✅ Header (teal like screenshot)
+              Container(
+                height: 56,
+                width: double.infinity,
+                decoration: const BoxDecoration(color: AppColors.infoLightMore),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const SizedBox(width: 10),
+                    GestureDetector(
+                      onTap: () => Get.back(),
+                      child: const Icon(Icons.arrow_back,
+                          color: Colors.white, size: 22),
                     ),
-                  ),
-                  Expanded(
-                    child: Align(
-                      alignment: Alignment.center,
-                      child: Text(
-                        "Tax Calculator",
-                        style: TextStyle(
-                          color: AppColors.white,
-                          fontSize: 20,
-                          fontWeight: FontWeight.w600,
+                    const Expanded(
+                      child: Align(
+                        alignment: Alignment.center,
+                        child: Text(
+                          "Tax Calculator",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ],
+                    const SizedBox(width: 32),
+                  ],
+                ),
               ),
-            ),
 
-            // স্ক্রল হওয়া অংশ (Expanded দিয়ে পুরো জায়গা নেবে)
-            Expanded(
-              child: SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
+              const SizedBox(height: 12),
+
+              Expanded(
+                child: SingleChildScrollView(
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const SizedBox(height: 10),
+                      // ✅ Income Sources
                       Card(
-                        elevation: 5,
-                        color: AppColors.white,
-                        shape: Border.all(style: BorderStyle.none),
+                        elevation: 2,
+                        color: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(0),
+                          side: const BorderSide(color: Color(0xFFE6E6E6)),
+                        ),
                         child: Padding(
-                          padding: const EdgeInsets.all(8.0),
+                          padding: const EdgeInsets.all(12),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
+                              const Text(
                                 "Income Sources",
                                 style: TextStyle(
-                                  color: AppColors.black,
-                                  fontSize: 22,
-                                  fontWeight: FontWeight.w600,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w800,
+                                  color: Colors.black87,
                                 ),
                               ),
                               const SizedBox(height: 10),
-                              Text(
+
+                              const Text(
                                 "Primary Income (Annual)",
                                 style: TextStyle(
-                                  color: AppColors.grey,
-                                  fontSize: 16,
+                                  fontSize: 12,
                                   fontWeight: FontWeight.w600,
+                                  color: Colors.black54,
                                 ),
                               ),
-
                               CustomInputField(
-                                controller: propertyController,
-                                keyboardType: TextInputType.text,
-                                hintText: "1200000",
+                                controller: primaryIncomeCtrl,
+                                keyboardType: TextInputType.number,
+                                hintText: "120000",
                               ),
-                              const SizedBox(height: 4),
-                              Text(
-                                "Other income",
+                              const SizedBox(height: 10),
+
+                              const Text(
+                                "Other Income",
                                 style: TextStyle(
-                                  color: AppColors.grey,
-                                  fontSize: 16,
+                                  fontSize: 12,
                                   fontWeight: FontWeight.w600,
+                                  color: Colors.black54,
                                 ),
                               ),
-
                               CustomInputField(
-                                controller: propertyController,
-                                keyboardType: TextInputType.text,
+                                controller: otherIncomeCtrl,
+                                keyboardType: TextInputType.number,
                                 hintText: "12000",
                               ),
-                              const SizedBox(height: 4),
-                              Text(
-                                "Tax Region",
+                              const SizedBox(height: 10),
+
+                              const Text(
+                                "Depreciation (\$)",
                                 style: TextStyle(
-                                  color: AppColors.grey,
-                                  fontSize: 16,
+                                  fontSize: 12,
                                   fontWeight: FontWeight.w600,
+                                  color: Colors.black54,
                                 ),
                               ),
-
                               CustomInputField(
-                                controller: propertyController,
-                                keyboardType: TextInputType.text,
-                                hintText: "Victoria",
+                                controller: depreciationCtrl,
+                                keyboardType: TextInputType.number,
+                                hintText: "12000",
                               ),
                             ],
                           ),
                         ),
                       ),
-                      const SizedBox(height: 10),
+
+                      const SizedBox(height: 12),
+
+                      // ✅ Property Portfolio
                       Card(
-                        elevation: 5,
-                        color: AppColors.white,
-                        shape: Border.all(style: BorderStyle.none),
+                        elevation: 2,
+                        color: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(0),
+                          side: const BorderSide(color: Color(0xFFE6E6E6)),
+                        ),
                         child: Padding(
-                          padding: const EdgeInsets.all(8.0),
+                          padding: const EdgeInsets.all(12),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
-                                "Property Expenses",
+                              const Text(
+                                "Property Portfolio",
                                 style: TextStyle(
-                                  color: AppColors.black,
-                                  fontSize: 22,
-                                  fontWeight: FontWeight.w600,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w800,
+                                  color: Colors.black87,
                                 ),
                               ),
                               const SizedBox(height: 10),
-                              Text(
-                                "Property Maintenance Cost",
+
+                              const Text(
+                                "Total Rental Income (all properties)",
                                 style: TextStyle(
-                                  color: AppColors.grey,
-                                  fontSize: 16,
+                                  fontSize: 12,
                                   fontWeight: FontWeight.w600,
+                                  color: Colors.black54,
                                 ),
                               ),
-
                               CustomInputField(
-                                controller: propertyController,
-                                keyboardType: TextInputType.text,
-                                hintText: "50000",
+                                controller: totalRentCtrl,
+                                keyboardType: TextInputType.number,
+                                hintText: "5000",
                               ),
-                              const SizedBox(height: 4),
-                              Text(
-                                "Loan Interest Paid(Annual)",
+                              const SizedBox(height: 10),
+
+                              const Text(
+                                "Total Property Expenses",
                                 style: TextStyle(
-                                  color: AppColors.grey,
-                                  fontSize: 16,
+                                  fontSize: 12,
                                   fontWeight: FontWeight.w600,
+                                  color: Colors.black54,
                                 ),
                               ),
-
                               CustomInputField(
-                                controller: propertyController,
-                                keyboardType: TextInputType.text,
+                                controller: totalExpensesCtrl,
+                                keyboardType: TextInputType.number,
                                 hintText: "6000",
                               ),
-                              const SizedBox(height: 4),
-                              Text(
-                                "Depreciation(Optional)",
+                              const SizedBox(height: 10),
+
+                              const Text(
+                                "Loan Interest (total)",
                                 style: TextStyle(
-                                  color: AppColors.grey,
-                                  fontSize: 16,
+                                  fontSize: 12,
                                   fontWeight: FontWeight.w600,
+                                  color: Colors.black54,
                                 ),
                               ),
-
                               CustomInputField(
-                                controller: propertyController,
-                                keyboardType: TextInputType.text,
+                                controller: loanInterestCtrl,
+                                keyboardType: TextInputType.number,
                                 hintText: "4000",
                               ),
                             ],
                           ),
                         ),
                       ),
-                      const SizedBox(height: 10),
+
+                      const SizedBox(height: 12),
+
+                      // ✅ Investment Details
                       Card(
-                        elevation: 5,
-                        color: AppColors.white,
-                        shape: Border.all(style: BorderStyle.none),
+                        elevation: 2,
+                        color: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(0),
+                          side: const BorderSide(color: Color(0xFFE6E6E6)),
+                        ),
                         child: Padding(
-                          padding: const EdgeInsets.all(8.0),
+                          padding: const EdgeInsets.all(12),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
+                              const Text(
                                 "Investment Details",
                                 style: TextStyle(
-                                  color: AppColors.black,
-                                  fontSize: 22,
-                                  fontWeight: FontWeight.w600,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w800,
+                                  color: Colors.black87,
                                 ),
                               ),
                               const SizedBox(height: 10),
-                              Text(
-                                "Capital Gains Amount(if any)",
+
+                              const Text(
+                                "Capital Gains Amount (if any)",
                                 style: TextStyle(
-                                  color: AppColors.grey,
-                                  fontSize: 16,
+                                  fontSize: 12,
                                   fontWeight: FontWeight.w600,
+                                  color: Colors.black54,
                                 ),
                               ),
-
                               CustomInputField(
-                                controller: propertyController,
-                                keyboardType: TextInputType.text,
+                                controller: capitalGainsCtrl,
+                                keyboardType: TextInputType.number,
                                 hintText: "50000",
                               ),
-                              const SizedBox(height: 4),
-                              Text(
-                                "Loan Tax Value",
+                              const SizedBox(height: 10),
+
+                              const Text(
+                                "Land Tax Value",
                                 style: TextStyle(
-                                  color: AppColors.grey,
-                                  fontSize: 16,
+                                  fontSize: 12,
                                   fontWeight: FontWeight.w600,
+                                  color: Colors.black54,
                                 ),
                               ),
                               CustomInputField(
-                                controller: propertyController,
-                                keyboardType: TextInputType.text,
+                                controller: landTaxValueCtrl,
+                                keyboardType: TextInputType.number,
                                 hintText: "12500",
                               ),
                             ],
                           ),
                         ),
                       ),
-                      const SizedBox(height: 30),
+
+                      const SizedBox(height: 18),
                     ],
                   ),
                 ),
               ),
-            ),
 
-            // বাটন — এখানে Expanded দরকার নেই
-            Padding(
-              padding: const EdgeInsets.only(bottom: 20),
-              child: SizedBox(
-                width: double.infinity,
-                height: 56, // বাটনের উচ্চতা নিজে নিয়ন্ত্রণ করো
-                child: ElevatedButton(
-                  onPressed: () {
-                    Get.to(() => TaxSummaryResult());
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.primary,
-                    foregroundColor: AppColors.white,
-                    elevation: 4,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(0),
+              // ✅ Bottom Calculate button (full width)
+              Padding(
+                padding: const EdgeInsets.only(bottom: 20),
+                child: SizedBox(
+                  width: double.infinity,
+                  height: 48,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Get.to(() => TaxSummaryResult());
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.primary,
+                      foregroundColor: Colors.white,
+                      elevation: 0,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(0),
+                      ),
+                      textStyle: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w700,
+                      ),
                     ),
-                    textStyle: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                    ),
+                    child: const Text("Calculate"),
                   ),
-                  child: const Text("Calculate"),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
