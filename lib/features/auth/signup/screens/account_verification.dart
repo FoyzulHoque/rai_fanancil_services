@@ -79,15 +79,17 @@ class _AccountVerificationScreenState extends State<AccountVerificationScreen> {
       context: context,
       builder: (BuildContext context) {
         return CustomPopup(
-          customText: 'Your account has been created successfully! You can now continue and start exploring all the features.',
+          customText:
+          'Your account has been created successfully! You can now continue and start exploring all the features.',
           buttonText: 'Go to Sign in page',
-          onButtonPressed: () {
-            Get.to((LoginScreen()));
+          onButtonPressed: () async {
+            Get.to(LoginScreen());
           },
         );
       },
     );
   }
+
 
   @override
   Widget build(BuildContext context) {

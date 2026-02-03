@@ -11,7 +11,6 @@ String allPropertiesResponseToJson(AllPropertiesResponse data) =>
 class AllPropertiesResponse {
 
   num? statusCode;
-  int? statusCode;
   bool? success;
   String? message;
   AllPropertiesData? data;
@@ -77,11 +76,6 @@ class AllPropertiesDatum {
   String? address;
   num? beds;
   num? baths;
-  int? id;
-  int? price;
-  String? address;
-  int? beds;
-  int? baths;
   String? propertyType;
   String? imageUrl;
   bool? isSaved;
@@ -157,9 +151,6 @@ class Meta {
   num? page;
   num? limit;
   num? total;
-  int? page;
-  int? limit;
-  int? total;
 
   Meta({this.page, this.limit, this.total});
 
