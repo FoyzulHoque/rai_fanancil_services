@@ -1,300 +1,230 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import '../../../../../core/themes/app_colors.dart';
-import '../../../../../core/widgets/custom_break_down_row_container.dart';
-import '../../../../../core/widgets/custome_container.dart';
 import '../../../../../core/widgets/full_page_pdf_make_widget.dart';
 import '../../../user navbar/controller/navbar_controller.dart';
-import '../../cash flow calculator/controller/property_dropdown_controller.dart';
 import '../widget/cost_distribution_chat_widget.dart';
 
 class CostEstimatesScreen extends StatelessWidget {
   CostEstimatesScreen({super.key});
 
-  final PropertyDropdownController propertyDropdownController = Get.put(
-    PropertyDropdownController(),
-  );
   final UserBottomNavbarController navbarController =
   Get.find<UserBottomNavbarController>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.only(left: 16, right: 16, top: 20),
-        child: Column(
-          children: [
-            Container(
-              height: 70,
-              decoration: BoxDecoration(color: AppColors.lightBlueSolid),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const SizedBox(width: 10),
-                  GestureDetector(
-                    onTap: () {
-                      Get.back();
-                    },
-                    child: Image.asset(
-                      "assets/icons/moves_right.png",
-                      width: 20,
-                      height: 20,
-                      fit: BoxFit.contain,
+      backgroundColor: Colors.white,
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.only(left: 16, right: 16, top: 10),
+          child: Column(
+            children: [
+              // ✅ Header
+              Container(
+                height: 56,
+                width: double.infinity,
+                decoration: const BoxDecoration(color: AppColors.lightBlueSolid),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const SizedBox(width: 10),
+                    GestureDetector(
+                      onTap: () => Get.back(),
+                      child: const Icon(Icons.arrow_back,
+                          color: Colors.white, size: 22),
                     ),
-                  ),
-                  const Expanded(
-                    child: Align(
-                      alignment: Alignment.center,
-                      child: Text(
-                        "Investment Results",
-                        style: TextStyle(
-                          color: AppColors.white,
-                          fontSize: 20,
-                          fontWeight: FontWeight.w600,
+                    const Expanded(
+                      child: Align(
+                        alignment: Alignment.center,
+                        child: Text(
+                          "Cost Estimates",
+                          style: TextStyle(
+                            color: AppColors.white,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ],
+                    const SizedBox(width: 32),
+                  ],
+                ),
               ),
-            ),
-            const SizedBox(height: 10),
-            Expanded(
-              child: SingleChildScrollView(
-                child: RepaintBoundary(
-                  key: pageKey, // Attach the key here
-                  child: Column(
-                    children: [
-                      Container(
-                        height: 78.5,
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          color: AppColors.colorList[0],
-                          borderRadius: BorderRadius.circular(0),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 8.0, top: 4.0),
+
+              const SizedBox(height: 12),
+
+              Expanded(
+                child: SingleChildScrollView(
+                  child: RepaintBoundary(
+                    key: pageKey,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // ✅ Total Annual Costs
+                        Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.all(14),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(0),
+                            gradient: LinearGradient(
+                              colors: [
+                                AppColors.primary.withOpacity(0.95),
+                                AppColors.blue.withOpacity(0.85),
+                              ],
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                            ),
+                          ),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
+                            children: const [
                               Text(
-                                "Net Annual Income",
+                                "Total Annual Costs",
                                 style: TextStyle(
-                                  color: AppColors.white,
-                                  fontSize: 22,
+                                  color: Colors.white,
+                                  fontSize: 13,
                                   fontWeight: FontWeight.w600,
                                 ),
                               ),
-                              const SizedBox(height: 4),
+                              SizedBox(height: 6),
                               Text(
-                                "\$81,873",
+                                "\$5,880",
                                 style: TextStyle(
-                                  color: AppColors.white,
+                                  color: Colors.white,
                                   fontSize: 22,
-                                  fontWeight: FontWeight.w600,
+                                  fontWeight: FontWeight.w800,
                                 ),
                               ),
                             ],
                           ),
                         ),
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const SizedBox(height: 20),
-                          Row(
-                            children: [
-                              customContainer(
-                                AppColors.greenDip,
-                                1,
-                                "Gross Income",
-                                "\$109,000",
-                                70,
-                                173,
-                              ),
-                              const SizedBox(width: 10),
-                              customContainer(
-                                AppColors.warning,
-                                1,
-                                "Tax Rate",
-                                "\$24.89%",
-                                70,
-                                163,
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 12),
-                          CostDistributionChart(
-                            title: "Cost Distribution",
-                            chartSize: 300,
-                            holeRadiusFactor: 0.70, // adjust for thicker/thinner ring
-                            items: [
-                              CostItem(
-                                label: "Building Insurance",
-                                amount: 1850,
-                                color: const Color(0xFF1976D2), // blue
-                              ),
-                              CostItem(
-                                label: "Council Rates",
-                                amount: 1920,
-                                color: const Color(0xFF4CAF50), // green
-                              ),
-                              CostItem(
-                                label: "Water Charges",
-                                amount: 980,
-                                color: const Color(0xFF03A9F4), // cyan
-                              ),
-                              CostItem(
-                                label: "Contents Insurance",
-                                amount: 650,
-                                color: const Color(0xFF9C27B0), // purple
-                              ),
-                              CostItem(
-                                label: "Landlord Insurance",
-                                amount: 480,
-                                color: const Color(0xFFFF9800), // orange
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 12),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              //Capital Growth Forecast
 
-                              //------------------------------------Insurance Estimate--------------
+                        const SizedBox(height: 12),
+
+                        // ✅ Cost Distribution (chart + legend)
+                        Card(
+                          elevation: 2,
+                          color: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(0),
+                            side: const BorderSide(color: Color(0xFFE6E6E6)),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(12),
+                            child: CostDistributionChart(
+                              title: "Cost Distribution",
+                              chartSize: 240,
+                              holeRadiusFactor: 0.70,
+                              items: [
+                                CostItem(
+                                  label: "Building Insurance",
+                                  amount: 1850,
+                                  color: const Color(0xFF1976D2),
+                                ),
+                                CostItem(
+                                  label: "Council Rates",
+                                  amount: 1920,
+                                  color: const Color(0xFF4CAF50),
+                                ),
+                                CostItem(
+                                  label: "Water Charges",
+                                  amount: 980,
+                                  color: const Color(0xFF03A9F4),
+                                ),
+                                CostItem(
+                                  label: "Contents Insurance",
+                                  amount: 650,
+                                  color: const Color(0xFF9C27B0),
+                                ),
+                                CostItem(
+                                  label: "Landlord Insurance",
+                                  amount: 480,
+                                  color: const Color(0xFFFF9800),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+
+                        const SizedBox(height: 12),
+
+                        // ✅ Detailed Breakdown
+                        Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.all(12),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFD9EEF8),
+                            borderRadius: BorderRadius.circular(0),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: const [
                               Text(
                                 "Detailed Breakdown",
                                 style: TextStyle(
-                                  color: AppColors.black,
-                                  fontSize: 22,
-                                  fontWeight: FontWeight.w600,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w800,
+                                  color: Colors.black87,
                                 ),
                               ),
-                              const SizedBox(height: 12),
-                              breakdownRow(
-                                containerColors: AppColors.infoLight,
-                                title: "Annual Total",
-                                value: "\$2,800",
-                              ),
-                              breakdownRow(
-                                containerColors: AppColors.infoLight,
-                                title: "Monthly Payment",
-                                value: "\$930",
-                                valueColor: AppColors.warning,
-                              ),
-
-                              breakdownRow(
-                                containerColors: AppColors.infoLight,
-                                title: "Weekly Payment",
-                                value: "\$2,063",
-                                valueColor: AppColors.warning,
-                              ),
-                              breakdownRow(
-                                containerColors: AppColors.infoLight,
-                                title: "Daily Cost",
-                                value: "\$818",
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 20),
-                   /*   Card(
-                        elevation: 5,
-                        color: AppColors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(0),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "Tax Impact (Annual)",
-                                style: TextStyle(
-                                  color: AppColors.black,
-                                  fontSize: 22,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                              const SizedBox(height: 12),
-                              breakdownRow(
-                                title: "Rental income",
-                                value: "\$33,800",
-                              ),
-                              const Divider(),
-                              breakdownRow(
-                                title: "Deductible Expenses",
-                                value: "\$15,200",
-                                valueColor: AppColors.warning,
-                              ),
-                              const Divider(),
-
-                              breakdownRow(
-                                title: "Depreciation",
-                                value: "\$8,500",
-                                valueColor: AppColors.warning,
-                              ),
-                              const Divider(),
-
-                              breakdownRow(
-                                title: "Taxable Income",
-                                value: "\$10,100",
-                              ),
-                              const Divider(),
-
-                              breakdownRow(
-                                title: "Estimated Tax(32.5%)",
-                                value: "\$3,283",
-                              ),
+                              SizedBox(height: 10),
+                              _LineRow(label: "Annual Total", value: "\$5,880"),
+                              SizedBox(height: 6),
+                              _LineRow(label: "Monthly Payment", value: "\$490"),
+                              SizedBox(height: 6),
+                              _LineRow(label: "Weekly Payment", value: "\$113"),
+                              SizedBox(height: 6),
+                              _LineRow(label: "Daily Cost", value: "\$16"),
                             ],
                           ),
                         ),
-                      ),
-                      const SizedBox(height: 20),*/
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 20),
-                        child: SizedBox(
+
+                        const SizedBox(height: 14),
+
+                        // ✅ Export PDF
+                        SizedBox(
                           width: double.infinity,
-                          height: 56,
-                          child: ElevatedButton.icon(
+                          height: 48,
+                          child: OutlinedButton.icon(
                             onPressed: () async {
-                              // Add a small delay to ensure the UI is stable
                               await Future.delayed(
-                                const Duration(milliseconds: 50),
-                              );
+                                  const Duration(milliseconds: 50));
                               final imageBytes = await captureFullPage();
                               if (imageBytes != null) {
                                 final pdfFile = await generatePdf(imageBytes);
                                 await printPdf(pdfFile);
                               }
                             },
-                            icon: const Icon(Icons.print, color: Colors.blue),
-                            label: const Text("Print Full Page"),
-                            style: ElevatedButton.styleFrom(
+                            icon: const Icon(Icons.download,
+                                color: Colors.black54),
+                            label: const Text(
+                              "Export PDF",
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.black87,
+                              ),
+                            ),
+                            style: OutlinedButton.styleFrom(
                               side: BorderSide(
-                                color: AppColors.primary,
+                                color: AppColors.primary.withOpacity(0.35),
                                 width: 1,
                               ),
-                              backgroundColor: AppColors.white,
-                              foregroundColor: AppColors.black,
-                              elevation: 4,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(0),
                               ),
+                              backgroundColor: Colors.white,
                             ),
                           ),
                         ),
-                      ),
-                      const SizedBox(height: 10),
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 20),
-                        child: SizedBox(
+
+                        const SizedBox(height: 14),
+
+                        // ✅ Done
+                        SizedBox(
                           width: double.infinity,
-                          height: 56,
+                          height: 48,
                           child: ElevatedButton(
                             onPressed: () {
                               navbarController.financialCalculatorsScreen();
@@ -302,28 +232,61 @@ class CostEstimatesScreen extends StatelessWidget {
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: AppColors.primary,
-                              foregroundColor: AppColors.white,
-                              elevation: 4,
+                              foregroundColor: Colors.white,
+                              elevation: 0,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(0),
                               ),
                               textStyle: const TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w700,
                               ),
                             ),
-                            child: const Text("Down"),
+                            child: const Text("Done"),
                           ),
                         ),
-                      ),
-                    ],
+
+                        const SizedBox(height: 18),
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
+    );
+  }
+}
+
+class _LineRow extends StatelessWidget {
+  final String label;
+  final String value;
+  const _LineRow({required this.label, required this.value});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          label,
+          style: const TextStyle(
+            fontSize: 12,
+            color: Colors.black45,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        Text(
+          value,
+          style: const TextStyle(
+            fontSize: 12,
+            color: Colors.black87,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+      ],
     );
   }
 }

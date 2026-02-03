@@ -13,78 +13,43 @@ class StampDutyCalculatorResultBreakDownChartWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (totalAmount <= 0) return const SizedBox.shrink();
+
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        // Donut Chart
+        // ✅ Donut Chart (NO center text)
         SizedBox(
           height: 220,
           width: 220,
-          child: Stack(
-            alignment: Alignment.center,
-            children: [
-              PieChart(
-                PieChartData(
-                  pieTouchData: PieTouchData(
-                    touchCallback: (FlTouchEvent event, pieTouchResponse) {
-                      // You can add tooltip / highlight logic here if needed
-                    },
-                  ),
-                  borderData: FlBorderData(show: false),
-                  sectionsSpace: 0,
-                  centerSpaceRadius: 70, // → donut hole size
-                  sections: showingSections(),
-                ),
+          child: PieChart(
+            PieChartData(
+              pieTouchData: PieTouchData(
+                touchCallback: (FlTouchEvent event, pieTouchResponse) {},
               ),
-
-              // Center Text (Total Amount)
-              Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    '\$${totalAmount.toStringAsFixed(0)}',
-                    style: const TextStyle(
-                      fontSize: 28,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black87,
-                    ),
-                  ),
-                  const Text(
-                    'Total',
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.grey,
-                    ),
-                  ),
-                ],
-              ),
-            ],
+              borderData: FlBorderData(show: false),
+              sectionsSpace: 0, // no gap between sections (like screenshot)
+              centerSpaceRadius: 72, // donut hole size (tune to match)
+              sections: _showingSections(),
+            ),
           ),
         ),
 
-        const SizedBox(height: 24),
+        const SizedBox(height: 16),
 
-        // Legend
-        ...items.map((item) => _buildLegendRow(item)).toList(),
+        // ✅ Legend (dot + label + value) like screenshot
+        ...items.map(_buildLegendRow).toList(),
       ],
     );
   }
 
-  List<PieChartSectionData> showingSections() {
+  List<PieChartSectionData> _showingSections() {
     return items.map((item) {
-      final percentage = (item.value / totalAmount) * 100;
-
       return PieChartSectionData(
         color: item.color,
         value: item.value,
-        title: '${percentage.toStringAsFixed(0)}%',
-        radius: 50,
-        titleStyle: const TextStyle(
-          fontSize: 14,
-          fontWeight: FontWeight.bold,
-          color: Colors.white,
-          shadows: [Shadow(color: Colors.black45, blurRadius: 4)],
-        ),
+        title: '', // ✅ remove % text from slices (clean ring like screenshot)
+        radius: 56, // ring thickness/size
       );
     }).toList();
   }
@@ -95,34 +60,38 @@ class StampDutyCalculatorResultBreakDownChartWidget extends StatelessWidget {
       child: Row(
         children: [
           Container(
-            width: 16,
-            height: 16,
-            decoration: BoxDecoration(
-              color: item.color,
-              shape: BoxShape.circle,
-            ),
+            width: 10,
+            height: 10,
+            decoration: BoxDecoration(color: item.color, shape: BoxShape.circle),
           ),
-          const SizedBox(width: 12),
+          const SizedBox(width: 8),
           Expanded(
             child: Text(
               item.label,
               style: const TextStyle(
-                fontSize: 15,
-                fontWeight: FontWeight.w500,
+                fontSize: 12,
+                color: Colors.black54,
+                fontWeight: FontWeight.w600,
               ),
             ),
           ),
           Text(
-            '\$${item.value.toStringAsFixed(0)}',
+            '\$${_money(item.value)}',
             style: const TextStyle(
-              fontSize: 15,
-              fontWeight: FontWeight.w600,
+              fontSize: 12,
+              fontWeight: FontWeight.w700,
               color: Colors.black87,
             ),
           ),
         ],
       ),
     );
+  }
+
+  String _money(num v) {
+    final s = v.toStringAsFixed(0);
+    final reg = RegExp(r'\B(?=(\d{3})+(?!\d))');
+    return s.replaceAllMapped(reg, (m) => ',');
   }
 }
 

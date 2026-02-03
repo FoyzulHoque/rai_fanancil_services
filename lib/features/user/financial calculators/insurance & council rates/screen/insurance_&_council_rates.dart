@@ -2,293 +2,289 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../../../core/themes/app_colors.dart';
 import '../../../../../core/widgets/custom_input_field_widget.dart';
-import '../../cash flow calculator/controller/property_dropdown_controller.dart';
-import '../../property investment/controller/select_custom_button_controller.dart';
 import 'cost_estimates_screen.dart';
 
 class InsuranceAndCouncilRatesScreen extends StatelessWidget {
   InsuranceAndCouncilRatesScreen({super.key});
 
-  final PropertyDropdownController propertyDropdownController = Get.put(
-    PropertyDropdownController(),
-  );
-  final LoanTypeController loanTypeController = Get.put(LoanTypeController());
-  TextEditingController propertyController = TextEditingController();
+  // ✅ Separate controllers (don’t set initial values; hintText will show placeholders)
+  final TextEditingController suburbCtrl = TextEditingController();
+  final TextEditingController bedroomsCtrl = TextEditingController();
+  final TextEditingController bathroomsCtrl = TextEditingController();
+  final TextEditingController buildingAreaCtrl = TextEditingController();
+
+  // ✅ Dropdown values (keep UI like screenshot)
+  final List<String> propertyTypes = const ["Apartment", "House", "Townhouse", "Unit"];
+  final List<String> buildTypes = const ["New", "Old", "Renovated"];
 
   @override
   Widget build(BuildContext context) {
+    // default selected (only for dropdown UI selection; not input value)
+    String selectedPropertyType = propertyTypes.first; // Apartment
+    String selectedBuildType = buildTypes.first; // New
+
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.only(left: 16, right: 16, top: 20),
-        child: Column(
-          children: [
-            Container(
-              height: 70,
-              decoration: BoxDecoration(color: AppColors.lightBlueSolid),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const SizedBox(width: 10),
-                  GestureDetector(
-                    onTap: () {
-                      Get.back();
-                    },
-                    child: Image.asset(
-                      "assets/icons/moves_right.png",
-                      width: 20,
-                      height: 20,
-                      fit: BoxFit.contain,
-                    ),
-                  ),
-                  Expanded(
-                    child: Align(
-                      alignment: Alignment.center,
-                      child: Text(
-                        "Insurance & Council Rates",
-                        style: TextStyle(
-                          color: AppColors.white,
-                          fontSize: 20,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-
-            // স্ক্রল হওয়া অংশ (Expanded দিয়ে পুরো জায়গা নেবে)
-            Expanded(
-              child: SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const SizedBox(height: 10),
-                      Card(
-                        elevation: 5,
-                        color: AppColors.white,
-                        shape: Border.all(style: BorderStyle.none),
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "Property Details",
-                                style: TextStyle(
-                                  color: AppColors.black,
-                                  fontSize: 22,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                              const SizedBox(height: 10),
-                              Text(
-                                "Property Value(\$)",
-                                style: TextStyle(
-                                  color: AppColors.grey,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-
-                              CustomInputField(
-                                controller: propertyController,
-                                keyboardType: TextInputType.text,
-                                hintText: "1200000",
-                              ),
-                              const SizedBox(height: 4),
-                              Text(
-                                "State",
-                                style: TextStyle(
-                                  color: AppColors.grey,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-
-                              CustomInputField(
-                                controller: propertyController,
-                                keyboardType: TextInputType.text,
-                                hintText: "Victoria",
-                              ),
-                              const SizedBox(height: 4),
-                              Text(
-                                "Building Area(sqm)",
-                                style: TextStyle(
-                                  color: AppColors.grey,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-
-                              CustomInputField(
-                                controller: propertyController,
-                                keyboardType: TextInputType.text,
-                                hintText: "1254",
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                     /* const SizedBox(height: 10),
-                      Card(
-                        elevation: 5,
-                        color: AppColors.white,
-                        shape: Border.all(style: BorderStyle.none),
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "Loan Structure",
-                                style: TextStyle(
-                                  color: AppColors.black,
-                                  fontSize: 22,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                              const SizedBox(height: 4),
-                              Text(
-                                "Interest Type",
-                                style: TextStyle(
-                                  color: Colors.black54,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-
-                              CustomSegmentSelector(
-                                height: 42,
-                                borderRadius: 6,
-                                backgroundColor: AppColors.btncolor,
-                                selectedColor: AppColors.primary,
-                                selectedTextColor: Colors.white,
-                                unSelectedTextColor: Colors.grey,
-                              ),
-
-                              const SizedBox(height: 4),
-                              Text(
-                                "Remaining Loan Term (Years)",
-                                style: TextStyle(
-                                  color: AppColors.grey,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                              const SizedBox(height: 4),
-
-                              CustomInputField(
-                                controller: propertyController,
-                                keyboardType: TextInputType.text,
-                                hintText: "5",
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-                      Card(
-                        elevation: 5,
-                        color: AppColors.white,
-                        shape: Border.all(style: BorderStyle.none),
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "Other Income(\$)",
-                                style: TextStyle(
-                                  color: AppColors.grey,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-
-                              CustomInputField(
-                                controller: propertyController,
-                                keyboardType: TextInputType.text,
-                                hintText: "5000",
-                              ),
-                              const SizedBox(height: 10),
-                              Text(
-                                "Income Frequency)",
-                                style: TextStyle(
-                                  color: AppColors.grey,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-
-                              CustomInputField(
-                                controller: propertyController,
-                                keyboardType: TextInputType.text,
-                                hintText: "Monthly",
-                              ),
-                              const SizedBox(height: 10),
-                              Text(
-                                "Tax Settings",
-                                style: TextStyle(
-                                  color: AppColors.black,
-                                  fontSize: 22,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                              const SizedBox(height: 4),
-                              Text(
-                                "Residency Status",
-                                style: TextStyle(
-                                  color: AppColors.grey,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-
-                              CustomInputField(
-                                controller: propertyController,
-                                keyboardType: TextInputType.text,
-                                hintText: "Own",
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),*/
-                    ],
-                  ),
-                ),
-              ),
-            ),
-
-            // বাটন — এখানে Expanded দরকার নেই
-            Padding(
-              padding: const EdgeInsets.only(bottom: 20),
-              child: SizedBox(
+      backgroundColor: Colors.white,
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.only(left: 16, right: 16, top: 10),
+          child: Column(
+            children: [
+              // ✅ Header (blue)
+              Container(
+                height: 56,
                 width: double.infinity,
-                height: 56, // বাটনের উচ্চতা নিজে নিয়ন্ত্রণ করো
-                child: ElevatedButton(
-                  onPressed: () {
-                    Get.to(() => CostEstimatesScreen());
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.primary,
-                    foregroundColor: AppColors.white,
-                    elevation: 4,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(0),
+                decoration: const BoxDecoration(color: AppColors.lightBlueSolid),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const SizedBox(width: 10),
+                    GestureDetector(
+                      onTap: () => Get.back(),
+                      child: const Icon(Icons.arrow_back, color: Colors.white, size: 22),
                     ),
-                    textStyle: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
+                    const Expanded(
+                      child: Align(
+                        alignment: Alignment.center,
+                        child: Text(
+                          "Insurance & Council Rates",
+                          style: TextStyle(
+                            color: AppColors.white,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
                     ),
-                  ),
-                  child: const Text("Calculate"),
+                    const SizedBox(width: 32),
+                  ],
                 ),
               ),
-            ),
-          ],
+
+              const SizedBox(height: 12),
+
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // ✅ Suburb input (single top field)
+                        Text(
+                          "Suburb",
+                          style: TextStyle(
+                            color: AppColors.grey,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        const SizedBox(height: 6),
+                        CustomInputField(
+                          controller: suburbCtrl,
+                          keyboardType: TextInputType.text,
+                          hintText: "Victoria",
+                        ),
+
+                        const SizedBox(height: 12),
+
+                        // ✅ Property Details card
+                        Card(
+                          elevation: 5,
+                          color: AppColors.white,
+                          shape: Border.all(style: BorderStyle.none),
+                          child: Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: StatefulBuilder(
+                              builder: (context, setState) {
+                                return Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "Property Details",
+                                      style: TextStyle(
+                                        color: AppColors.black,
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 10),
+
+                                    // Property Type dropdown
+                                    Text(
+                                      "Property Type",
+                                      style: TextStyle(
+                                        color: AppColors.grey,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 6),
+                                    DropdownButtonFormField<String>(
+                                      value: selectedPropertyType,
+                                      decoration: InputDecoration(
+                                        border: OutlineInputBorder(
+                                          borderRadius: BorderRadius.circular(0),
+                                        ),
+                                        enabledBorder: OutlineInputBorder(
+                                          borderRadius: BorderRadius.circular(0),
+                                          borderSide: const BorderSide(color: Colors.grey, width: 1),
+                                        ),
+                                        focusedBorder: OutlineInputBorder(
+                                          borderRadius: BorderRadius.circular(0),
+                                          borderSide: const BorderSide(color: Colors.grey, width: 1.5),
+                                        ),
+                                        contentPadding: const EdgeInsets.symmetric(
+                                          horizontal: 12,
+                                          vertical: 12,
+                                        ),
+                                        filled: true,
+                                        fillColor: Colors.white,
+                                      ),
+                                      icon: const Icon(Icons.keyboard_arrow_down_rounded, color: Colors.black54),
+                                      items: propertyTypes
+                                          .map((e) => DropdownMenuItem<String>(value: e, child: Text(e)))
+                                          .toList(),
+                                      onChanged: (v) {
+                                        if (v == null) return;
+                                        setState(() => selectedPropertyType = v);
+                                      },
+                                    ),
+
+                                    const SizedBox(height: 12),
+
+                                    // Bedrooms
+                                    Text(
+                                      "Number of Bedrooms",
+                                      style: TextStyle(
+                                        color: AppColors.grey,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 6),
+                                    CustomInputField(
+                                      controller: bedroomsCtrl,
+                                      keyboardType: TextInputType.number,
+                                      hintText: "4",
+                                    ),
+
+                                    const SizedBox(height: 12),
+
+                                    // Bathrooms
+                                    Text(
+                                      "Number of Bathrooms",
+                                      style: TextStyle(
+                                        color: AppColors.grey,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 6),
+                                    CustomInputField(
+                                      controller: bathroomsCtrl,
+                                      keyboardType: TextInputType.number,
+                                      hintText: "5",
+                                    ),
+
+                                    const SizedBox(height: 12),
+
+                                    // Building Area
+                                    Text(
+                                      "Building Area (sqm)",
+                                      style: TextStyle(
+                                        color: AppColors.grey,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 6),
+                                    CustomInputField(
+                                      controller: buildingAreaCtrl,
+                                      keyboardType: TextInputType.number,
+                                      hintText: "1254",
+                                    ),
+
+                                    const SizedBox(height: 12),
+
+                                    // Build Type dropdown
+                                    Text(
+                                      "Build Type",
+                                      style: TextStyle(
+                                        color: AppColors.grey,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 6),
+                                    DropdownButtonFormField<String>(
+                                      value: selectedBuildType,
+                                      decoration: InputDecoration(
+                                        border: OutlineInputBorder(
+                                          borderRadius: BorderRadius.circular(0),
+                                        ),
+                                        enabledBorder: OutlineInputBorder(
+                                          borderRadius: BorderRadius.circular(0),
+                                          borderSide: const BorderSide(color: Colors.grey, width: 1),
+                                        ),
+                                        focusedBorder: OutlineInputBorder(
+                                          borderRadius: BorderRadius.circular(0),
+                                          borderSide: const BorderSide(color: Colors.grey, width: 1.5),
+                                        ),
+                                        contentPadding: const EdgeInsets.symmetric(
+                                          horizontal: 12,
+                                          vertical: 12,
+                                        ),
+                                        filled: true,
+                                        fillColor: Colors.white,
+                                      ),
+                                      icon: const Icon(Icons.keyboard_arrow_down_rounded, color: Colors.black54),
+                                      items: buildTypes
+                                          .map((e) => DropdownMenuItem<String>(value: e, child: Text(e)))
+                                          .toList(),
+                                      onChanged: (v) {
+                                        if (v == null) return;
+                                        setState(() => selectedBuildType = v);
+                                      },
+                                    ),
+                                  ],
+                                );
+                              },
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+
+              // ✅ Bottom Calculate button (blue)
+              Padding(
+                padding: const EdgeInsets.only(bottom: 20),
+                child: SizedBox(
+                  width: double.infinity,
+                  height: 56,
+                  child: ElevatedButton(
+                    onPressed: () => Get.to(() => CostEstimatesScreen()),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.primary,
+                      foregroundColor: AppColors.white,
+                      elevation: 4,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(0),
+                      ),
+                      textStyle: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    child: const Text("Calculate"),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

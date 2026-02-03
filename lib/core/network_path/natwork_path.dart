@@ -1,10 +1,14 @@
+import '../services_class/shared_preferences_helper.dart';
+
 class Urls {
   static const String _baseUrl =
       'http://10.0.20.177:12030/api/v1'; // Re-check this IP and port
 
   static const String baseUrl =
       'http://10.0.20.177:12030/api/v1'; // Re-check this IP and port
-
+  static Future<String?> get token async {
+    return await SharedPreferencesHelper.getAccessToken();
+  }
   // Auth URLs
   static const String login = '$baseUrl/auth/login';
   static const String authSignUp = '$baseUrl/auth/register';

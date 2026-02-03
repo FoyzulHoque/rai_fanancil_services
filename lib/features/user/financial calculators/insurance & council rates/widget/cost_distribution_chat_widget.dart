@@ -5,7 +5,7 @@ class CostDistributionChart extends StatelessWidget {
   final String title;
   final List<CostItem> items;
   final double chartSize;
-  final double holeRadiusFactor; // 0.0 = full pie, 0.6–0.75 = nice donut
+  final double holeRadiusFactor; // 0.0 = full pie, 0.6–0.75 = donut
 
   CostDistributionChart({
     super.key,
@@ -20,20 +20,31 @@ class CostDistributionChart extends StatelessWidget {
     final total = items.fold<double>(0, (sum, item) => sum + item.amount);
     if (total <= 0) return const SizedBox.shrink();
 
-    // Calculate start angles
+    // ✅ slice gap like your image
+    const double gapRadians = 0.06;
+
     double cumulative = 0;
     final segments = <Segment>[];
+
     for (final item in items) {
       final fraction = item.amount / total;
-      final startAngle = cumulative * 2 * math.pi - math.pi / 2;
-      final sweepAngle = fraction * 2 * math.pi;
-      segments.add(Segment(
-        color: item.color,
-        startAngle: startAngle,
-        sweepAngle: sweepAngle,
-        label: item.label,
-        amount: item.amount,
-      ));
+      final baseStart = cumulative * 2 * math.pi - math.pi / 2;
+
+      double sweep = fraction * 2 * math.pi;
+      if (items.length > 1) {
+        sweep = math.max(0.0, sweep - gapRadians);
+      }
+
+      segments.add(
+        Segment(
+          color: item.color,
+          startAngle: baseStart + (items.length > 1 ? gapRadians / 2 : 0),
+          sweepAngle: sweep,
+          label: item.label,
+          amount: item.amount,
+        ),
+      );
+
       cumulative += fraction;
     }
 
@@ -49,6 +60,7 @@ class CostDistributionChart extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 24),
+
         SizedBox(
           width: chartSize,
           height: chartSize,
@@ -62,35 +74,18 @@ class CostDistributionChart extends StatelessWidget {
                   holeRadiusFactor: holeRadiusFactor,
                 ),
               ),
-              // Optional center text (total or title)
-              Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    "Total",
-                    style: TextStyle(
-                      fontSize: 13,
-                      color: Colors.grey.shade600,
-                    ),
-                  ),
-                  Text(
-                    _formatAmount(total),
-                    style: const TextStyle(
-                      fontSize: 19,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
-              ),
+
+              // ✅ NO CENTER TEXT (so "Total $6k" will NEVER appear)
             ],
           ),
         ),
+
         const SizedBox(height: 28),
-        // Legend
+
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Column(
-            children: items.map((item) => _buildLegendRow(item)).toList(),
+            children: items.map(_buildLegendRow).toList(),
           ),
         ),
       ],
@@ -131,7 +126,7 @@ class CostDistributionChart extends StatelessWidget {
 
   String _formatAmount(double value) {
     if (value >= 1000) {
-      return '''\$${(value / 1000).toStringAsFixed(0)}k''';
+      return '\$${(value / 1000).toStringAsFixed(0)}k';
     }
     return "\$${value.toStringAsFixed(0)}";
   }
@@ -183,9 +178,7 @@ class _DonutChartPainter extends CustomPainter {
     final innerRadius = outerRadius * holeRadiusFactor;
 
     final outerRect = Rect.fromCircle(center: center, radius: outerRadius);
-    final innerRect = Rect.fromCircle(center: center, radius: innerRadius);
 
-    // Draw segments
     for (final segment in segments) {
       final paint = Paint()
         ..color = segment.color
@@ -195,25 +188,17 @@ class _DonutChartPainter extends CustomPainter {
         outerRect,
         segment.startAngle,
         segment.sweepAngle,
-        true, // fill center (but will be cut by inner circle)
+        true,
         paint,
       );
     }
 
-    // Cut out the center hole
+    // cut out hole
     final holePaint = Paint()
-      ..color = Colors.white // or your background color
+      ..color = Colors.white
       ..style = PaintingStyle.fill;
 
     canvas.drawCircle(center, innerRadius, holePaint);
-
-    // Optional: thin border
-    final borderPaint = Paint()
-      ..color = Colors.grey.shade300
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 1.5;
-
-    canvas.drawCircle(center, outerRadius, borderPaint);
   }
 
   @override
