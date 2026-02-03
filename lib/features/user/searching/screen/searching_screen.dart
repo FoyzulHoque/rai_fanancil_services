@@ -97,7 +97,11 @@ class SearchingScreen extends StatelessWidget {
                           price: property.price?.toString() ?? "",
                           leftButtonText: '+Add property',
                           leftTextColor: AppColors.black,
-                          onTapAddProperty: () {},
+                          onTapAddProperty: () {
+                            allPropertiesController.saveProperty(
+                              property.id.toString(),
+                            );
+                          },
                           borderColorLeft: AppColors.grey,
                           rightButtonText: 'Use in Calculator',
                           rightTextColor: AppColors.white,

@@ -67,6 +67,7 @@ class Urls {
       '$_baseUrl/properties/my-saved-property';
   // all properties
   static const String allProperties = '$_baseUrl/properties/all';
+  static const String saveProperty = '$_baseUrl/properties/save';
 
 
 

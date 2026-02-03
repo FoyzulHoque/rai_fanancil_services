@@ -26,21 +26,34 @@ class AllPropertiesController extends GetxController {
         Urls.allProperties,
         // token: token,
       );
-
-      // log(response.responseData.toString());
-      log("responseData type = ${response.responseData.runtimeType}");
-
       if (response.statusCode == 200 || response.isSuccess) {
-        log(response.responseData.toString());
-
         // ✅ responseData is already the { meta: {...}, data: [...] } object
         final data = Data.fromJson(response.responseData);
 
-        log(data.runtimeType.toString());
         allPropertiesData.assignAll(data.data ?? []);
-        log('$allPropertiesData');
+      }
+    } catch (e) {
+      log("Fetching all error: $e");
+    } finally {
+      isLoading.value = false;
+    }
+  }
 
-        Get.snackbar('Success', 'Loaded ${data.data?.length ?? 0} properties');
+  Future<void> saveProperty(String id) async {
+    try {
+      isLoading.value = true;
+      final response = await networkCaller.postRequest(
+        Urls.saveProperty,
+        body: {'propertyId': id},
+        token: token,
+        // token: token,
+      );
+      log(response.responseData.toString());
+      if (response.statusCode == 200 || response.isSuccess) {
+        // ✅ responseData is already the { meta: {...}, data: [...] } object
+        // final data = Data.fromJson(response.responseData);
+
+        // allPropertiesData.assignAll(data.data ?? []);
       }
     } catch (e) {
       log("Fetching all error: $e");

@@ -68,69 +68,58 @@ class PropertyScreen extends StatelessWidget {
               ),
               Padding(
                 padding: const EdgeInsets.all(16.0),
-                child: RefreshIndicator(
-                  onRefresh: () {
-                    return savedPropertiesController.refreshData();
-                  },
-                  color: AppColors.primary,
-                  child: SingleChildScrollView(
-                    physics: AlwaysScrollableScrollPhysics(),
-                    child: Column(
-                      children: [
-                        Obx(() {
-                          if (savedPropertiesController.isLoading.value) {
-                            return const Center(
-                              child: CircularProgressIndicator(),
-                            );
-                          }
+                child: Column(
+                  children: [
+                    Obx(() {
+                      if (savedPropertiesController.isLoading.value) {
+                        return const Center(child: CircularProgressIndicator());
+                      }
 
-                          if (savedPropertiesController
-                              .savedPropertiesData
-                              .isEmpty) {
-                            return const Center(
-                              child: Text("No saved properties found"),
-                            );
-                          }
+                      if (savedPropertiesController
+                          .savedPropertiesData
+                          .isEmpty) {
+                        return const Center(
+                          child: Text("No saved properties found"),
+                        );
+                      }
 
-                          return ListView.builder(
-                            primary: false,
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            itemCount: savedPropertiesController
-                                .savedPropertiesData
-                                .length,
-                            itemBuilder: (context, index) {
-                              final item = savedPropertiesController
-                                  .savedPropertiesData[index];
-                              final property = item.propertyListing;
+                      return ListView.builder(
+                        primary: false,
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: savedPropertiesController
+                            .savedPropertiesData
+                            .length,
+                        itemBuilder: (context, index) {
+                          final item = savedPropertiesController
+                              .savedPropertiesData[index];
+                          final property = item.propertyListing;
 
-                              return Padding(
-                                padding: const EdgeInsets.all(4.0),
-                                child: SearchScreenBodyWidget(
-                                  image: property?.images?.isNotEmpty == true
-                                      ? property!.images!.first
-                                      : "",
-                                  baths: property?.bathrooms?.toString() ?? "0",
-                                  beds: property?.bedrooms?.toString() ?? "0",
-                                  location:
-                                      "${property?.address ?? ""}, ${property?.state ?? ""}",
-                                  price: property?.price?.toString() ?? "0",
-                                  leftButtonText: 'Remove',
-                                  leftTextColor: AppColors.warningSecondary,
-                                  onTapAddProperty: () {},
-                                  borderColorLeft: AppColors.warningSecondary,
-                                  rightButtonText: 'Use in Calculator',
-                                  rightTextColor: AppColors.white,
-                                  onTapUseInCalculator: () {},
-                                  borderColorRight: AppColors.primary,
-                                ),
-                              );
-                            },
+                          return Padding(
+                            padding: const EdgeInsets.all(4.0),
+                            child: SearchScreenBodyWidget(
+                              image: property?.images?.isNotEmpty == true
+                                  ? property!.images!.first
+                                  : "",
+                              baths: property?.bathrooms?.toString() ?? "0",
+                              beds: property?.bedrooms?.toString() ?? "0",
+                              location:
+                                  "${property?.address ?? ""}, ${property?.state ?? ""}",
+                              price: property?.price?.toString() ?? "0",
+                              leftButtonText: 'Remove',
+                              leftTextColor: AppColors.warningSecondary,
+                              onTapAddProperty: () {},
+                              borderColorLeft: AppColors.warningSecondary,
+                              rightButtonText: 'Use in Calculator',
+                              rightTextColor: AppColors.white,
+                              onTapUseInCalculator: () {},
+                              borderColorRight: AppColors.primary,
+                            ),
                           );
-                        }),
-                      ],
-                    ),
-                  ),
+                        },
+                      );
+                    }),
+                  ],
                 ),
               ),
             ],
