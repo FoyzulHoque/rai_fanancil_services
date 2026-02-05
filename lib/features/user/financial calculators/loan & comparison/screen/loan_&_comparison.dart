@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../../../core/themes/app_colors.dart';
-import '../../cash flow calculator/controller/property_dropdown_controller.dart';
-import 'loan_comparison_result_screen.dart';
+import '../controller/loan_comparison_controller.dart';
+import '../controller/loan_property_dropdown_controller.dart';
 
 class LoanAndComparisonScreen extends StatelessWidget {
   LoanAndComparisonScreen({super.key});
 
-  final PropertyDropdownController propertyDropdownController =
-  Get.put(PropertyDropdownController());
+  final LoanPropertyDropdownController propertyDropdownController =
+  Get.put(LoanPropertyDropdownController());
+
+  final LoanComparisonController loanComparisonController =
+  Get.put(LoanComparisonController());
 
   @override
   Widget build(BuildContext context) {
@@ -55,163 +58,236 @@ class LoanAndComparisonScreen extends StatelessWidget {
 
               Expanded(
                 child: SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        "Select Property",
-                        style: TextStyle(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.black54,
-                        ),
-                      ),
-                      const SizedBox(height: 8),
+                  child: Obx(() {
+                    final showFull = loanComparisonController.showFullUI.value;
+                    final data = loanComparisonController.comparison.value?.data;
 
-                      // Dropdown (Property1)
-                      Obx(
-                            () => DropdownButtonFormField<String>(
-                          value:
-                          propertyDropdownController.selectedProperty.value,
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(0)),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(0),
-                              borderSide: const BorderSide(
-                                  color: Color(0xFFE6E6E6), width: 1),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(0),
-                              borderSide: const BorderSide(
-                                  color: Color(0xFFCCCCCC), width: 1.2),
-                            ),
-                            contentPadding: const EdgeInsets.symmetric(
-                                horizontal: 12, vertical: 12),
-                            filled: true,
-                            fillColor: Colors.white,
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          "Select Property",
+                          style: TextStyle(
+                            fontSize: 13,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.black54,
                           ),
-                          icon: const Icon(Icons.keyboard_arrow_down_rounded,
-                              color: Colors.black54),
-                          isExpanded: true,
-                          items: propertyDropdownController.properties
-                              .map((v) => DropdownMenuItem<String>(
-                            value: v,
-                            child: Text(
-                              v,
-                              style: const TextStyle(
-                                fontSize: 14,
-                                color: Colors.black87,
-                                fontWeight: FontWeight.w600,
+                        ),
+                        const SizedBox(height: 8),
+
+                        // Dropdown (Property1)
+                        Obx(
+                              () => DropdownButtonFormField<String>(
+                            value: propertyDropdownController.selectedProperty.value.isEmpty
+                                ? null
+                                : propertyDropdownController.selectedProperty.value,
+                            decoration: InputDecoration(
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(0)),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(0),
+                                borderSide: const BorderSide(
+                                    color: Color(0xFFE6E6E6), width: 1),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(0),
+                                borderSide: const BorderSide(
+                                    color: Color(0xFFCCCCCC), width: 1.2),
+                              ),
+                              contentPadding: const EdgeInsets.symmetric(
+                                  horizontal: 12, vertical: 12),
+                              filled: true,
+                              fillColor: Colors.white,
+                            ),
+                            icon: const Icon(Icons.keyboard_arrow_down_rounded,
+                                color: Colors.black54),
+                            isExpanded: true,
+                            items: propertyDropdownController.properties
+                                .map((v) => DropdownMenuItem<String>(
+                              value: v,
+                              child: Text(
+                                v,
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.black87,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ))
+                                .toList(),
+                            onChanged: propertyDropdownController.changeProperty,
+                          ),
+                        ),
+
+                        const SizedBox(height: 16),
+
+                        // ✅ BEFORE API: show ONLY dropdown + Calculate button
+                        if (!showFull) ...[
+                          SizedBox(
+                            width: double.infinity,
+                            height: 48,
+                            child: ElevatedButton(
+                              onPressed: loanComparisonController.isLoading.value
+                                  ? null
+                                  : () async {
+                                final propertyId =
+                                propertyDropdownController.selectedPropertyId();
+
+                                if (propertyId == null || propertyId.trim().isEmpty) {
+                                  Get.snackbar("Error", "Please select a property",
+                                      snackPosition: SnackPosition.BOTTOM);
+                                  return;
+                                }
+
+                                await loanComparisonController.calculateLoanComparison(
+                                  propertyId: propertyId.trim(),
+                                );
+
+                                if (loanComparisonController.showFullUI.value == false) {
+                                  final msg = loanComparisonController.errorMessage.value.trim().isEmpty
+                                      ? "Something went wrong"
+                                      : loanComparisonController.errorMessage.value;
+                                  Get.snackbar("Error", msg,
+                                      snackPosition: SnackPosition.BOTTOM);
+                                }
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: AppColors.primary,
+                                foregroundColor: Colors.white,
+                                elevation: 0,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(0),
+                                ),
+                              ),
+                              child: loanComparisonController.isLoading.value
+                                  ? const SizedBox(
+                                height: 22,
+                                width: 22,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  color: Colors.white,
+                                ),
+                              )
+                                  : const Text(
+                                "Calculate",
+                                style: TextStyle(
+                                  fontSize: 13.5,
+                                  fontWeight: FontWeight.w700,
+                                  color: Colors.white,
+                                ),
                               ),
                             ),
-                          ))
-                              .toList(),
-                          onChanged: propertyDropdownController.changeProperty,
-                        ),
-                      ),
-
-                      const SizedBox(height: 12),
-
-                      // Current Rate + Best Market Rate
-                      Row(
-                        children: const [
-                          Expanded(
-                            child: _RateBox(
-                              title: "Current Rate",
-                              value: "6.24%",
-                              borderColor: Color(0xFF34C38F),
-                            ),
                           ),
-                          SizedBox(width: 12),
-                          Expanded(
-                            child: _RateBox(
-                              title: "Best Market Rate",
-                              value: "5.49%",
-                              borderColor: Color(0xFF34C38F),
-                            ),
-                          ),
+                          const SizedBox(height: 18),
                         ],
-                      ),
 
-                      const SizedBox(height: 12),
+                        // ✅ AFTER API: show full UI (same layout)
+                        if (showFull && data != null) ...[
+                          // Current Rate + Best Market Rate
+                          Row(
+                            children: [
+                              Expanded(
+                                child: _RateBox(
+                                  title: "Current Rate",
+                                  value:
+                                  "${data.currentRatePercent.toStringAsFixed(2)}%",
+                                  borderColor: const Color(0xFF34C38F),
+                                ),
+                              ),
+                              const SizedBox(width: 12),
+                              Expanded(
+                                child: _RateBox(
+                                  title: "Best Market Rate",
+                                  value:
+                                  "${data.bestMarketRatePercent.toStringAsFixed(2)}%",
+                                  borderColor: const Color(0xFF34C38F),
+                                ),
+                              ),
+                            ],
+                          ),
 
-                      // Sydney card
-                      _InfoCard(
-                        borderColor: const Color(0xFFBFA7FF),
-                        leftIcon: Icons.home_outlined,
-                        leftIconColor: const Color(0xFF8E63FF),
-                        title: "Sydney",
-                        rows: const [
-                          _InfoRow(
-                            label: "Loan Balance",
-                            value: "\$450,000",
+                          const SizedBox(height: 12),
+
+                          // Sydney card
+                          _InfoCard(
+                            borderColor: const Color(0xFFBFA7FF),
+                            leftIcon: Icons.home_outlined,
+                            leftIconColor: const Color(0xFF8E63FF),
+                            title: data.propertySummary.location.split(" ").first.isEmpty
+                                ? "Property"
+                                : data.propertySummary.location.split(" ").first,
+                            rows: [
+                              _InfoRow(
+                                label: "Loan Balance",
+                                value: "\$${_money(data.propertySummary.loanBalance)}",
+                              ),
+                              _InfoRow(
+                                label: "Remaining Term",
+                                value: "${data.propertySummary.remainingTermYears.toStringAsFixed(0)} years",
+                              ),
+                              _InfoRow(
+                                label: "Monthly Savings",
+                                value: "\$${_money(data.savingsSummary.monthlySavings)}",
+                                valueColor: const Color(0xFF2ECC71),
+                                prefixIcon: Icons.trending_up_rounded,
+                                prefixIconColor: const Color(0xFF2ECC71),
+                              ),
+                              _InfoRow(
+                                label: "Total Interest Saved",
+                                value: "\$${_money(data.savingsSummary.totalInterestSaved)}",
+                              ),
+                            ],
                           ),
-                          _InfoRow(
-                            label: "Remaining Term",
-                            value: "25 years",
+
+                          const SizedBox(height: 12),
+
+                          // Best Rates on the Market
+                          _BestRatesCard(
+                            rate: "${data.bestRateProvider.ratePercent.toStringAsFixed(2)}%",
+                            subtitle: data.bestRateProvider.name,
                           ),
-                          _InfoRow(
-                            label: "Monthly Savings",
-                            value: "\$189",
-                            valueColor: Color(0xFF2ECC71),
-                            prefixIcon: Icons.trending_up_rounded,
-                            prefixIconColor: Color(0xFF2ECC71),
+
+                          const SizedBox(height: 12),
+
+                          // Why Work With Me? (API)
+                          _WhyWorkWithMeCardFromApi(items: data.whyWorkWithMe),
+
+                          const SizedBox(height: 16),
+
+                          // Book Free Consultation button (same button spot)
+                          SizedBox(
+                            width: double.infinity,
+                            height: 48,
+                            child: ElevatedButton.icon(
+                              onPressed: () {
+                                // if you want: Get.to(() => BookScreen());
+                              },
+                              icon: const Icon(Icons.call,
+                                  color: Colors.white, size: 18),
+                              label: const Text(
+                                "Book Free Consultation",
+                                style: TextStyle(
+                                  fontSize: 13.5,
+                                  fontWeight: FontWeight.w700,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: AppColors.primary,
+                                foregroundColor: Colors.white,
+                                elevation: 0,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(0),
+                                ),
+                              ),
+                            ),
                           ),
-                          _InfoRow(
-                            label: "Total Interest Saved",
-                            value: "\$56,788",
-                          ),
+
+                          const SizedBox(height: 18),
                         ],
-                      ),
-
-                      const SizedBox(height: 12),
-
-                      // Best Rates on the Market
-                      _BestRatesCard(
-                        rate: "5.49%",
-                        subtitle: "R-Money by Rai Financial services",
-                      ),
-
-                      const SizedBox(height: 12),
-
-                      // Why Work With Me?
-                      _WhyWorkWithMeCard(),
-
-                      const SizedBox(height: 16),
-
-                      // Book Free Consultation button
-                      SizedBox(
-                        width: double.infinity,
-                        height: 48,
-                        child: ElevatedButton.icon(
-                          onPressed: () {
-                            // if you want: Get.to(() => BookScreen());
-                          },
-                          icon: const Icon(Icons.call,
-                              color: Colors.white, size: 18),
-                          label: const Text(
-                            "Book Free Consultation",
-                            style: TextStyle(
-                              fontSize: 13.5,
-                              fontWeight: FontWeight.w700,
-                              color: Colors.white,
-                            ),
-                          ),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColors.primary,
-                            foregroundColor: Colors.white,
-                            elevation: 0,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(0),
-                            ),
-                          ),
-                        ),
-                      ),
-
-                      const SizedBox(height: 18),
-                    ],
-                  ),
+                      ],
+                    );
+                  }),
                 ),
               ),
             ],
@@ -220,9 +296,15 @@ class LoanAndComparisonScreen extends StatelessWidget {
       ),
     );
   }
+
+  static String _money(num v) {
+    final s = v.toStringAsFixed(0);
+    final reg = RegExp(r'\B(?=(\d{3})+(?!\d))');
+    return s.replaceAllMapped(reg, (m) => ',');
+  }
 }
 
-// ---------------- UI Widgets ----------------
+// ---------------- UI Widgets (UNCHANGED) ----------------
 
 class _RateBox extends StatelessWidget {
   final String title;
@@ -436,20 +518,13 @@ class _BestRatesCard extends StatelessWidget {
   }
 }
 
-class _WhyWorkWithMeCard extends StatelessWidget {
+class _WhyWorkWithMeCardFromApi extends StatelessWidget {
+  final List<dynamic> items; // WhyWorkItem list
+
+  const _WhyWorkWithMeCardFromApi({required this.items});
+
   @override
   Widget build(BuildContext context) {
-    const bullets = [
-      "Access to 40+ lenders",
-      "I'll find you the best rate, not just the big banks",
-      "No cost to you",
-      "Lenders pay me, so you save completely free",
-      "Handle the paperwork",
-      "I'll manage the entire refinance process for you",
-      "Ongoing support",
-      "Annual reviews to ensure you always have the best rate",
-    ];
-
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
@@ -469,8 +544,11 @@ class _WhyWorkWithMeCard extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 10),
-          ...bullets.map(
-                (t) => Padding(
+          ...items.map((e) {
+            final title = (e.title ?? '').toString();
+            final desc = (e.description ?? '').toString();
+
+            return Padding(
               padding: const EdgeInsets.only(bottom: 8),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -487,7 +565,7 @@ class _WhyWorkWithMeCard extends StatelessWidget {
                   const SizedBox(width: 8),
                   Expanded(
                     child: Text(
-                      t,
+                      "$title\n$desc",
                       style: const TextStyle(
                         fontSize: 11.8,
                         color: Colors.black54,
@@ -498,8 +576,8 @@ class _WhyWorkWithMeCard extends StatelessWidget {
                   ),
                 ],
               ),
-            ),
-          ),
+            );
+          }).toList(),
         ],
       ),
     );

@@ -1,73 +1,69 @@
 import 'package:flutter/material.dart';
-import '../../../../core/themes/app_colors.dart';
 
 class UserBodyWidget extends StatelessWidget {
+  final Color boxColor;
+  final IconData image;
+  final String title;
+  final String totalNumber;
+  final Color iconColor;
+
   const UserBodyWidget({
     super.key,
-    this.totalNumber,
-    this.title,
-    this.image,
-    this.boxColor,
-    this.iconColor,
+    required this.boxColor,
+    required this.image,
+    required this.title,
+    required this.totalNumber,
+    required this.iconColor,
   });
-  final String? totalNumber;
-  final String? title;
-  final String? image;
-  final Color? boxColor;
-  final Color? iconColor;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 71,
-      width: 172,
+      height: 64,
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
       decoration: BoxDecoration(
-        border: Border.all(color: AppColors.secondaryColors, width: 1),
+        color: boxColor,
+        border: Border.all(color: const Color(0xFF0C7BB9)),
       ),
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Column(
+      child: Row(
+        children: [
+          Expanded(
+            child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "$totalNumber",
-                  style: TextStyle(
-                    color: AppColors.black,
+                  totalNumber,
+                  style: const TextStyle(
+                    fontSize: 16,
                     fontWeight: FontWeight.w800,
-                    fontSize: 22,
+                    color: Colors.black87,
                   ),
                 ),
+                const SizedBox(height: 2),
                 Text(
-                  "$title",
-                  style: TextStyle(
-                    color: AppColors.grey,
+                  title,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    fontSize: 11,
                     fontWeight: FontWeight.w600,
-                    fontSize: 14,
+                    color: Colors.black54,
                   ),
                 ),
               ],
             ),
-            const SizedBox(width: 8),
-            Container(
-              height: 40,
-              width: 40,
-              decoration: BoxDecoration(color: boxColor),
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Image.asset(
-                  "$image",
-                  width: 19.9,
-                  height: 19.9,
-                  fit: BoxFit.contain, // cover এর বদলে contain ভালো আইকনের জন্য
-                  color: iconColor,
-                ),
-              ),
+          ),
+
+          Container(
+            height: 28,
+            width: 28,
+            decoration: BoxDecoration(
+              color: iconColor.withOpacity(0.12),
+              borderRadius: BorderRadius.circular(2),
             ),
-          ],
-        ),
+            child: Icon(image, color: iconColor, size: 18),
+          ),
+        ],
       ),
     );
   }

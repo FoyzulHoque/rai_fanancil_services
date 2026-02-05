@@ -177,7 +177,7 @@ class StampDutyCalculatorScreen extends StatelessWidget {
                             CustomInputField(
                               controller: savingsController,
                               keyboardType: TextInputType.number,
-                              hintText: "0",
+                              hintText: "Savings of (\$)",
                             ),
 
                             const SizedBox(height: 14),
@@ -187,7 +187,7 @@ class StampDutyCalculatorScreen extends StatelessWidget {
                             CustomInputField(
                               controller: propertyValueController,
                               keyboardType: TextInputType.number,
-                              hintText: "1200000",
+                              hintText: "Property Value (\$)",
                             ),
                           ],
                         ),

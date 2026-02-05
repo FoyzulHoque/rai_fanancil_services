@@ -7,9 +7,9 @@ class PropertyValueGrowthChart extends StatelessWidget {
     super.key,
     required this.title,
     required this.monthlyData,
-    this.lineColor = const Color(0xFF2196F3), // হালকা নীল লাইন
-    this.dotOuterColor = const Color(0xFF1976D2), // ডটের বাইরের রিং
-    this.dotInnerColor = Colors.white, // ডটের ভিতর সাদা
+    this.lineColor = const Color(0xFF2196F3),
+    this.dotOuterColor = const Color(0xFF1976D2),
+    this.dotInnerColor = Colors.white,
   });
 
   final String title;
@@ -21,59 +21,59 @@ class PropertyValueGrowthChart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (monthlyData.isEmpty) {
-      return Card(
-        elevation: 4,
-        color: AppColors.white,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
+      return Container(
+        width: double.infinity,
+        decoration: BoxDecoration(
+          color: AppColors.white,
+          border: Border.all(color: const Color(0xFFE6E6E6)),
+        ),
         child: const Padding(
-          padding: EdgeInsets.all(20),
+          padding: EdgeInsets.all(18),
           child: Center(child: Text("No data available")),
         ),
       );
     }
 
-    final List<FlSpot> spots = monthlyData
+    final spots = monthlyData
         .asMap()
         .entries
-        .map(
-          (entry) => FlSpot(
-            entry.key.toDouble(),
-            (entry.value['amount'] as num).toDouble(),
-          ),
-        )
+        .map((e) => FlSpot(e.key.toDouble(), (e.value['amount'] as num).toDouble()))
         .toList();
 
-    final List<String> months = monthlyData
-        .map<String>((data) => data['month'] as String)
-        .toList();
+    final months = monthlyData.map<String>((e) => (e['month'] ?? '').toString()).toList();
+    final maxY = spots.map((s) => s.y).reduce((a, b) => a > b ? a : b) * 1.15;
 
-    // Y-axis এর সর্বোচ্চ ভ্যালু + প্যাডিং যাতে লাইন উপরে না লাগে
-    final double maxY =
-        spots.map((spot) => spot.y).reduce((a, b) => a > b ? a : b) * 1.1;
-
-    return Card(
-      elevation: 4,
-      color: AppColors.white,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
+    return Container(
+      width: double.infinity,
+      decoration: BoxDecoration(
+        color: AppColors.white,
+        border: Border.all(color: const Color(0xFFE6E6E6)),
+      ),
       child: Padding(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.all(12),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              title,
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 20,
-                color: Colors.black87,
-              ),
+            Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    title,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w800,
+                      fontSize: 13,
+                      color: Colors.black87,
+                    ),
+                  ),
+                ),
+                _miniDropdown(),
+              ],
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 8),
+
             SizedBox(
-              height: 280, // একটু বেশি উচ্চতা যাতে ভালো দেখায়
+              height: 190,
               child: LineChart(
                 LineChartData(
-                  // হালকা গ্রিড লাইন (ডটেড)
                   gridData: FlGridData(
                     show: true,
                     drawVerticalLine: false,
@@ -81,55 +81,38 @@ class PropertyValueGrowthChart extends StatelessWidget {
                     getDrawingHorizontalLine: (_) => FlLine(
                       color: Colors.grey.shade200,
                       strokeWidth: 1,
-                      dashArray: [8, 8],
                     ),
                   ),
                   titlesData: FlTitlesData(
-                    // বামে Y-axis লেবেল (বড় সংখ্যা সুন্দর ফরম্যাটে)
                     leftTitles: AxisTitles(
                       sideTitles: SideTitles(
                         showTitles: true,
-                        reservedSize: 70,
-                        interval: maxY / 4,
-                        getTitlesWidget: (value, meta) {
-                          return Text(
-                            _formatLargeNumber(value.toInt()),
-                            style: const TextStyle(
-                              fontSize: 12,
-                              color: Colors.grey,
-                            ),
-                          );
-                        },
+                        reservedSize: 44,
+                        getTitlesWidget: (value, meta) => Text(
+                          value.toInt().toString(),
+                          style: const TextStyle(fontSize: 9, color: Colors.black45),
+                        ),
                       ),
                     ),
-                    // নিচে মাসের নাম
                     bottomTitles: AxisTitles(
                       sideTitles: SideTitles(
                         showTitles: true,
-                        interval: 3,
+                        interval: 1,
                         getTitlesWidget: (value, meta) {
-                          final index = value.toInt();
-                          if (index < 0 || index >= months.length)
-                            return const Text('');
+                          final i = value.toInt();
+                          if (i < 0 || i >= months.length) return const SizedBox();
                           return Padding(
-                            padding: const EdgeInsets.only(top: 8),
+                            padding: const EdgeInsets.only(top: 6),
                             child: Text(
-                              months[index],
-                              style: const TextStyle(
-                                fontSize: 12,
-                                color: Colors.grey,
-                              ),
+                              months[i],
+                              style: const TextStyle(fontSize: 9, color: Colors.black45),
                             ),
                           );
                         },
                       ),
                     ),
-                    topTitles: const AxisTitles(
-                      sideTitles: SideTitles(showTitles: false),
-                    ),
-                    rightTitles: const AxisTitles(
-                      sideTitles: SideTitles(showTitles: false),
-                    ),
+                    topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                    rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
                   ),
                   borderData: FlBorderData(show: false),
                   minX: 0,
@@ -142,40 +125,22 @@ class PropertyValueGrowthChart extends StatelessWidget {
                       isCurved: true,
                       curveSmoothness: 0.35,
                       color: lineColor,
-                      barWidth: 3,
+                      barWidth: 2.8,
                       isStrokeCapRound: true,
-                      // ডটগুলো visible + white inner circle সাথে blue outer ring
                       dotData: FlDotData(
                         show: true,
                         getDotPainter: (spot, percent, barData, index) =>
                             FlDotCirclePainter(
-                              radius: 7,
+                              radius: 5.5,
                               color: dotInnerColor,
-                              strokeWidth: 3.5,
+                              strokeWidth: 2.5,
                               strokeColor: dotOuterColor,
                             ),
                       ),
-                      belowBarData: BarAreaData(show: false), // কোনো ফিল নেই
+                      belowBarData: BarAreaData(show: false),
                     ),
                   ],
-                  lineTouchData: LineTouchData(
-                    enabled: true,
-                    touchTooltipData: LineTouchTooltipData(
-                      getTooltipColor: (touchedSpot) =>
-                          Colors.blueAccent.withOpacity(0.8),
-                      getTooltipItems: (touchedSpots) {
-                        return touchedSpots.map((touchedSpot) {
-                          return LineTooltipItem(
-                            _formatLargeNumber(touchedSpot.y.toInt()),
-                            const TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          );
-                        }).toList();
-                      },
-                    ),
-                  ),
+                  lineTouchData: const LineTouchData(enabled: true),
                 ),
               ),
             ),
@@ -185,13 +150,29 @@ class PropertyValueGrowthChart extends StatelessWidget {
     );
   }
 
-  // বড় সংখ্যা সুন্দর করে ফরম্যাট করা (যেমন 1000000 → 1000000)
-  String _formatLargeNumber(int value) {
-    if (value >= 1000000) {
-      return '${value ~/ 1000000}000000';
-    } else if (value >= 1000) {
-      return '${value ~/ 1000}000';
-    }
-    return value.toString();
+  Widget _miniDropdown() {
+    return Container(
+      height: 28,
+      padding: const EdgeInsets.symmetric(horizontal: 10),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        border: Border.all(color: const Color(0xFFE6E6E6)),
+      ),
+      child: DropdownButtonHideUnderline(
+        child: DropdownButton<String>(
+          value: "Daily",
+          items: const [
+            DropdownMenuItem(value: "Daily", child: Text("Daily")),
+          ],
+          onChanged: (_) {},
+          icon: const Icon(Icons.keyboard_arrow_down_rounded, size: 18),
+          style: const TextStyle(
+            fontSize: 11.5,
+            color: Colors.black87,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+      ),
+    );
   }
 }

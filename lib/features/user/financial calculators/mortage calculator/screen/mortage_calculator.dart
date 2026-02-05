@@ -4,12 +4,14 @@ import '../../../../../core/themes/app_colors.dart';
 import '../../../../../core/widgets/custom_input_field_widget.dart';
 import '../../property investment/controller/select_custom_button_controller.dart';
 import '../../property investment/widget/custom_button_widget.dart';
+import '../controller/mortgage_controller.dart';
 import 'mortgage_results_screen.dart';
 
 class MortgageCalculatorScreen extends StatelessWidget {
   MortgageCalculatorScreen({super.key});
 
   final LoanTypeController loanTypeController = Get.put(LoanTypeController());
+  final MortgageController mortgageController = Get.put(MortgageController());
 
   // ✅ separate controllers (no initial values; hintText is used like screenshot)
   final TextEditingController loanAmountCtrl = TextEditingController();
@@ -93,7 +95,7 @@ class MortgageCalculatorScreen extends StatelessWidget {
                                 CustomInputField(
                                   controller: loanAmountCtrl,
                                   keyboardType: TextInputType.number,
-                                  hintText: "120000",
+                                  hintText: "Loan Amount (\$)",
                                 ),
                                 const SizedBox(height: 10),
 
@@ -101,7 +103,7 @@ class MortgageCalculatorScreen extends StatelessWidget {
                                 CustomInputField(
                                   controller: interestRateCtrl,
                                   keyboardType: TextInputType.number,
-                                  hintText: "10",
+                                  hintText: "Interest Rate (%)",
                                 ),
                                 const SizedBox(height: 10),
 
@@ -109,7 +111,7 @@ class MortgageCalculatorScreen extends StatelessWidget {
                                 CustomInputField(
                                   controller: loanTermMonthsCtrl,
                                   keyboardType: TextInputType.number,
-                                  hintText: "360",
+                                  hintText: "Loan Term (Months)",
                                 ),
                                 const SizedBox(height: 10),
 
@@ -117,7 +119,7 @@ class MortgageCalculatorScreen extends StatelessWidget {
                                 CustomInputField(
                                   controller: depositCtrl,
                                   keyboardType: TextInputType.number,
-                                  hintText: "50000",
+                                  hintText: "Deposit (\$)",
                                 ),
                               ],
                             ),
@@ -161,7 +163,7 @@ class MortgageCalculatorScreen extends StatelessWidget {
                                 CustomInputField(
                                   controller: ioPeriodMonthsCtrl,
                                   keyboardType: TextInputType.number,
-                                  hintText: "60",
+                                  hintText: "IO period(Months)",
                                 ),
                                 const SizedBox(height: 10),
 
@@ -169,7 +171,7 @@ class MortgageCalculatorScreen extends StatelessWidget {
                                 CustomInputField(
                                   controller: remainingTermPAndICtrl,
                                   keyboardType: TextInputType.number,
-                                  hintText: "300",
+                                  hintText: "Remaining term(P&I)",
                                 ),
                               ],
                             ),
@@ -187,22 +189,48 @@ class MortgageCalculatorScreen extends StatelessWidget {
                 child: SizedBox(
                   width: double.infinity,
                   height: 56,
-                  child: ElevatedButton(
-                    onPressed: () => Get.to(() => MortgageResultScreen()),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.primary,
-                      foregroundColor: AppColors.white,
-                      elevation: 4,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(0),
+                  child: Obx(() {
+                    return ElevatedButton(
+                      onPressed: mortgageController.isLoading.value
+                          ? null
+                          : () async {
+
+                        final String loanType = (loanTypeController.selected.value == LoanType.interestOnly) ? "IO" : "P&I";
+
+
+                        await mortgageController.calculateMortgage(
+                          loanAmountCtrl: loanAmountCtrl,
+                          interestRateCtrl: interestRateCtrl,
+                          loanTermMonthsCtrl: loanTermMonthsCtrl,
+                          depositCtrl: depositCtrl,
+                          loanType: loanType,
+                          ioPeriodMonthsCtrl: ioPeriodMonthsCtrl,
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.primary,
+                        foregroundColor: AppColors.white,
+                        elevation: 4,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(0),
+                        ),
+                        textStyle: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
-                      textStyle: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    child: const Text("Calculate"),
-                  ),
+                      child: mortgageController.isLoading.value
+                          ? const SizedBox(
+                        height: 22,
+                        width: 22,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          color: Colors.white,
+                        ),
+                      )
+                          : const Text("Calculate"),
+                    );
+                  }),
                 ),
               ),
             ],

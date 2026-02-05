@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../../../core/themes/app_colors.dart';
 import '../../../../../core/widgets/custom_input_field_widget.dart';
-import 'income_summary_screen.dart';
+import '../controllers/income_calculator_controller.dart';
 
 class IncomeCalculatorScreen extends StatefulWidget {
   const IncomeCalculatorScreen({super.key});
@@ -12,16 +12,31 @@ class IncomeCalculatorScreen extends StatefulWidget {
 }
 
 class _IncomeCalculatorScreenState extends State<IncomeCalculatorScreen> {
-  // Dropdowns (UI like screenshot)
+  final IncomeCalculatorController controller =
+  Get.put(IncomeCalculatorController());
+
   final List<String> _frequencies = const ["Monthly", "Annually", "Weekly"];
   String _selectedFrequency = "Monthly";
 
-  // Controllers (empty by default)
   final TextEditingController primaryIncomeCtrl = TextEditingController();
   final TextEditingController rentalIncomeCtrl = TextEditingController();
   final TextEditingController businessIncomeCtrl = TextEditingController();
   final TextEditingController otherIncomeCtrl = TextEditingController();
   final TextEditingController residencyStatusCtrl = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+
+    // default selected
+    controller.incomeFrequencyController.text = _selectedFrequency;
+    // attach UI controllers -> controller controllers (same structure)
+    controller.primaryIncomeController = primaryIncomeCtrl;
+    controller.rentalIncomeController = rentalIncomeCtrl;
+    controller.businessOrSideIncomeController = businessIncomeCtrl;
+    controller.otherIncomeController = otherIncomeCtrl;
+    controller.residencyStatusController = residencyStatusCtrl;
+  }
 
   @override
   void dispose() {
@@ -59,7 +74,6 @@ class _IncomeCalculatorScreenState extends State<IncomeCalculatorScreen> {
           padding: const EdgeInsets.only(left: 16, right: 16, top: 20),
           child: Column(
             children: [
-              // Header (green)
               Container(
                 height: 60,
                 decoration: const BoxDecoration(color: AppColors.greenDip),
@@ -92,7 +106,7 @@ class _IncomeCalculatorScreenState extends State<IncomeCalculatorScreen> {
                   ],
                 ),
               ),
-        
+
               Expanded(
                 child: SingleChildScrollView(
                   child: Padding(
@@ -101,8 +115,7 @@ class _IncomeCalculatorScreenState extends State<IncomeCalculatorScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const SizedBox(height: 10),
-        
-                        // Income Frequency (top dropdown like screenshot)
+
                         Text(
                           "Income Frequency",
                           style: TextStyle(
@@ -114,9 +127,9 @@ class _IncomeCalculatorScreenState extends State<IncomeCalculatorScreen> {
                         const SizedBox(height: 8),
                         DropdownButtonFormField<String>(
                           value: _selectedFrequency,
+                          hint: const Text("Select Income Frequency"),
                           decoration: _boxDecoration(),
-                          icon: const Icon(Icons.keyboard_arrow_down_rounded,
-                              color: Colors.blueGrey),
+                          icon: const Icon(Icons.keyboard_arrow_down_rounded, color: Colors.blueGrey),
                           isExpanded: true,
                           items: _frequencies
                               .map((e) => DropdownMenuItem<String>(
@@ -127,12 +140,12 @@ class _IncomeCalculatorScreenState extends State<IncomeCalculatorScreen> {
                           onChanged: (v) {
                             if (v == null) return;
                             setState(() => _selectedFrequency = v);
+                            controller.incomeFrequencyController.text = v;
                           },
                         ),
-        
+
                         const SizedBox(height: 14),
-        
-                        // Primary Income Card
+
                         Card(
                           elevation: 5,
                           color: AppColors.white,
@@ -154,16 +167,15 @@ class _IncomeCalculatorScreenState extends State<IncomeCalculatorScreen> {
                                 CustomInputField(
                                   controller: primaryIncomeCtrl,
                                   keyboardType: TextInputType.number,
-                                  hintText: "12000",
+                                  hintText: "Primary Income",
                                 ),
                               ],
                             ),
                           ),
                         ),
-        
+
                         const SizedBox(height: 10),
-        
-                        // Additional Income Sources Card
+
                         Card(
                           elevation: 5,
                           color: AppColors.white,
@@ -182,7 +194,7 @@ class _IncomeCalculatorScreenState extends State<IncomeCalculatorScreen> {
                                   ),
                                 ),
                                 const SizedBox(height: 10),
-        
+
                                 Text(
                                   "Rental Income (\$)",
                                   style: TextStyle(
@@ -195,10 +207,10 @@ class _IncomeCalculatorScreenState extends State<IncomeCalculatorScreen> {
                                 CustomInputField(
                                   controller: rentalIncomeCtrl,
                                   keyboardType: TextInputType.number,
-                                  hintText: "12000",
+                                  hintText: "Rental Income",
                                 ),
                                 const SizedBox(height: 10),
-        
+
                                 Text(
                                   "Business / Side Income (\$)",
                                   style: TextStyle(
@@ -211,10 +223,10 @@ class _IncomeCalculatorScreenState extends State<IncomeCalculatorScreen> {
                                 CustomInputField(
                                   controller: businessIncomeCtrl,
                                   keyboardType: TextInputType.number,
-                                  hintText: "5000",
+                                  hintText: "Business / Side Income",
                                 ),
                                 const SizedBox(height: 10),
-        
+
                                 Text(
                                   "Other Income (\$)",
                                   style: TextStyle(
@@ -227,44 +239,15 @@ class _IncomeCalculatorScreenState extends State<IncomeCalculatorScreen> {
                                 CustomInputField(
                                   controller: otherIncomeCtrl,
                                   keyboardType: TextInputType.number,
-                                  hintText: "5000",
-                                ),
-                                const SizedBox(height: 10),
-        
-                                Text(
-                                  "Income Frequency",
-                                  style: TextStyle(
-                                    color: AppColors.grey,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                                const SizedBox(height: 6),
-                                DropdownButtonFormField<String>(
-                                  value: _selectedFrequency,
-                                  decoration: _boxDecoration(),
-                                  icon: const Icon(Icons.keyboard_arrow_down_rounded,
-                                      color: Colors.blueGrey),
-                                  isExpanded: true,
-                                  items: _frequencies
-                                      .map((e) => DropdownMenuItem<String>(
-                                    value: e,
-                                    child: Text(e),
-                                  ))
-                                      .toList(),
-                                  onChanged: (v) {
-                                    if (v == null) return;
-                                    setState(() => _selectedFrequency = v);
-                                  },
+                                  hintText: "Other Income",
                                 ),
                               ],
                             ),
                           ),
                         ),
-        
+
                         const SizedBox(height: 10),
-        
-                        // Tax Settings Card
+
                         Card(
                           elevation: 5,
                           color: AppColors.white,
@@ -283,7 +266,7 @@ class _IncomeCalculatorScreenState extends State<IncomeCalculatorScreen> {
                                   ),
                                 ),
                                 const SizedBox(height: 10),
-        
+
                                 Text(
                                   "Residency Status",
                                   style: TextStyle(
@@ -296,7 +279,7 @@ class _IncomeCalculatorScreenState extends State<IncomeCalculatorScreen> {
                                 CustomInputField(
                                   controller: residencyStatusCtrl,
                                   keyboardType: TextInputType.text,
-                                  hintText: "Own",
+                                  hintText: "Residency Status",
                                 ),
                               ],
                             ),
@@ -307,31 +290,43 @@ class _IncomeCalculatorScreenState extends State<IncomeCalculatorScreen> {
                   ),
                 ),
               ),
-        
-              // Bottom Calculate button (blue like screenshot)
+
               Padding(
                 padding: const EdgeInsets.only(bottom: 20),
                 child: SizedBox(
                   width: double.infinity,
                   height: 56,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Get.to(() => IncomeSummaryScreen());
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.primary,
-                      foregroundColor: AppColors.white,
-                      elevation: 4,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(0),
+                  child: Obx(() {
+                    return ElevatedButton(
+                      onPressed: controller.isLoading.value
+                          ? null
+                          : () {
+                        controller.createIncomeCalculator();
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.primary,
+                        foregroundColor: AppColors.white,
+                        elevation: 4,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(0),
+                        ),
+                        textStyle: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
-                      textStyle: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    child: const Text("Calculate"),
-                  ),
+                      child: controller.isLoading.value
+                          ? const SizedBox(
+                        height: 22,
+                        width: 22,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          color: Colors.white,
+                        ),
+                      )
+                          : const Text("Calculate"),
+                    );
+                  }),
                 ),
               ),
             ],

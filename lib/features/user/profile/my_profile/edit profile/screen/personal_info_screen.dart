@@ -6,8 +6,6 @@ import 'package:rai_fanancil_services/core/themes/app_colors.dart';
 
 import '../../controller/edit_profile_controller.dart';
 
-// ────────────────────────────────────────────────
-
 class PersonalInfoScreen extends StatelessWidget {
   PersonalInfoScreen({super.key});
 
@@ -16,124 +14,193 @@ class PersonalInfoScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: Column(
         children: [
-          // Blue header with profile picture
+          // ✅ Top Blue Header (like screenshot)
           Container(
             width: double.infinity,
             color: AppColors.secondaryColors,
-            padding: const EdgeInsets.only(top: 24, bottom: 32),
-            child: Column(
-              children: [
-                Row(
-                  children: [
-                    IconButton(
-                      icon: const Icon(Icons.arrow_back, color: AppColors.white),
-                      onPressed: () => Navigator.pop(context),
+            padding: const EdgeInsets.only(top: 18, bottom: 18),
+            child: SafeArea(
+              bottom: false,
+              child: Row(
+                children: [
+                  const SizedBox(width: 12),
+                  // back circle icon
+                  InkWell(
+                    onTap: () => Get.back(),
+                    borderRadius: BorderRadius.circular(50),
+                    child: Container(
+                      height: 36,
+                      width: 36,
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.25),
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(
+                        Icons.arrow_back,
+                        color: Colors.white,
+                        size: 20,
+                      ),
                     ),
-                    const SizedBox(width: 26),
-                    const Expanded(
-                      child: Align(
-                        alignment: Alignment.topCenter,
-                        child: Text(
-                          'Your personal info',
-                          style: TextStyle(
-                            fontSize: 20,
-                            color: AppColors.white,
-                            fontWeight: FontWeight.w600,
-                          ),
+                  ),
+                  const Expanded(
+                    child: Center(
+                      child: Text(
+                        "Your personal info",
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
                     ),
-                  ],
-                ),
-                const SizedBox(height: 16),
-                Stack(
-                  alignment: Alignment.bottomRight,
-                  children: [
-                    Obx(
-                          () => CircleAvatar(
-                        radius: 50,
-                        backgroundColor: Colors.white,
-                        child: CircleAvatar(
-                          radius: 46,
-                          backgroundColor: Colors.grey.shade300,
-                          backgroundImage:
-                          controller.newProfileImagePath.value.isNotEmpty
-                              ? FileImage(
-                              File(controller.newProfileImagePath.value)) 
-                              : (controller.profileCtrl.userProfile.value.profileImage != null
-                              ? NetworkImage(controller.profileCtrl.userProfile.value.profileImage!)
-                              : null) as ImageProvider?,
-                          child: controller.newProfileImagePath.value.isEmpty &&
-                              controller.profileCtrl.userProfile.value.profileImage == null
-                              ? const Icon(Icons.person, size: 50, color: Colors.white)
-                              : null,
-                        ),
-                      ),
-                    ),
-                    Positioned(
-                      bottom: 4,
-                      right: 4,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Colors.blue,
-                          shape: BoxShape.circle,
-                          border: Border.all(color: Colors.white, width: 2),
-                        ),
-                        child: IconButton(
-                          icon: const Icon(Icons.camera_alt, color: Colors.white, size: 20),
-                          onPressed: _pickImage,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
+                  ),
+                  const SizedBox(width: 48), // to balance back button width
+                ],
+              ),
             ),
           ),
 
-          // Form fields
-          Expanded(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-              child: Column(
+          // ✅ Avatar section (white area below header)
+          Container(
+            width: double.infinity,
+            color: Colors.white,
+            padding: const EdgeInsets.symmetric(vertical: 16),
+            child: Center(
+              child: Stack(
+                alignment: Alignment.bottomRight,
                 children: [
-                  _buildTextField(
-                    icon: Icons.person_outline,
-                    label: "First name",
-                    controller: controller.firstNameCtrl,
-                    hint: "Enter first name",
-                  ),
-                  const SizedBox(height: 16),
-                  _buildTextField(
-                    icon: Icons.person_outline,
-                    label: "Last name",
-                    controller: controller.lastNameCtrl,
-                    hint: "Enter last name",
-                  ),
-                  const SizedBox(height: 16),
                   Obx(
-                        () => _buildSelectableField(
-                      icon: Icons.calendar_today_outlined,
-                      label: "Date of birth",
-                      value: controller.dateTime.value.isEmpty ? "Select date" : controller.dateTime.value,
-                      onTap: () => _selectDate(context),
-                      trailing: const Icon(Icons.chevron_right),
+                        () => CircleAvatar(
+                      radius: 56,
+                      backgroundColor: Colors.white,
+                      child: CircleAvatar(
+                        radius: 52,
+                        backgroundColor: Colors.grey.shade300,
+                        backgroundImage:
+                        controller.newProfileImagePath.value.isNotEmpty
+                            ? FileImage(
+                            File(controller.newProfileImagePath.value))
+                            : (controller.profileCtrl.userProfile.value
+                            .profileImage !=
+                            null
+                            ? NetworkImage(controller.profileCtrl
+                            .userProfile.value.profileImage!)
+                            : null) as ImageProvider?,
+                        child: controller.newProfileImagePath.value.isEmpty &&
+                            controller.profileCtrl.userProfile.value
+                                .profileImage ==
+                                null
+                            ? const Icon(Icons.person,
+                            size: 48, color: Colors.white)
+                            : null,
+                      ),
                     ),
                   ),
-                  const SizedBox(height: 16),
-                  _buildTextField(
-                    icon: Icons.location_on_outlined,
-                    label: "Location",
-                    controller: controller.location,
-                    hint: "Enter your location",
+
+                  // camera button
+                  Positioned(
+                    bottom: 8,
+                    right: 8,
+                    child: InkWell(
+                      onTap: _pickImage,
+                      borderRadius: BorderRadius.circular(50),
+                      child: Container(
+                        height: 34,
+                        width: 34,
+                        decoration: BoxDecoration(
+                          color: AppColors.primary,
+                          shape: BoxShape.circle,
+                          border: Border.all(color: Colors.white, width: 2),
+                        ),
+                        child: const Icon(
+                          Icons.camera_alt,
+                          color: Colors.white,
+                          size: 18,
+                        ),
+                      ),
+                    ),
                   ),
-                  const SizedBox(height: 40),
+                ],
+              ),
+            ),
+          ),
+
+          // ✅ Light blue input area (like screenshot)
+          Expanded(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
+              child: Column(
+                children: [
+                  _flatBlueField(
+                    icon: Icons.person_outline,
+                    child: TextField(
+                      controller: controller.firstNameCtrl,
+                      decoration: const InputDecoration(
+                        border: InputBorder.none,
+                        hintText: "First name",
+                        isDense: true,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+
+                  _flatBlueField(
+                    icon: Icons.person_outline,
+                    child: TextField(
+                      controller: controller.lastNameCtrl,
+                      decoration: const InputDecoration(
+                        border: InputBorder.none,
+                        hintText: "Last name",
+                        isDense: true,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+
+                  Obx(
+                        () => _flatBlueField(
+                      icon: Icons.calendar_today_outlined,
+                      trailing: const Icon(Icons.chevron_right,
+                          color: Colors.black45),
+                      onTap: () => _selectDate(context),
+                      child: Text(
+                        controller.dateTime.value.isEmpty
+                            ? "Date of birth"
+                            : controller.dateTime.value,
+                        style: TextStyle(
+                          fontSize: 14.5,
+                          fontWeight: FontWeight.w500,
+                          color: controller.dateTime.value.isEmpty
+                              ? Colors.black45
+                              : Colors.black87,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+
+                  _flatBlueField(
+                    icon: Icons.location_on_outlined,
+                    child: TextField(
+                      controller: controller.location,
+                      decoration: const InputDecoration(
+                        border: InputBorder.none,
+                        hintText: "Location",
+                        isDense: true,
+                      ),
+                    ),
+                  ),
+
+                  const SizedBox(height: 22),
+
+                  // ✅ Save button (same functionality)
                   Obx(
                         () => SizedBox(
                       width: double.infinity,
-                      height: 54,
+                      height: 52,
                       child: ElevatedButton(
                         onPressed: controller.hasChanges.value
                             ? () => controller.saveChanges()
@@ -142,17 +209,24 @@ class PersonalInfoScreen extends StatelessWidget {
                           backgroundColor: controller.hasChanges.value
                               ? AppColors.primary
                               : Colors.grey.shade400,
+                          elevation: 0,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(0),
                           ),
-                          elevation: 0,
                         ),
                         child: controller.isLoading.value
-                            ? const CircularProgressIndicator(color: Colors.white)
+                            ? const SizedBox(
+                          height: 22,
+                          width: 22,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            color: Colors.white,
+                          ),
+                        )
                             : const Text(
-                          'Save changes',
+                          "Save changes",
                           style: TextStyle(
-                            fontSize: 16,
+                            fontSize: 15,
                             fontWeight: FontWeight.w600,
                             color: Colors.white,
                           ),
@@ -160,6 +234,8 @@ class PersonalInfoScreen extends StatelessWidget {
                       ),
                     ),
                   ),
+
+                  const SizedBox(height: 18),
                 ],
               ),
             ),
@@ -169,10 +245,37 @@ class PersonalInfoScreen extends StatelessWidget {
     );
   }
 
-  // ────────────────────────────────────────────────
-  // HELPER FUNCTIONS
-  // ────────────────────────────────────────────────
+  // ✅ UI helper (blue flat row like screenshot) — NO logic changed
+  Widget _flatBlueField({
+    required IconData icon,
+    required Widget child,
+    Widget? trailing,
+    VoidCallback? onTap,
+  }) {
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+        decoration: BoxDecoration(
+          color: const Color(0xFFD9EEF8), // light blue like screenshot
+          borderRadius: BorderRadius.circular(0),
+        ),
+        child: Row(
+          children: [
+            Icon(icon, color: Colors.black54, size: 20),
+            const SizedBox(width: 12),
+            Expanded(child: child),
+            if (trailing != null) trailing,
+          ],
+        ),
+      ),
+    );
+  }
 
+  // ────────────────────────────────────────────────
+  // FUNCTIONALITY (UNCHANGED)
+  // ────────────────────────────────────────────────
   Future<void> _pickImage() async {
     await controller.pickImage();
   }
@@ -190,85 +293,5 @@ class PersonalInfoScreen extends StatelessWidget {
     if (picked != null) {
       controller.dateTime.value = DateFormat('dd/MM/yyyy').format(picked);
     }
-  }
-
-  Widget _buildTextField({
-    required IconData icon,
-    required String label,
-    required TextEditingController controller,
-    required String hint,
-  }) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(0),
-        border: Border.all(color: Colors.grey.shade300),
-      ),
-      child: Row(
-        children: [
-          Icon(icon, color: Colors.grey.shade700, size: 24),
-          const SizedBox(width: 16),
-          Expanded(
-            child: TextField(
-              controller: controller,
-              decoration: InputDecoration(
-                border: InputBorder.none,
-                hintText: hint,
-                labelText: label,
-                labelStyle: TextStyle(color: Colors.grey.shade600, fontSize: 13),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildSelectableField({
-    required IconData icon,
-    required String label,
-    required String value,
-    required VoidCallback onTap,
-    Widget? trailing,
-  }) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(0),
-          border: Border.all(color: Colors.grey.shade300),
-        ),
-        child: Row(
-          children: [
-            Icon(icon, color: Colors.grey.shade700, size: 24),
-            const SizedBox(width: 16),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    label,
-                    style: TextStyle(fontSize: 13, color: Colors.grey.shade600),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    value,
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                      color: Colors.black87,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            if (trailing != null) trailing,
-          ],
-        ),
-      ),
-    );
   }
 }

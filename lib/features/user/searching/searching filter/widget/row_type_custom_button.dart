@@ -41,7 +41,7 @@ class RowTypeCustomButton extends StatelessWidget {
                 color: borderColorLeft ?? AppColors.grey,
               ),
             ),
-            onPressed: onTapAddProperty,
+            onPressed: onTapUseInCalculator,
             child: Text(
               leftButtonText,
               style: TextStyle(
@@ -66,7 +66,7 @@ class RowTypeCustomButton extends StatelessWidget {
                 color: borderColorRight ?? AppColors.primary,
               ),
             ),
-            onPressed: onTapUseInCalculator,
+            onPressed: onTapAddProperty,
             child: Text(
               rightButtonText,
               style: TextStyle(

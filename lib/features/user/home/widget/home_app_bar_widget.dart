@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:rai_fanancil_services/core/themes/app_colors.dart';
 
 class HomeAppBarWidget extends StatelessWidget {
@@ -6,7 +7,7 @@ class HomeAppBarWidget extends StatelessWidget {
   final String? name;
   final VoidCallback? onProfileTap;
   final VoidCallback? onNotificationTap;
-  final int notificationCount; // Optional: pass 0 to hide badge
+  final int notificationCount;
 
   const HomeAppBarWidget({
     super.key,
@@ -17,143 +18,90 @@ class HomeAppBarWidget extends StatelessWidget {
     this.notificationCount = 0,
   });
 
-  String _getGreeting() {
+  String _getGreetingWord() {
     final hour = DateTime.now().hour;
-
-    if (hour >= 5 && hour < 12) {
-      return "Good Morning!";
-    } else if (hour >= 12 && hour < 17) {
-      return "Good Afternoon!";
-    } else if (hour >= 17 && hour < 21) {
-      return "Good Evening!";
-    } else {
-      return "Good Night!";
-    }
+    if (hour >= 5 && hour < 12) return "Good Morning";
+    if (hour >= 12 && hour < 17) return "Good Afternoon";
+    if (hour >= 17 && hour < 21) return "Good Evening";
+    return "Good Night";
   }
+
   @override
   Widget build(BuildContext context) {
+    final dateText = DateFormat('EEEE, dd MMM yyyy').format(DateTime.now());
+    final userName = (name ?? "User").trim().isEmpty ? "User" : name!.trim();
+
     return Container(
+      width: double.infinity,
       color: AppColors.secondaryColors,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 30),
-        child: Row(
-          children: [
-            // Profile Avatar
-            InkWell(
-              onTap: onProfileTap,
-              borderRadius: BorderRadius.circular(30),
-              child: Container(
-                height: 52,
-                width: 52,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  border: Border.all(color: Colors.white, width: 2.5),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.12),
-                      blurRadius: 10,
-                      offset: const Offset(0, 4),
-                    ),
-                  ],
-                ),
-                child: ClipOval(
-                  child: imageUrl != null && imageUrl!.isNotEmpty
-                      ? Image.network(
-                    imageUrl!,
-                    fit: BoxFit.cover,
-                    loadingBuilder: (context, child, loadingProgress) {
-                      if (loadingProgress == null) return child;
-                      return Container(
-                        color: Colors.grey[200],
-                        child: const Center(
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2.5,
-                            color: Colors.blue,
-                          ),
-                        ),
-                      );
-                    },
-                    errorBuilder: (context, error, stackTrace) {
-                      return Container(
-                        color: Colors.grey[200],
-                        child: const Icon(Icons.person, size: 28, color: Colors.grey),
-                      );
-                    },
-                  )
-                      : Container(
-                    color: Colors.grey[200],
-                    child: const Icon(Icons.person, size: 28, color: Colors.grey),
-                  ),
-                ),
+      padding: const EdgeInsets.only(left: 16, right: 16, top: 52, bottom: 14),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // ✅ small avatar like screenshot
+          InkWell(
+            onTap: onProfileTap,
+            borderRadius: BorderRadius.circular(30),
+            child: Container(
+              height: 40,
+              width: 40,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(color: Colors.white.withOpacity(0.9), width: 1.6),
               ),
-            ),
-
-            const SizedBox(width: 14),
-
-            // Greeting & Name
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                   _getGreeting(),
-              style: const TextStyle(
-                fontSize: 16,
-                color: Colors.white,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-
-      // উইজেটের নিচে বা আলাদা ফাইলে
-              const SizedBox(height: 2),
-                  Text(
-                    name ?? "User",
-                    style: const TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.white,
-                      letterSpacing: 0.3,
-                    ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ],
-              ),
-            ),
-
-           /* // Notification Bell with Badge
-            InkWell(
-              onTap: onNotificationTap,
-              borderRadius: BorderRadius.circular(30),
-              child: Badge(
-                label: notificationCount > 0
-                    ? Text(
-                  notificationCount > 99 ? "99+" : "$notificationCount",
-                  style: const TextStyle(fontSize: 10),
+              child: ClipOval(
+                child: (imageUrl != null && imageUrl!.trim().isNotEmpty)
+                    ? Image.network(
+                  imageUrl!,
+                  fit: BoxFit.cover,
+                  errorBuilder: (_, __, ___) {
+                    return Container(
+                      color: Colors.white.withOpacity(0.25),
+                      child: const Icon(Icons.person, size: 20, color: Colors.white),
+                    );
+                  },
                 )
-                    : null,
-                isLabelVisible: notificationCount > 0,
-                backgroundColor: Colors.red,
-                child: Container(
-                  padding: const EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                    color: Colors.grey[50],
-                    shape: BoxShape.circle,
-                  ),
-                  child: Image.asset(
-                    "assets/icons/Notification_icon.png",
-                    height: 26,
-                    width: 26,
-                    fit: BoxFit.contain,
-                    // Optional: tint if needed
-                    // color: Colors.grey[800],
-                  ),
+                    : Container(
+                  color: Colors.white.withOpacity(0.25),
+                  child: const Icon(Icons.person, size: 20, color: Colors.white),
                 ),
               ),
-            ),*/
-          ],
-        ),
+            ),
+          ),
+
+          const SizedBox(width: 12),
+
+          // ✅ date + greeting line like screenshot
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  dateText,
+                  style: const TextStyle(
+                    fontSize: 11.5,
+                    color: Colors.white70,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                const SizedBox(height: 3),
+                Text(
+                  "${_getGreetingWord()}, $userName!",
+                  style: const TextStyle(
+                    fontSize: 15,
+                    color: Colors.white,
+                    fontWeight: FontWeight.w800,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ],
+            ),
+          ),
+
+          // ✅ Keep notification area available (optional)
+          // (You can uncomment and style later if you want it on header)
+        ],
       ),
     );
   }

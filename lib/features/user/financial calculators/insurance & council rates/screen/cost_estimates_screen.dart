@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import '../../../../../core/themes/app_colors.dart';
 import '../../../../../core/widgets/full_page_pdf_make_widget.dart';
 import '../../../user navbar/controller/navbar_controller.dart';
+import '../controller/insurance_council_controller.dart';
 import '../widget/cost_distribution_chat_widget.dart';
 
 class CostEstimatesScreen extends StatelessWidget {
@@ -10,6 +11,15 @@ class CostEstimatesScreen extends StatelessWidget {
 
   final UserBottomNavbarController navbarController =
   Get.find<UserBottomNavbarController>();
+
+  final InsuranceCouncilController controller =
+  Get.find<InsuranceCouncilController>();
+
+  static String _money(num v) {
+    final s = v.toStringAsFixed(0);
+    final reg = RegExp(r'\B(?=(\d{3})+(?!\d))');
+    return s.replaceAllMapped(reg, (m) => ',');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,197 +68,242 @@ class CostEstimatesScreen extends StatelessWidget {
                 child: SingleChildScrollView(
                   child: RepaintBoundary(
                     key: pageKey,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // ✅ Total Annual Costs
-                        Container(
-                          width: double.infinity,
-                          padding: const EdgeInsets.all(14),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(0),
-                            gradient: LinearGradient(
-                              colors: [
-                                AppColors.primary.withOpacity(0.95),
-                                AppColors.blue.withOpacity(0.85),
-                              ],
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
+                    child: Obx(() {
+                      final r = controller.result.value;
+                      final d = r?.data;
+
+                      if (d == null) {
+                        return const Padding(
+                          padding: EdgeInsets.only(top: 40),
+                          child: Center(
+                            child: Text(
+                              "No result data found.",
+                              style: TextStyle(
+                                color: Colors.black54,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
+                              ),
                             ),
                           ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: const [
-                              Text(
-                                "Total Annual Costs",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                              SizedBox(height: 6),
-                              Text(
-                                "\$5,880",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 22,
-                                  fontWeight: FontWeight.w800,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
+                        );
+                      }
 
-                        const SizedBox(height: 12),
+                      final dist = d.costDistribution;
+                      final breakdown = d.detailedBreakdown;
 
-                        // ✅ Cost Distribution (chart + legend)
-                        Card(
-                          elevation: 2,
-                          color: Colors.white,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(0),
-                            side: const BorderSide(color: Color(0xFFE6E6E6)),
+                      final totalAnnual = d.totalAnnualCosts ?? 0;
+
+                      final buildingInsurance = dist?.buildingInsurance ?? 0;
+                      final councilRates = dist?.councilRates ?? 0;
+                      final waterCharges = dist?.waterCharges ?? 0;
+                      final contentsInsurance = dist?.contentsInsurance ?? 0;
+                      final landlordInsurance = dist?.landlordInsurance ?? 0;
+
+                      final annualTotal = breakdown?.annualTotal ?? totalAnnual;
+                      final monthly = breakdown?.monthlyPayment ?? 0;
+                      final weekly = breakdown?.weeklyPayment ?? 0;
+                      final daily = breakdown?.dailyCost ?? 0;
+
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // ✅ Total Annual Costs
+                          Container(
+                            width: double.infinity,
+                            padding: const EdgeInsets.all(14),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(0),
+                              gradient: LinearGradient(
+                                colors: [
+                                  AppColors.primary.withOpacity(0.95),
+                                  AppColors.blue.withOpacity(0.85),
+                                ],
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                              ),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text(
+                                  "Total Annual Costs",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                                const SizedBox(height: 6),
+                                Text(
+                                  "\$${_money(totalAnnual)}",
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 22,
+                                    fontWeight: FontWeight.w800,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
-                          child: Padding(
+
+                          const SizedBox(height: 12),
+
+                          // ✅ Cost Distribution (chart + legend)
+                          Card(
+                            elevation: 2,
+                            color: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(0),
+                              side: const BorderSide(color: Color(0xFFE6E6E6)),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(12),
+                              child: CostDistributionChart(
+                                title: "Cost Distribution",
+                                chartSize: 240,
+                                holeRadiusFactor: 0.70,
+                                items: [
+                                  CostItem(
+                                    label: "Building Insurance",
+                                    amount: buildingInsurance,
+                                    color: const Color(0xFF1976D2),
+                                  ),
+                                  CostItem(
+                                    label: "Council Rates",
+                                    amount: councilRates,
+                                    color: const Color(0xFF4CAF50),
+                                  ),
+                                  CostItem(
+                                    label: "Water Charges",
+                                    amount: waterCharges,
+                                    color: const Color(0xFF03A9F4),
+                                  ),
+                                  CostItem(
+                                    label: "Contents Insurance",
+                                    amount: contentsInsurance,
+                                    color: const Color(0xFF9C27B0),
+                                  ),
+                                  CostItem(
+                                    label: "Landlord Insurance",
+                                    amount: landlordInsurance,
+                                    color: const Color(0xFFFF9800),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+
+                          const SizedBox(height: 12),
+
+                          // ✅ Detailed Breakdown
+                          Container(
+                            width: double.infinity,
                             padding: const EdgeInsets.all(12),
-                            child: CostDistributionChart(
-                              title: "Cost Distribution",
-                              chartSize: 240,
-                              holeRadiusFactor: 0.70,
-                              items: [
-                                CostItem(
-                                  label: "Building Insurance",
-                                  amount: 1850,
-                                  color: const Color(0xFF1976D2),
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFD9EEF8),
+                              borderRadius: BorderRadius.circular(0),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text(
+                                  "Detailed Breakdown",
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w800,
+                                    color: Colors.black87,
+                                  ),
                                 ),
-                                CostItem(
-                                  label: "Council Rates",
-                                  amount: 1920,
-                                  color: const Color(0xFF4CAF50),
-                                ),
-                                CostItem(
-                                  label: "Water Charges",
-                                  amount: 980,
-                                  color: const Color(0xFF03A9F4),
-                                ),
-                                CostItem(
-                                  label: "Contents Insurance",
-                                  amount: 650,
-                                  color: const Color(0xFF9C27B0),
-                                ),
-                                CostItem(
-                                  label: "Landlord Insurance",
-                                  amount: 480,
-                                  color: const Color(0xFFFF9800),
-                                ),
+                                const SizedBox(height: 10),
+                                _LineRow(
+                                    label: "Annual Total",
+                                    value: "\$${_money(annualTotal)}"),
+                                const SizedBox(height: 6),
+                                _LineRow(
+                                    label: "Monthly Payment",
+                                    value: "\$${monthly.toStringAsFixed(2)}"),
+                                const SizedBox(height: 6),
+                                _LineRow(
+                                    label: "Weekly Payment",
+                                    value: "\$${weekly.toStringAsFixed(2)}"),
+                                const SizedBox(height: 6),
+                                _LineRow(
+                                    label: "Daily Cost",
+                                    value: "\$${daily.toStringAsFixed(2)}"),
                               ],
                             ),
                           ),
-                        ),
 
-                        const SizedBox(height: 12),
+                          const SizedBox(height: 14),
 
-                        // ✅ Detailed Breakdown
-                        Container(
-                          width: double.infinity,
-                          padding: const EdgeInsets.all(12),
-                          decoration: BoxDecoration(
-                            color: const Color(0xFFD9EEF8),
-                            borderRadius: BorderRadius.circular(0),
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: const [
-                              Text(
-                                "Detailed Breakdown",
+                          // ✅ Export PDF
+                          SizedBox(
+                            width: double.infinity,
+                            height: 48,
+                            child: OutlinedButton.icon(
+                              onPressed: () async {
+                                await Future.delayed(
+                                    const Duration(milliseconds: 50));
+                                final imageBytes = await captureFullPage();
+                                if (imageBytes != null) {
+                                  final pdfFile = await generatePdf(imageBytes);
+                                  await printPdf(pdfFile);
+                                }
+                              },
+                              icon: const Icon(Icons.download,
+                                  color: Colors.black54),
+                              label: const Text(
+                                "Export PDF",
                                 style: TextStyle(
                                   fontSize: 14,
-                                  fontWeight: FontWeight.w800,
+                                  fontWeight: FontWeight.w600,
                                   color: Colors.black87,
                                 ),
                               ),
-                              SizedBox(height: 10),
-                              _LineRow(label: "Annual Total", value: "\$5,880"),
-                              SizedBox(height: 6),
-                              _LineRow(label: "Monthly Payment", value: "\$490"),
-                              SizedBox(height: 6),
-                              _LineRow(label: "Weekly Payment", value: "\$113"),
-                              SizedBox(height: 6),
-                              _LineRow(label: "Daily Cost", value: "\$16"),
-                            ],
-                          ),
-                        ),
-
-                        const SizedBox(height: 14),
-
-                        // ✅ Export PDF
-                        SizedBox(
-                          width: double.infinity,
-                          height: 48,
-                          child: OutlinedButton.icon(
-                            onPressed: () async {
-                              await Future.delayed(
-                                  const Duration(milliseconds: 50));
-                              final imageBytes = await captureFullPage();
-                              if (imageBytes != null) {
-                                final pdfFile = await generatePdf(imageBytes);
-                                await printPdf(pdfFile);
-                              }
-                            },
-                            icon: const Icon(Icons.download,
-                                color: Colors.black54),
-                            label: const Text(
-                              "Export PDF",
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w600,
-                                color: Colors.black87,
+                              style: OutlinedButton.styleFrom(
+                                side: BorderSide(
+                                  color: AppColors.primary.withOpacity(0.35),
+                                  width: 1,
+                                ),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(0),
+                                ),
+                                backgroundColor: Colors.white,
                               ),
                             ),
-                            style: OutlinedButton.styleFrom(
-                              side: BorderSide(
-                                color: AppColors.primary.withOpacity(0.35),
-                                width: 1,
+                          ),
+
+                          const SizedBox(height: 14),
+
+                          // ✅ Done
+                          SizedBox(
+                            width: double.infinity,
+                            height: 48,
+                            child: ElevatedButton(
+                              onPressed: () {
+                                navbarController.financialCalculatorsScreen();
+                                Get.back();
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: AppColors.primary,
+                                foregroundColor: Colors.white,
+                                elevation: 0,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(0),
+                                ),
+                                textStyle: const TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w700,
+                                ),
                               ),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(0),
-                              ),
-                              backgroundColor: Colors.white,
+                              child: const Text("Done"),
                             ),
                           ),
-                        ),
 
-                        const SizedBox(height: 14),
-
-                        // ✅ Done
-                        SizedBox(
-                          width: double.infinity,
-                          height: 48,
-                          child: ElevatedButton(
-                            onPressed: () {
-                              navbarController.financialCalculatorsScreen();
-                              Get.back();
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: AppColors.primary,
-                              foregroundColor: Colors.white,
-                              elevation: 0,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(0),
-                              ),
-                              textStyle: const TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
-                            child: const Text("Done"),
-                          ),
-                        ),
-
-                        const SizedBox(height: 18),
-                      ],
-                    ),
+                          const SizedBox(height: 18),
+                        ],
+                      );
+                    }),
                   ),
                 ),
               ),

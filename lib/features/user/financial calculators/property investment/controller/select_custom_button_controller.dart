@@ -5,6 +5,8 @@ enum LoanType { pi, interestOnly }
 class LoanTypeController extends GetxController {
   final selected = LoanType.pi.obs;
 
+
+
   void change(LoanType type) {
     selected.value = type;
   }

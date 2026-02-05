@@ -4,11 +4,30 @@ import '../../../../../core/themes/app_colors.dart';
 import '../../../../../core/widgets/full_page_pdf_make_widget.dart';
 import '../../../user navbar/controller/navbar_controller.dart';
 
+import '../controller/cashflow_result_controller.dart';
+
 class CashFlowResultScreen extends StatelessWidget {
   CashFlowResultScreen({super.key});
 
   final UserBottomNavbarController navbarController =
   Get.find<UserBottomNavbarController>();
+
+  final CashFlowResultController resultController = Get.find<CashFlowResultController>();
+
+  String _money(double v) {
+    // simple formatting without extra package
+    final s = v.toStringAsFixed(0);
+    final chars = s.split('');
+    final out = <String>[];
+    for (int i = 0; i < chars.length; i++) {
+      final posFromEnd = chars.length - i;
+      out.add(chars[i]);
+      if (posFromEnd > 1 && posFromEnd % 3 == 1) out.add(',');
+    }
+    return "\$${out.join()}";
+  }
+
+  String _percent(double v) => "${v.toStringAsFixed(2)}%";
 
   @override
   Widget build(BuildContext context) {
@@ -60,158 +79,201 @@ class CashFlowResultScreen extends StatelessWidget {
                 child: SingleChildScrollView(
                   child: RepaintBoundary(
                     key: pageKey,
-                    child: Column(
-                      children: [
-                        // Net Monthly Cashflow Card
-                        Container(
-                          width: double.infinity,
-                          padding: const EdgeInsets.all(14),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(0),
-                            gradient: LinearGradient(
-                              colors: [
-                                AppColors.blue.withOpacity(0.95),
-                                AppColors.primary.withOpacity(0.80),
-                              ],
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                            ),
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: const [
-                              Text(
-                                "Net Monthly Cashflow",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                              SizedBox(height: 6),
-                              Text(
-                                "\$625",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 22,
-                                  fontWeight: FontWeight.w800,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
+                    child: Obx(() {
+                      final r = resultController.result.value;
 
-                        const SizedBox(height: 16),
-
-                        // Annual Increases Card
-                        _CardBox(
-                          title: "Annual Increases",
-                          child: Column(
-                            children: const [
-                              _KVRow(label: "Rental increase per year", value: "2%"),
-                              Divider(height: 18),
-                              _KVRow(label: "Cash rate change", value: "0.25%"),
-                              Divider(height: 18),
-                              _KVRow(label: "Annual salary increase", value: "3%"),
-                              Divider(height: 18),
-                              _KVRow(label: "Expense inflation", value: "4%"),
-                            ],
-                          ),
-                        ),
-
-                        const SizedBox(height: 16),
-
-                        // Asset & Liability Position Card
-                        _CardBox(
-                          title: "Asset & Liability Position",
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const SizedBox(height: 6),
-
-                              // Bars section
-                              _BarsPanel(
-                                asset: 600000,
-                                liability: 450000,
-                                equity: 150000,
-                              ),
-
-                              const SizedBox(height: 14),
-
-                              // Summary values
-                              _detailRow("Property Value", "\$600,000", valueColor: Colors.black87),
-                              const SizedBox(height: 6),
-                              _detailRow("Total Loans", "\$450,000", valueColor: Colors.black87),
-                              const SizedBox(height: 6),
-                              _detailRow("Equity", "\$150,000", valueColor: AppColors.primary),
-                              const SizedBox(height: 6),
-                              _detailRow("LVR", "75.0%", valueColor: Colors.black87),
-                            ],
-                          ),
-                        ),
-
-                        const SizedBox(height: 18),
-
-                        // Export PDF Button
-                        SizedBox(
-                          width: double.infinity,
-                          height: 48,
-                          child: OutlinedButton.icon(
-                            onPressed: () async {
-                              await Future.delayed(const Duration(milliseconds: 50));
-                              final imageBytes = await captureFullPage();
-                              if (imageBytes != null) {
-                                final pdfFile = await generatePdf(imageBytes);
-                                await printPdf(pdfFile);
-                              }
-                            },
-                            icon: const Icon(Icons.download, color: Colors.black54),
-                            label: const Text(
-                              "Export PDF",
+                      // if no data (edge case)
+                      if (r == null) {
+                        return const Padding(
+                          padding: EdgeInsets.only(top: 30),
+                          child: Center(
+                            child: Text(
+                              "No result data found.",
                               style: TextStyle(
+                                color: Colors.black54,
                                 fontSize: 14,
                                 fontWeight: FontWeight.w600,
-                                color: Colors.black87,
                               ),
-                            ),
-                            style: OutlinedButton.styleFrom(
-                              side: BorderSide(color: AppColors.primary.withOpacity(0.35), width: 1),
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
-                              backgroundColor: Colors.white,
                             ),
                           ),
-                        ),
+                        );
+                      }
 
-                        const SizedBox(height: 14),
+                      final annual = r.annualIncreases;
+                      final asset = r.assetLiabilityPosition;
 
-                        // Done Button
-                        SizedBox(
-                          width: double.infinity,
-                          height: 48,
-                          child: ElevatedButton(
-                            onPressed: () {
-                              navbarController.financialCalculatorsScreen();
-                              Get.back();
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: AppColors.primary,
-                              foregroundColor: Colors.white,
-                              elevation: 0,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(0),
-                              ),
-                              textStyle: const TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w700,
+                      return Column(
+                        children: [
+                          // Net Monthly Cashflow Card
+                          Container(
+                            width: double.infinity,
+                            padding: const EdgeInsets.all(14),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(0),
+                              gradient: LinearGradient(
+                                colors: [
+                                  AppColors.blue.withOpacity(0.95),
+                                  AppColors.primary.withOpacity(0.80),
+                                ],
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
                               ),
                             ),
-                            child: const Text("Done"),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text(
+                                  "Net Monthly Cashflow",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                                const SizedBox(height: 6),
+                                Text(
+                                  _money(r.netMonthlyCashflow),
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 22,
+                                    fontWeight: FontWeight.w800,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
 
-                        const SizedBox(height: 18),
-                      ],
-                    ),
+                          const SizedBox(height: 16),
+
+                          // Annual Increases Card
+                          _CardBox(
+                            title: "Annual Increases",
+                            child: Column(
+                              children: [
+                                _KVRow(
+                                  label: "Rental increase per year",
+                                  value: _percent(annual.rentalIncreasePerYear),
+                                ),
+                                const Divider(height: 18),
+                                _KVRow(
+                                  label: "Cash rate change",
+                                  value: _percent(annual.cashRateChange),
+                                ),
+                                const Divider(height: 18),
+                                _KVRow(
+                                  label: "Annual salary increase",
+                                  value: _percent(annual.annualSalaryIncrease),
+                                ),
+                                const Divider(height: 18),
+                                _KVRow(
+                                  label: "Expense inflation",
+                                  value: _percent(annual.expenseInflation),
+                                ),
+                              ],
+                            ),
+                          ),
+
+                          const SizedBox(height: 16),
+
+                          // Asset & Liability Position Card
+                          _CardBox(
+                            title: "Asset & Liability Position",
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const SizedBox(height: 6),
+
+                                // Bars section
+                                _BarsPanel(
+                                  asset: asset.propertyValue,
+                                  liability: asset.totalLoans,
+                                  equity: asset.equity,
+                                ),
+
+                                const SizedBox(height: 14),
+
+                                // Summary values
+                                _detailRow("Property Value", _money(asset.propertyValue),
+                                    valueColor: Colors.black87),
+                                const SizedBox(height: 6),
+                                _detailRow("Total Loans", _money(asset.totalLoans),
+                                    valueColor: Colors.black87),
+                                const SizedBox(height: 6),
+                                _detailRow("Equity", _money(asset.equity),
+                                    valueColor: AppColors.primary),
+                                const SizedBox(height: 6),
+                                _detailRow("LVR", _percent(asset.lvr),
+                                    valueColor: Colors.black87),
+                              ],
+                            ),
+                          ),
+
+                          const SizedBox(height: 18),
+
+                          // Export PDF Button
+                          SizedBox(
+                            width: double.infinity,
+                            height: 48,
+                            child: OutlinedButton.icon(
+                              onPressed: () async {
+                                await Future.delayed(const Duration(milliseconds: 50));
+                                final imageBytes = await captureFullPage();
+                                if (imageBytes != null) {
+                                  final pdfFile = await generatePdf(imageBytes);
+                                  await printPdf(pdfFile);
+                                }
+                              },
+                              icon: const Icon(Icons.download, color: Colors.black54),
+                              label: const Text(
+                                "Export PDF",
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.black87,
+                                ),
+                              ),
+                              style: OutlinedButton.styleFrom(
+                                side: BorderSide(
+                                    color: AppColors.primary.withOpacity(0.35),
+                                    width: 1),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(0)),
+                                backgroundColor: Colors.white,
+                              ),
+                            ),
+                          ),
+
+                          const SizedBox(height: 14),
+
+                          // Done Button
+                          SizedBox(
+                            width: double.infinity,
+                            height: 48,
+                            child: ElevatedButton(
+                              onPressed: () {
+                                navbarController.financialCalculatorsScreen();
+                                Get.back();
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: AppColors.primary,
+                                foregroundColor: Colors.white,
+                                elevation: 0,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(0),
+                                ),
+                                textStyle: const TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                              child: const Text("Done"),
+                            ),
+                          ),
+
+                          const SizedBox(height: 18),
+                        ],
+                      );
+                    }),
                   ),
                 ),
               ),
@@ -222,7 +284,8 @@ class CashFlowResultScreen extends StatelessWidget {
     );
   }
 
-  static Widget _detailRow(String label, String value, {Color valueColor = Colors.black87}) {
+  static Widget _detailRow(String label, String value,
+      {Color valueColor = Colors.black87}) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -327,10 +390,11 @@ class _BarsPanel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final maxVal = [asset, liability, equity].reduce((a, b) => a > b ? a : b);
+
     double w(BuildContext c, double v) {
-      final full = MediaQuery.of(c).size.width - 16 * 2 - 24; // padding/rough
+      final full = MediaQuery.of(c).size.width - 16 * 2 - 24;
       final ratio = maxVal == 0 ? 0 : (v / maxVal);
-      return (full * 0.78) * ratio; // keep inside card nicely
+      return (full * 0.78) * ratio;
     }
 
     return Column(
@@ -341,25 +405,43 @@ class _BarsPanel extends StatelessWidget {
         _barRow(context, "Liability", w(context, liability), AppColors.warning),
         const SizedBox(height: 8),
         _barRow(context, "Equity", w(context, equity), AppColors.primary),
-
         const SizedBox(height: 10),
-
-        // Axis labels (simple like screenshot)
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: const [
-            Text("\$0k", style: TextStyle(fontSize: 11, color: Colors.black45, fontWeight: FontWeight.w600)),
-            Text("\$150k", style: TextStyle(fontSize: 11, color: Colors.black45, fontWeight: FontWeight.w600)),
-            Text("\$300k", style: TextStyle(fontSize: 11, color: Colors.black45, fontWeight: FontWeight.w600)),
-            Text("\$450k", style: TextStyle(fontSize: 11, color: Colors.black45, fontWeight: FontWeight.w600)),
-            Text("\$600k", style: TextStyle(fontSize: 11, color: Colors.black45, fontWeight: FontWeight.w600)),
+            Text("\$0k",
+                style: TextStyle(
+                    fontSize: 11,
+                    color: Colors.black45,
+                    fontWeight: FontWeight.w600)),
+            Text("\$150k",
+                style: TextStyle(
+                    fontSize: 11,
+                    color: Colors.black45,
+                    fontWeight: FontWeight.w600)),
+            Text("\$300k",
+                style: TextStyle(
+                    fontSize: 11,
+                    color: Colors.black45,
+                    fontWeight: FontWeight.w600)),
+            Text("\$450k",
+                style: TextStyle(
+                    fontSize: 11,
+                    color: Colors.black45,
+                    fontWeight: FontWeight.w600)),
+            Text("\$600k",
+                style: TextStyle(
+                    fontSize: 11,
+                    color: Colors.black45,
+                    fontWeight: FontWeight.w600)),
           ],
         ),
       ],
     );
   }
 
-  Widget _barRow(BuildContext context, String label, double barWidth, Color color) {
+  Widget _barRow(
+      BuildContext context, String label, double barWidth, Color color) {
     return Row(
       children: [
         SizedBox(

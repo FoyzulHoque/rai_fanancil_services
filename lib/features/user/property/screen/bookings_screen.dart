@@ -30,35 +30,11 @@ class PropertyScreen extends StatelessWidget {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    const SizedBox(height: 32),
-                    /*  Row(
-                            children: [
-                              Expanded(
-                                child: SearchsWidget(),
-                              ),
-                              const SizedBox(width: 10),
-                           */
-                    /*   GestureDetector(
-                                onTap: () {
-                                  Get.to(()=>SearchingFilterScreen());
-                                },
-                                child: SizedBox(
-                                  height: 46,
-                                  width: 46,
-                                  child: Image.asset(
-                                    "assets/icons/Scan.png",
-                                    fit: BoxFit.contain,
-                                  ),
-                                ),
-                              ),*/
-                    /*
-                            ],
-                          ),*/
+                    const SizedBox(height: 50),
                     const Text(
                       'Saved properties',
                       style: TextStyle(color: AppColors.white, fontSize: 22),
                     ),
-                    const SizedBox(height: 12),
                     const Text(
                       'Choose a property to get started',
                       style: TextStyle(color: AppColors.white, fontSize: 16),
@@ -86,6 +62,7 @@ class PropertyScreen extends StatelessWidget {
                       return ListView.builder(
                         primary: false,
                         shrinkWrap: true,
+                        padding: EdgeInsets.zero,
                         physics: const NeverScrollableScrollPhysics(),
                         itemCount: savedPropertiesController
                             .savedPropertiesData

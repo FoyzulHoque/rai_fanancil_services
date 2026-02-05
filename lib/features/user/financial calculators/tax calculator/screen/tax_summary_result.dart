@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import '../../../../../core/themes/app_colors.dart';
 import '../../../../../core/widgets/full_page_pdf_make_widget.dart';
 import '../../../user navbar/controller/navbar_controller.dart';
+import '../controller/tax_summary_controller.dart';
 import '../widget/income_&_tax_overview_widget.dart';
 
 class TaxSummaryResult extends StatelessWidget {
@@ -11,26 +12,7 @@ class TaxSummaryResult extends StatelessWidget {
   final UserBottomNavbarController navbarController =
   Get.find<UserBottomNavbarController>();
 
-  // demo values
-  final double totalTaxPayable = 153741;
-  final double netProfitAfterTax = 356259;
-
-  final double incomeTax = 152800;
-  final double investmentTax = 938;
-  final double landTax = 2;
-
-  // Detailed Breakdown
-  final double grossIncome = 510000;
-  final double deductibleExpenses = 111515;
-  final double taxableIncome = 404741;
-  final double taxRateApplied = 37.98;
-
-  // Negative Gearing Benefit
-  final double rentalIncome = 35000;
-  final double propertyExpenses = 45000;
-  final double depreciation = 8500;
-  final double propertyLoss = 18500;
-  final double taxBenefit = 6013;
+  final TaxSummaryController controller = Get.find<TaxSummaryController>();
 
   @override
   Widget build(BuildContext context) {
@@ -79,262 +61,326 @@ class TaxSummaryResult extends StatelessWidget {
                 child: SingleChildScrollView(
                   child: RepaintBoundary(
                     key: pageKey,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // Top summary card
-                        Container(
-                          width: double.infinity,
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 12, vertical: 14),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            border: Border.all(color: const Color(0xFFBEE3F4)),
-                          ),
-                          child: Column(
-                            children: [
-                              const Text(
-                                "Total Tax Payable",
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  color: Colors.black45,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                              const SizedBox(height: 6),
-                              Text(
-                                "\$${_money(totalTaxPayable)}",
-                                style: const TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w800,
-                                  color: AppColors.primary,
-                                ),
-                              ),
-                              const SizedBox(height: 6),
-                              Text(
-                                "Net Profit After Tax  \$${_money(netProfitAfterTax)}",
-                                style: const TextStyle(
-                                  fontSize: 11,
-                                  color: Colors.black38,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                              const SizedBox(height: 10),
-                              const Divider(height: 18),
-                              _miniRow("Income Tax", "\$${_money(incomeTax)}"),
-                              const SizedBox(height: 10),
-                              _miniRow("Investment Tax", "\$${_money(investmentTax)}"),
-                              const SizedBox(height: 10),
-                              _miniRow("Land Tax", "\$${_money(landTax)}"),
-                            ],
-                          ),
-                        ),
+                    child: Obx(() {
+                      final res = controller.summary.value;
+                      final d = res?.data;
 
-                        const SizedBox(height: 12),
-
-                        // Chart card (FIXED height-safe)
-                        Container(
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            border: Border.all(color: const Color(0xFFE6E6E6)),
-                          ),
-                          padding: const EdgeInsets.all(12),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: const [
-                              Text(
-                                "Income & Tax Overview",
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w800,
-                                  color: Colors.black87,
-                                ),
-                              ),
-                              SizedBox(height: 10),
-                              // The chart widget is already height constrained internally
-                            ],
-                          ),
-                        ),
-
-                        // Put chart OUTSIDE const block to pass values
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 12, vertical: 8),
-                          child: IncomeTaxOverviewChart(
-                            grossIncome: 450000,
-                            deductions: 120000,
-                            taxableIncome: 380000,
-                            taxPayable: 145000,
-                            netAfterTax: 355000,
-                          ),
-                        ),
-
-                        const SizedBox(height: 12),
-
-                        // Detailed Breakdown (blue)
-                        Container(
-                          width: double.infinity,
-                          padding: const EdgeInsets.all(12),
-                          decoration: BoxDecoration(
-                            color: const Color(0xFFD9EEF8),
-                            border: Border.all(color: const Color(0xFFE6E6E6)),
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Text(
-                                "Detailed Breakdown",
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w800,
-                                  color: Colors.black54,
-                                ),
-                              ),
-                              const SizedBox(height: 10),
-                              _lineRow("Gross Income", "\$${_money(grossIncome)}"),
-                              const SizedBox(height: 8),
-                              _lineRow(
-                                "Deductible Expenses",
-                                "-\$${_money(deductibleExpenses)}",
-                                valueColor: Colors.red,
-                              ),
-                              const SizedBox(height: 8),
-                              _lineRow("Taxable Income", "\$${_money(taxableIncome)}"),
-                              const SizedBox(height: 8),
-                              _lineRow("Tax Rate Applied",
-                                  "${taxRateApplied.toStringAsFixed(2)}%"),
-                              const SizedBox(height: 10),
-                              const Divider(height: 16),
-                              _lineRow(
-                                "Final Payable Amount",
-                                "\$${_money(totalTaxPayable)}",
-                              ),
-                            ],
-                          ),
-                        ),
-
-                        const SizedBox(height: 12),
-
-                        // Negative Gearing Benefit (green)
-                        Container(
-                          width: double.infinity,
-                          padding: const EdgeInsets.all(12),
-                          decoration: BoxDecoration(
-                            color: const Color(0xFFE9FFF2),
-                            border: Border.all(color: const Color(0xFFE6E6E6)),
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Text(
-                                "Negative Gearing Benefit",
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w800,
-                                  color: Colors.black87,
-                                ),
-                              ),
-                              const SizedBox(height: 8),
-                              _lineRow("Rental Income", "\$${_money(rentalIncome)}"),
-                              const SizedBox(height: 6),
-                              _lineRow(
-                                "Property Expenses",
-                                "-\$${_money(propertyExpenses)}",
-                                valueColor: Colors.red,
-                              ),
-                              const SizedBox(height: 6),
-                              _lineRow(
-                                "Depreciation",
-                                "-\$${_money(depreciation)}",
-                                valueColor: Colors.red,
-                              ),
-                              const SizedBox(height: 6),
-                              _lineRow(
-                                "Property Loss",
-                                "-\$${_money(propertyLoss)}",
-                                valueColor: Colors.red,
-                              ),
-                              const SizedBox(height: 10),
-                              const Divider(height: 16),
-                              _lineRow(
-                                "Tax Benefit",
-                                "\$${_money(taxBenefit)}",
-                                valueColor: const Color(0xFF00A651),
-                              ),
-                            ],
-                          ),
-                        ),
-
-                        const SizedBox(height: 14),
-
-                        // Export PDF
-                        SizedBox(
-                          width: double.infinity,
-                          height: 48,
-                          child: OutlinedButton.icon(
-                            onPressed: () async {
-                              await Future.delayed(
-                                  const Duration(milliseconds: 50));
-                              final imageBytes = await captureFullPage();
-                              if (imageBytes != null) {
-                                final pdfFile = await generatePdf(imageBytes);
-                                await printPdf(pdfFile);
-                              }
-                            },
-                            icon: const Icon(Icons.download,
-                                color: Colors.black54, size: 18),
-                            label: const Text(
-                              "Export PDF",
+                      if (d == null) {
+                        return const Padding(
+                          padding: EdgeInsets.only(top: 30),
+                          child: Center(
+                            child: Text(
+                              "No summary data found.",
                               style: TextStyle(
-                                fontSize: 13,
+                                color: Colors.black54,
+                                fontSize: 14,
                                 fontWeight: FontWeight.w600,
-                                color: Colors.black87,
                               ),
-                            ),
-                            style: OutlinedButton.styleFrom(
-                              side: BorderSide(
-                                color: AppColors.primary.withOpacity(0.35),
-                                width: 1,
-                              ),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(0),
-                              ),
-                              backgroundColor: Colors.white,
                             ),
                           ),
-                        ),
+                        );
+                      }
 
-                        const SizedBox(height: 12),
+                      final totalTaxPayable = d.totalTaxPayable ?? 0;
+                      final netProfitAfterTax = d.netProfitAfterTax ?? 0;
 
-                        // Done
-                        SizedBox(
-                          width: double.infinity,
-                          height: 48,
-                          child: ElevatedButton(
-                            onPressed: () {
-                              navbarController.financialCalculatorsScreen();
-                              Get.back();
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: AppColors.primary,
-                              foregroundColor: Colors.white,
-                              elevation: 0,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(0),
+                      final incomeTax = d.taxBreakdown?.incomeTax ?? 0;
+                      final investmentTax = d.taxBreakdown?.investmentTax ?? 0;
+                      final landTax = d.taxBreakdown?.landTax ?? 0;
+
+                      final grossIncome = d.detailedBreakdown?.grossIncome ?? 0;
+                      final deductibleExpenses =
+                          d.detailedBreakdown?.deductibleExpenses ?? 0;
+                      final taxableIncome =
+                          d.detailedBreakdown?.taxableIncome ?? 0;
+                      final taxRateApplied =
+                          d.detailedBreakdown?.taxRateApplied ?? 0;
+
+                      final rentalIncome =
+                          d.negativeGearingBenefit?.rentalIncome ?? 0;
+                      final propertyExpenses =
+                          d.negativeGearingBenefit?.propertyExpenses ?? 0;
+                      final depreciation =
+                          d.negativeGearingBenefit?.depreciation ?? 0;
+                      final propertyLoss =
+                          d.negativeGearingBenefit?.propertyLoss ?? 0;
+                      final taxBenefit =
+                          d.negativeGearingBenefit?.taxBenefit ?? 0;
+
+                      final chartGross = d.incomeTaxOverview?.grossIncome ?? 0;
+                      final chartDeduct = d.incomeTaxOverview?.deductions ?? 0;
+                      final chartTaxable = d.incomeTaxOverview?.taxableIncome ?? 0;
+                      final chartPayable = d.incomeTaxOverview?.taxPayable ?? 0;
+                      final chartNet = d.incomeTaxOverview?.netAfterTax ?? 0;
+
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // Top summary card
+                          Container(
+                            width: double.infinity,
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 12, vertical: 14),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              border: Border.all(color: const Color(0xFFBEE3F4)),
+                            ),
+                            child: Column(
+                              children: [
+                                const Text(
+                                  "Total Tax Payable",
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.black45,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                                const SizedBox(height: 6),
+                                Text(
+                                  "\$${_money(totalTaxPayable)}",
+                                  style: const TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w800,
+                                    color: AppColors.primary,
+                                  ),
+                                ),
+                                const SizedBox(height: 6),
+                                Text(
+                                  "Net Profit After Tax  \$${_money(netProfitAfterTax)}",
+                                  style: const TextStyle(
+                                    fontSize: 11,
+                                    color: Colors.black38,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                                const SizedBox(height: 10),
+                                const Divider(height: 18),
+                                _miniRow("Income Tax", "\$${_money(incomeTax)}"),
+                                const SizedBox(height: 10),
+                                _miniRow("Investment Tax",
+                                    "\$${_money(investmentTax)}"),
+                                const SizedBox(height: 10),
+                                _miniRow("Land Tax", "\$${_money(landTax)}"),
+                              ],
+                            ),
+                          ),
+
+                          const SizedBox(height: 12),
+
+                          // Chart card (FIXED height-safe)
+                          Container(
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              border: Border.all(color: const Color(0xFFE6E6E6)),
+                            ),
+                            padding: const EdgeInsets.all(12),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: const [
+                                Text(
+                                  "Income & Tax Overview",
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w800,
+                                    color: Colors.black87,
+                                  ),
+                                ),
+                                SizedBox(height: 10),
+                              ],
+                            ),
+                          ),
+
+                          // Put chart OUTSIDE const block to pass values
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 12, vertical: 8),
+                            child: IncomeTaxOverviewChart(
+                              grossIncome: chartGross,
+                              deductions: chartDeduct,
+                              taxableIncome: chartTaxable,
+                              taxPayable: chartPayable,
+                              netAfterTax: chartNet,
+                            ),
+                          ),
+
+                          const SizedBox(height: 12),
+
+                          // Detailed Breakdown (blue)
+                          Container(
+                            width: double.infinity,
+                            padding: const EdgeInsets.all(12),
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFD9EEF8),
+                              border: Border.all(color: const Color(0xFFE6E6E6)),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text(
+                                  "Detailed Breakdown",
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w800,
+                                    color: Colors.black54,
+                                  ),
+                                ),
+                                const SizedBox(height: 10),
+                                _lineRow("Gross Income", "\$${_money(grossIncome)}"),
+                                const SizedBox(height: 8),
+                                _lineRow(
+                                  "Deductible Expenses",
+                                  // API already sends negative; keep UI sign consistent
+                                  deductibleExpenses < 0
+                                      ? "-\$${_money(deductibleExpenses.abs())}"
+                                      : "-\$${_money(deductibleExpenses)}",
+                                  valueColor: Colors.red,
+                                ),
+                                const SizedBox(height: 8),
+                                _lineRow("Taxable Income", "\$${_money(taxableIncome)}"),
+                                const SizedBox(height: 8),
+                                _lineRow(
+                                  "Tax Rate Applied",
+                                  "${taxRateApplied.toStringAsFixed(2)}%",
+                                ),
+                                const SizedBox(height: 10),
+                                const Divider(height: 16),
+                                _lineRow(
+                                  "Final Payable Amount",
+                                  "\$${_money(totalTaxPayable)}",
+                                ),
+                              ],
+                            ),
+                          ),
+
+                          const SizedBox(height: 12),
+
+                          // Negative Gearing Benefit (green)
+                          Container(
+                            width: double.infinity,
+                            padding: const EdgeInsets.all(12),
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFE9FFF2),
+                              border: Border.all(color: const Color(0xFFE6E6E6)),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text(
+                                  "Negative Gearing Benefit",
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w800,
+                                    color: Colors.black87,
+                                  ),
+                                ),
+                                const SizedBox(height: 8),
+                                _lineRow("Rental Income", "\$${_money(rentalIncome)}"),
+                                const SizedBox(height: 6),
+                                _lineRow(
+                                  "Property Expenses",
+                                  propertyExpenses < 0
+                                      ? "-\$${_money(propertyExpenses.abs())}"
+                                      : "-\$${_money(propertyExpenses)}",
+                                  valueColor: Colors.red,
+                                ),
+                                const SizedBox(height: 6),
+                                _lineRow(
+                                  "Depreciation",
+                                  depreciation < 0
+                                      ? "-\$${_money(depreciation.abs())}"
+                                      : "-\$${_money(depreciation)}",
+                                  valueColor: Colors.red,
+                                ),
+                                const SizedBox(height: 6),
+                                _lineRow(
+                                  "Property Loss",
+                                  propertyLoss < 0
+                                      ? "-\$${_money(propertyLoss.abs())}"
+                                      : "-\$${_money(propertyLoss)}",
+                                  valueColor: Colors.red,
+                                ),
+                                const SizedBox(height: 10),
+                                const Divider(height: 16),
+                                _lineRow(
+                                  "Tax Benefit",
+                                  "\$${_money(taxBenefit)}",
+                                  valueColor: const Color(0xFF00A651),
+                                ),
+                              ],
+                            ),
+                          ),
+
+                          const SizedBox(height: 14),
+
+                          // Export PDF
+                          SizedBox(
+                            width: double.infinity,
+                            height: 48,
+                            child: OutlinedButton.icon(
+                              onPressed: () async {
+                                await Future.delayed(
+                                    const Duration(milliseconds: 50));
+                                final imageBytes = await captureFullPage();
+                                if (imageBytes != null) {
+                                  final pdfFile = await generatePdf(imageBytes);
+                                  await printPdf(pdfFile);
+                                }
+                              },
+                              icon: const Icon(Icons.download,
+                                  color: Colors.black54, size: 18),
+                              label: const Text(
+                                "Export PDF",
+                                style: TextStyle(
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.black87,
+                                ),
                               ),
-                              textStyle: const TextStyle(
-                                fontSize: 13,
-                                fontWeight: FontWeight.w700,
+                              style: OutlinedButton.styleFrom(
+                                side: BorderSide(
+                                  color: AppColors.primary.withOpacity(0.35),
+                                  width: 1,
+                                ),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(0),
+                                ),
+                                backgroundColor: Colors.white,
                               ),
                             ),
-                            child: const Text("Done"),
                           ),
-                        ),
 
-                        const SizedBox(height: 18),
-                      ],
-                    ),
+                          const SizedBox(height: 12),
+
+                          // Done
+                          SizedBox(
+                            width: double.infinity,
+                            height: 48,
+                            child: ElevatedButton(
+                              onPressed: () {
+                                navbarController.financialCalculatorsScreen();
+                                Get.back();
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: AppColors.primary,
+                                foregroundColor: Colors.white,
+                                elevation: 0,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(0),
+                                ),
+                                textStyle: const TextStyle(
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                              child: const Text("Done"),
+                            ),
+                          ),
+
+                          const SizedBox(height: 18),
+                        ],
+                      );
+                    }),
                   ),
                 ),
               ),

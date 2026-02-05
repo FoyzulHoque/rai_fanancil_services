@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../../../core/themes/app_colors.dart';
 import '../../../../../core/widgets/custom_input_field_widget.dart';
+import '../controller/insurance_council_controller.dart';
 import 'cost_estimates_screen.dart';
 
 class InsuranceAndCouncilRatesScreen extends StatelessWidget {
@@ -15,7 +16,11 @@ class InsuranceAndCouncilRatesScreen extends StatelessWidget {
 
   // ✅ Dropdown values (keep UI like screenshot)
   final List<String> propertyTypes = const ["Apartment", "House", "Townhouse", "Unit"];
-  final List<String> buildTypes = const ["New", "Old", "Renovated"];
+  final List<String> buildTypes = const ["New", "Established"];
+
+  // ✅ controller
+  final InsuranceCouncilController controller =
+  Get.put(InsuranceCouncilController());
 
   @override
   Widget build(BuildContext context) {
@@ -83,7 +88,7 @@ class InsuranceAndCouncilRatesScreen extends StatelessWidget {
                         CustomInputField(
                           controller: suburbCtrl,
                           keyboardType: TextInputType.text,
-                          hintText: "Victoria",
+                          hintText: "Suburb",
                         ),
 
                         const SizedBox(height: 12),
@@ -166,7 +171,7 @@ class InsuranceAndCouncilRatesScreen extends StatelessWidget {
                                     CustomInputField(
                                       controller: bedroomsCtrl,
                                       keyboardType: TextInputType.number,
-                                      hintText: "4",
+                                      hintText: "Number of bedrooms",
                                     ),
 
                                     const SizedBox(height: 12),
@@ -184,7 +189,7 @@ class InsuranceAndCouncilRatesScreen extends StatelessWidget {
                                     CustomInputField(
                                       controller: bathroomsCtrl,
                                       keyboardType: TextInputType.number,
-                                      hintText: "5",
+                                      hintText: "Number of bathrooms",
                                     ),
 
                                     const SizedBox(height: 12),
@@ -202,7 +207,7 @@ class InsuranceAndCouncilRatesScreen extends StatelessWidget {
                                     CustomInputField(
                                       controller: buildingAreaCtrl,
                                       keyboardType: TextInputType.number,
-                                      hintText: "1254",
+                                      hintText: "Building Area (sqm)",
                                     ),
 
                                     const SizedBox(height: 12),
@@ -265,22 +270,48 @@ class InsuranceAndCouncilRatesScreen extends StatelessWidget {
                 child: SizedBox(
                   width: double.infinity,
                   height: 56,
-                  child: ElevatedButton(
-                    onPressed: () => Get.to(() => CostEstimatesScreen()),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.primary,
-                      foregroundColor: AppColors.white,
-                      elevation: 4,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(0),
+                  child: Obx(() {
+                    return ElevatedButton(
+                      onPressed: controller.isLoading.value
+                          ? null
+                          : () async {
+                        // ✅ API expects buildType: "New" or "Established"
+                        final apiBuildType =
+                        selectedBuildType == "New" ? "New" : "Established";
+
+                        await controller.calculateInsuranceCouncil(
+                          suburb: suburbCtrl.text,
+                          propertyType: selectedPropertyType,
+                          bedroomsCtrl: bedroomsCtrl,
+                          bathroomsCtrl: bathroomsCtrl,
+                          buildingAreaCtrl: buildingAreaCtrl,
+                          buildType: apiBuildType,
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.primary,
+                        foregroundColor: AppColors.white,
+                        elevation: 4,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(0),
+                        ),
+                        textStyle: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
-                      textStyle: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    child: const Text("Calculate"),
-                  ),
+                      child: controller.isLoading.value
+                          ? const SizedBox(
+                        height: 22,
+                        width: 22,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          color: Colors.white,
+                        ),
+                      )
+                          : const Text("Calculate"),
+                    );
+                  }),
                 ),
               ),
             ],

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:rai_fanancil_services/features/user/financial%20calculators/tax%20calculator/screen/tax_summary_result.dart';
 import '../../../../../core/themes/app_colors.dart';
 import '../../../../../core/widgets/custom_input_field_widget.dart';
+import '../controller/tax_summary_controller.dart';
 
 class TaxCalculatorScreen extends StatelessWidget {
   TaxCalculatorScreen({super.key});
@@ -18,6 +18,9 @@ class TaxCalculatorScreen extends StatelessWidget {
 
   final TextEditingController capitalGainsCtrl = TextEditingController();
   final TextEditingController landTaxValueCtrl = TextEditingController();
+
+  // ✅ GetX controller
+  final TaxSummaryController controller = Get.put(TaxSummaryController());
 
   @override
   Widget build(BuildContext context) {
@@ -100,7 +103,7 @@ class TaxCalculatorScreen extends StatelessWidget {
                               CustomInputField(
                                 controller: primaryIncomeCtrl,
                                 keyboardType: TextInputType.number,
-                                hintText: "120000",
+                                hintText: "Primary Income (Annual)",
                               ),
                               const SizedBox(height: 10),
 
@@ -115,7 +118,7 @@ class TaxCalculatorScreen extends StatelessWidget {
                               CustomInputField(
                                 controller: otherIncomeCtrl,
                                 keyboardType: TextInputType.number,
-                                hintText: "12000",
+                                hintText: "Other Income",
                               ),
                               const SizedBox(height: 10),
 
@@ -130,7 +133,7 @@ class TaxCalculatorScreen extends StatelessWidget {
                               CustomInputField(
                                 controller: depreciationCtrl,
                                 keyboardType: TextInputType.number,
-                                hintText: "12000",
+                                hintText: "Depreciation",
                               ),
                             ],
                           ),
@@ -173,7 +176,7 @@ class TaxCalculatorScreen extends StatelessWidget {
                               CustomInputField(
                                 controller: totalRentCtrl,
                                 keyboardType: TextInputType.number,
-                                hintText: "5000",
+                                hintText: "Total Rental Income (all properties)",
                               ),
                               const SizedBox(height: 10),
 
@@ -188,7 +191,7 @@ class TaxCalculatorScreen extends StatelessWidget {
                               CustomInputField(
                                 controller: totalExpensesCtrl,
                                 keyboardType: TextInputType.number,
-                                hintText: "6000",
+                                hintText: "Total Property Expenses",
                               ),
                               const SizedBox(height: 10),
 
@@ -203,7 +206,7 @@ class TaxCalculatorScreen extends StatelessWidget {
                               CustomInputField(
                                 controller: loanInterestCtrl,
                                 keyboardType: TextInputType.number,
-                                hintText: "4000",
+                                hintText: "Loan Interest (total)",
                               ),
                             ],
                           ),
@@ -246,7 +249,7 @@ class TaxCalculatorScreen extends StatelessWidget {
                               CustomInputField(
                                 controller: capitalGainsCtrl,
                                 keyboardType: TextInputType.number,
-                                hintText: "50000",
+                                hintText: "Capital Gains Amount (if any)",
                               ),
                               const SizedBox(height: 10),
 
@@ -261,7 +264,7 @@ class TaxCalculatorScreen extends StatelessWidget {
                               CustomInputField(
                                 controller: landTaxValueCtrl,
                                 keyboardType: TextInputType.number,
-                                hintText: "12500",
+                                hintText: "Land Tax Value",
                               ),
                             ],
                           ),
@@ -280,26 +283,65 @@ class TaxCalculatorScreen extends StatelessWidget {
                 child: SizedBox(
                   width: double.infinity,
                   height: 48,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Get.to(() => TaxSummaryResult());
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.primary,
-                      foregroundColor: Colors.white,
-                      elevation: 0,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(0),
+                  child: Obx(() {
+                    return ElevatedButton(
+                      onPressed: controller.isLoading.value
+                          ? null
+                          : () async {
+                        await controller.calculateTaxSummary(
+                          primaryIncomeCtrl: primaryIncomeCtrl,
+                          otherIncomeCtrl: otherIncomeCtrl,
+                          depreciationCtrl: depreciationCtrl,
+                          totalRentCtrl: totalRentCtrl,
+                          totalExpensesCtrl: totalExpensesCtrl,
+                          loanInterestCtrl: loanInterestCtrl,
+                          capitalGainsCtrl: capitalGainsCtrl,
+                          landTaxValueCtrl: landTaxValueCtrl,
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.primary,
+                        foregroundColor: Colors.white,
+                        elevation: 0,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(0),
+                        ),
+                        textStyle: const TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w700,
+                        ),
                       ),
-                      textStyle: const TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                    child: const Text("Calculate"),
-                  ),
+                      child: controller.isLoading.value
+                          ? const SizedBox(
+                        height: 20,
+                        width: 20,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          color: Colors.white,
+                        ),
+                      )
+                          : const Text("Calculate"),
+                    );
+                  }),
                 ),
               ),
+
+              // ✅ error (doesn't change layout, just shows when needed)
+              Obx(() {
+                final msg = controller.errorMessage.value.trim();
+                if (msg.isEmpty) return const SizedBox.shrink();
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 10),
+                  child: Text(
+                    msg,
+                    style: const TextStyle(
+                      fontSize: 12,
+                      color: Colors.red,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                );
+              }),
             ],
           ),
         ),

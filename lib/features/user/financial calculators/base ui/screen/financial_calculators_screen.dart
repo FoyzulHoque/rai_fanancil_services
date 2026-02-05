@@ -101,9 +101,7 @@ class FinancialCalculatorsScreen extends StatelessWidget {
               FinancialCalculatorsBodyWidget(
                 title: "Tax Calculator",
                 subTitle:'Income, investment & land tax' ,
-                image: 'assets/icons/profile_icons.jpg',
-                iconColor:AppColors.infoLightMore,
-                boxColor:AppColors.primaryDife ,
+                image: 'assets/icons/tax_icons.jpg',
                 containerCustomColor:AppColors.primaryDife,
                 onTab: (){
                   Get.to(()=>TaxCalculatorScreen());
@@ -123,9 +121,7 @@ class FinancialCalculatorsScreen extends StatelessWidget {
               FinancialCalculatorsBodyWidget(
                 title: "Suburb Profile",
                 subTitle:'Market insights and demographics' ,
-                image: 'assets/icons/tax_icons.jpg',
-                iconColor:AppColors.infoLightMore,
-                boxColor:AppColors.greyAndGreen ,
+                image: 'assets/icons/s_profile.png',
                 containerCustomColor:Color(0xFF009689),
                 onTab: (){
                   Get.to(()=>SuburbProfileScreen());

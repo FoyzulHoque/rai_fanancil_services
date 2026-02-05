@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import '../../../../../core/themes/app_colors.dart';
 
 class CustomNotificationToggle extends StatelessWidget {
@@ -14,49 +13,69 @@ class CustomNotificationToggle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      leading: const Icon(
-        Icons.notifications_outlined,
-        color: Colors.black54,
-        size: 28,
+    return Container(
+      decoration: const BoxDecoration(
+        border: Border(
+          bottom: BorderSide(color: Color(0xFFEDEDED), width: 1),
+        ),
       ),
-      title: const Text(
-        "Notification",
-        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-      ),
-      trailing:  GestureDetector(
-        onTap: () {
-          onChanged(!value);
-        },
-        child: AnimatedContainer(
-          duration: Duration(milliseconds: 300),
-          curve: Curves.easeIn,
-          width: 45.0,
-          height: 20.0,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(15.0),
-            color: value ? AppColors.primary : Colors.grey[400],
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+      child: Row(
+        children: [
+          Container(
+            height: 36,
+            width: 36,
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              color: const Color(0xFFF3F3F3),
+              borderRadius: BorderRadius.circular(6),
+            ),
+            child: const Icon(
+              Icons.notifications_outlined,
+              color: Colors.black54,
+              size: 22,
+            ),
           ),
-          child: AnimatedAlign(
-            duration: Duration(milliseconds: 300),
-            curve: Curves.easeIn,
-            alignment: value ? Alignment.centerRight : Alignment.centerLeft,
-            child: Padding(
-              padding: const EdgeInsets.all(2.0),
-              child: Container(
-                width: 18.0,
-                height: 18.0,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Colors.white,
+          const SizedBox(width: 14),
+          const Expanded(
+            child: Text(
+              "Notification",
+              style: TextStyle(
+                fontSize: 15,
+                fontWeight: FontWeight.w500,
+                color: Colors.black87,
+              ),
+            ),
+          ),
+
+          // ✅ toggle like screenshot
+          GestureDetector(
+            onTap: () => onChanged(!value),
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 250),
+              width: 46,
+              height: 22,
+              padding: const EdgeInsets.all(2),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+                color: value ? AppColors.primary : Colors.grey.shade400,
+              ),
+              child: AnimatedAlign(
+                duration: const Duration(milliseconds: 250),
+                alignment: value ? Alignment.centerRight : Alignment.centerLeft,
+                child: Container(
+                  width: 18,
+                  height: 18,
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                    shape: BoxShape.circle,
+                  ),
                 ),
               ),
             ),
           ),
-        ),
+        ],
       ),
-      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
     );
   }
 }

@@ -4,6 +4,9 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
 import '../../../../../core/network_path/natwork_path.dart';
+import '../model/cashflow_scenario_model.dart';
+import '../screen/cash_flow_result_screen.dart';
+import 'cashflow_result_controller.dart';
 
 class CashFlowLoanForm {
   final TextEditingController loanNameController = TextEditingController();
@@ -119,7 +122,16 @@ class CashFlowCalculatorController extends GetxController {
       debugPrint("Response (${response.statusCode}): ${response.body}");
 
       if (response.statusCode == 200 || response.statusCode == 201) {
-        Get.snackbar("Success", "Cash Flow Calculator created successfully!");
+        final parsed = CashflowScenarioResponse.fromJson(jsonDecode(response.body));
+
+        // ✅ store result in controller
+        final resultController = Get.find<CashFlowResultController>();
+        resultController.setResult(parsed.data);
+
+        Get.snackbar("Success", parsed.message);
+
+        // ✅ go to result screen
+        Get.to(() => CashFlowResultScreen());
 
         // ✅ Clear all fields (NO defaults)
         positionController.clear();
@@ -132,7 +144,7 @@ class CashFlowCalculatorController extends GetxController {
           l.dispose();
         }
         loans.clear();
-        addInitialLoan(); // keep 1 empty loan block
+        addInitialLoan();
       } else {
         String msg = "Failed to create calculator";
         try {

@@ -14,8 +14,9 @@ class CashFlowCalculatorScreen extends StatefulWidget {
 }
 
 class _CashFlowCalculatorScreenState extends State<CashFlowCalculatorScreen> {
-  final CashFlowCalculatorController controller =
-  Get.put(CashFlowCalculatorController());
+  final CashFlowCalculatorController controller = Get.put(
+    CashFlowCalculatorController(),
+  );
 
   // Dropdown options
   final List<String> _positions = const ["Annually", "Monthly", "Weekly"];
@@ -28,39 +29,47 @@ class _CashFlowCalculatorScreenState extends State<CashFlowCalculatorScreen> {
       body: SafeArea(
         child: Column(
           children: [
-            Container(
-              height: 56,
-              width: double.infinity,
-              color: AppColors.blue,
-              padding: const EdgeInsets.symmetric(horizontal: 12),
-              child: Row(
-                children: [
-                  GestureDetector(
-                    onTap: () => Get.back(),
-                    child: const Icon(Icons.arrow_back,
-                        color: Colors.white, size: 22),
-                  ),
-                  const SizedBox(width: 12),
-                  const Expanded(
-                    child: Text(
-                      "Cash Flow Calculator",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
+            Padding(
+              padding: const EdgeInsets.only(left: 16, right: 16, top: 10),
+              child: Container(
+                height: 56,
+                width: double.infinity,
+                color: AppColors.blue,
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                child: Row(
+                  children: [
+                    GestureDetector(
+                      onTap: () => Get.back(),
+                      child: const Icon(
+                        Icons.arrow_back,
                         color: Colors.white,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
+                        size: 22,
                       ),
                     ),
-                  ),
-                  const SizedBox(width: 34),
-                ],
+                    const SizedBox(width: 12),
+                    const Expanded(
+                      child: Text(
+                        "Cash Flow Calculator",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 34),
+                  ],
+                ),
               ),
             ),
 
             Expanded(
               child: SingleChildScrollView(
-                padding:
-                const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 14,
+                ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -76,32 +85,43 @@ class _CashFlowCalculatorScreenState extends State<CashFlowCalculatorScreen> {
 
                     DropdownButtonFormField<String>(
                       value: _selectedPosition,
+                      hint: const Text("Select cashflow position"),
                       decoration: InputDecoration(
                         border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(0)),
+                          borderRadius: BorderRadius.circular(0),
+                        ),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(0),
-                          borderSide:
-                          const BorderSide(color: Colors.grey, width: 1),
+                          borderSide: const BorderSide(
+                            color: Colors.grey,
+                            width: 1,
+                          ),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(0),
-                          borderSide:
-                          const BorderSide(color: Colors.grey, width: 1.5),
+                          borderSide: const BorderSide(
+                            color: Colors.grey,
+                            width: 1.5,
+                          ),
                         ),
                         contentPadding: const EdgeInsets.symmetric(
-                            horizontal: 12, vertical: 10),
+                          horizontal: 12,
+                          vertical: 10,
+                        ),
                         filled: true,
                         fillColor: Colors.white,
                       ),
                       items: _positions
-                          .map((e) =>
-                          DropdownMenuItem<String>(value: e, child: Text(e)))
+                          .map(
+                            (e) => DropdownMenuItem<String>(
+                              value: e,
+                              child: Text(e),
+                            ),
+                          )
                           .toList(),
                       onChanged: (v) {
-                        if (v == null) return;
                         setState(() => _selectedPosition = v);
-                        controller.positionController.text = v;
+                        controller.positionController.text = v ?? "";
                       },
                     ),
 
@@ -115,9 +135,10 @@ class _CashFlowCalculatorScreenState extends State<CashFlowCalculatorScreen> {
                         children: [
                           _Label("Rental increase per year (%)"),
                           CustomInputField(
-                            controller: controller.rentalIncreasePerYearController,
+                            controller:
+                                controller.rentalIncreasePerYearController,
                             keyboardType: TextInputType.number,
-                            hintText: "",
+                            hintText: "0%",
                           ),
                           const SizedBox(height: 10),
 
@@ -125,15 +146,16 @@ class _CashFlowCalculatorScreenState extends State<CashFlowCalculatorScreen> {
                           CustomInputField(
                             controller: controller.cashRateChangeController,
                             keyboardType: TextInputType.number,
-                            hintText: "",
+                            hintText: "0%",
                           ),
                           const SizedBox(height: 10),
 
                           _Label("Annual salary increase (%)"),
                           CustomInputField(
-                            controller: controller.annualSalaryIncreaseController,
+                            controller:
+                                controller.annualSalaryIncreaseController,
                             keyboardType: TextInputType.number,
-                            hintText: "",
+                            hintText: "0%",
                           ),
                           const SizedBox(height: 10),
 
@@ -141,7 +163,7 @@ class _CashFlowCalculatorScreenState extends State<CashFlowCalculatorScreen> {
                           CustomInputField(
                             controller: controller.expenseInflationController,
                             keyboardType: TextInputType.number,
-                            hintText: "",
+                            hintText: "0%",
                           ),
                         ],
                       ),
@@ -172,8 +194,9 @@ class _CashFlowCalculatorScreenState extends State<CashFlowCalculatorScreen> {
                       child: Obx(() {
                         return Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          children:
-                          List.generate(controller.loans.length, (index) {
+                          children: List.generate(controller.loans.length, (
+                            index,
+                          ) {
                             final loan = controller.loans[index];
 
                             return Column(
@@ -193,9 +216,13 @@ class _CashFlowCalculatorScreenState extends State<CashFlowCalculatorScreen> {
                                     ),
                                     if (controller.loans.length > 1)
                                       GestureDetector(
-                                        onTap: () => controller.removeLoan(index),
-                                        child: const Icon(Icons.delete_outline,
-                                            color: Colors.red, size: 20),
+                                        onTap: () =>
+                                            controller.removeLoan(index),
+                                        child: const Icon(
+                                          Icons.delete_outline,
+                                          color: Colors.red,
+                                          size: 20,
+                                        ),
                                       ),
                                   ],
                                 ),
@@ -205,7 +232,7 @@ class _CashFlowCalculatorScreenState extends State<CashFlowCalculatorScreen> {
                                 CustomInputField(
                                   controller: loan.loanNameController,
                                   keyboardType: TextInputType.text,
-                                  hintText: "",
+                                  hintText: "Loan Name",
                                 ),
                                 const SizedBox(height: 10),
 
@@ -213,7 +240,7 @@ class _CashFlowCalculatorScreenState extends State<CashFlowCalculatorScreen> {
                                 CustomInputField(
                                   controller: loan.loanAmountController,
                                   keyboardType: TextInputType.number,
-                                  hintText: "",
+                                  hintText: "0",
                                 ),
                                 const SizedBox(height: 10),
 
@@ -222,13 +249,14 @@ class _CashFlowCalculatorScreenState extends State<CashFlowCalculatorScreen> {
                                     Expanded(
                                       child: Column(
                                         crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                            CrossAxisAlignment.start,
                                         children: [
                                           _Label("Interest Rate (%)"),
                                           CustomInputField(
-                                            controller: loan.interestRateController,
+                                            controller:
+                                                loan.interestRateController,
                                             keyboardType: TextInputType.number,
-                                            hintText: "",
+                                            hintText: "0%",
                                           ),
                                         ],
                                       ),
@@ -237,13 +265,14 @@ class _CashFlowCalculatorScreenState extends State<CashFlowCalculatorScreen> {
                                     Expanded(
                                       child: Column(
                                         crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                            CrossAxisAlignment.start,
                                         children: [
                                           _Label("Term (years)"),
                                           CustomInputField(
-                                            controller: loan.termYearsController,
+                                            controller:
+                                                loan.termYearsController,
                                             keyboardType: TextInputType.number,
-                                            hintText: "",
+                                            hintText: "0000",
                                           ),
                                         ],
                                       ),
@@ -272,34 +301,39 @@ class _CashFlowCalculatorScreenState extends State<CashFlowCalculatorScreen> {
               child: SizedBox(
                 width: double.infinity,
                 height: 48,
-                child: Obx(() => ElevatedButton(
-                  onPressed: controller.isLoading.value
-                      ? null
-                      : () async {
-                    await controller.createCashFlowCalculator();
-                    Get.to(() => CashFlowResultScreen());
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.primary,
-                    foregroundColor: Colors.white,
-                    elevation: 0,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(0)),
-                    textStyle: const TextStyle(
-                        fontSize: 14, fontWeight: FontWeight.w600),
-                  ),
-                  child: controller.isLoading.value
-                      ? const SizedBox(
-                    height: 20,
-                    width: 20,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2.5,
-                      valueColor:
-                      AlwaysStoppedAnimation<Color>(Colors.white),
+                child: Obx(
+                  () => ElevatedButton(
+                    onPressed: controller.isLoading.value
+                        ? null
+                        : () async {
+                            await controller.createCashFlowCalculator();
+                          },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.primary,
+                      foregroundColor: Colors.white,
+                      elevation: 0,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(0),
+                      ),
+                      textStyle: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
-                  )
-                      : const Text("Calculate"),
-                )),
+                    child: controller.isLoading.value
+                        ? const SizedBox(
+                            height: 20,
+                            width: 20,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2.5,
+                              valueColor: AlwaysStoppedAnimation<Color>(
+                                Colors.white,
+                              ),
+                            ),
+                          )
+                        : const Text("Calculate"),
+                  ),
+                ),
               ),
             ),
           ],
@@ -335,7 +369,7 @@ class _SectionCard extends StatelessWidget {
             color: Color(0x11000000),
             blurRadius: 6,
             offset: Offset(0, 2),
-          )
+          ),
         ],
       ),
       padding: const EdgeInsets.all(12),
@@ -378,6 +412,7 @@ class _SectionCard extends StatelessWidget {
 
 class _Label extends StatelessWidget {
   final String text;
+
   const _Label(this.text);
 
   @override

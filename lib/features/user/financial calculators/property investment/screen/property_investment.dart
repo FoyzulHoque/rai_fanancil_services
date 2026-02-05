@@ -4,7 +4,7 @@ import '../../../../../core/themes/app_colors.dart';
 import '../../../../../core/widgets/custom_input_field_widget.dart';
 import '../controller/select_custom_button_controller.dart';
 import '../widget/custom_button_widget.dart';
-import 'investment_results_screen.dart';
+import '../controller/property_calculator_controller.dart';
 
 class PropertyInvestmentScreen extends StatefulWidget {
   const PropertyInvestmentScreen({super.key});
@@ -17,30 +17,9 @@ class PropertyInvestmentScreen extends StatefulWidget {
 class _PropertyInvestmentScreenState extends State<PropertyInvestmentScreen> {
   final LoanTypeController loanTypeController = Get.put(LoanTypeController());
 
-  // --- Dropdown values (UI only)
-  final List<String> _propertyTypes = const ["Apartment", "House", "Townhouse"];
-  String _selectedPropertyType = "Apartment";
-
-  final List<String> _suburbs = const ["Victoria", "Sydney", "Melbourne"];
-  String _selectedSuburb = "Victoria";
-
-  final List<String> _rentFrequencies = const ["Monthly", "Weekly"];
-  String _selectedRentFrequency = "Monthly";
-
-  // --- Controllers (no initial values)
-  final TextEditingController purchasePriceCtrl = TextEditingController();
-  final TextEditingController rentCtrl = TextEditingController();
-  final TextEditingController loanAmountCtrl = TextEditingController();
-  final TextEditingController interestRateCtrl = TextEditingController();
-
-  @override
-  void dispose() {
-    purchasePriceCtrl.dispose();
-    rentCtrl.dispose();
-    loanAmountCtrl.dispose();
-    interestRateCtrl.dispose();
-    super.dispose();
-  }
+  // ✅ controller
+  final PropertyCalculatorController controller =
+  Get.put(PropertyCalculatorController());
 
   @override
   Widget build(BuildContext context) {
@@ -89,53 +68,52 @@ class _PropertyInvestmentScreenState extends State<PropertyInvestmentScreen> {
                 child: SingleChildScrollView(
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      children: [
-                        _propertyCard(
-                          titleTop: "Property 1",
-                          purchasePriceCtrl: purchasePriceCtrl,
-                          propertyTypes: _propertyTypes,
-                          selectedPropertyType: _selectedPropertyType,
-                          onPropertyTypeChanged: (v) =>
-                              setState(() => _selectedPropertyType = v),
-                          suburbs: _suburbs,
-                          selectedSuburb: _selectedSuburb,
-                          onSuburbChanged: (v) =>
-                              setState(() => _selectedSuburb = v),
-                          rentCtrl: rentCtrl,
-                          rentFrequencies: _rentFrequencies,
-                          selectedRentFrequency: _selectedRentFrequency,
-                          onRentFrequencyChanged: (v) =>
-                              setState(() => _selectedRentFrequency = v),
-                          loanAmountCtrl: loanAmountCtrl,
-                          interestRateCtrl: interestRateCtrl,
-                          // NOTE: loan type uses your existing CustomSegmentSelector (P&I / Interest Only)
-                        ),
+                    child: Obx(() {
+                      // loading prefill
+                      if (controller.isLoadingProperty.value &&
+                          controller.propertyForms.isEmpty) {
+                        return const Padding(
+                          padding: EdgeInsets.only(top: 20),
+                          child: Center(child: CircularProgressIndicator()),
+                        );
+                      }
 
-                        const SizedBox(height: 12),
+                      final forms = controller.propertyForms;
 
-                        // duplicate block like screenshot (Property 1 appears again)
-                        _propertyCard(
-                          titleTop: "Property 1",
-                          purchasePriceCtrl: TextEditingController(),
-                          propertyTypes: _propertyTypes,
-                          selectedPropertyType: _selectedPropertyType,
-                          onPropertyTypeChanged: (v) =>
-                              setState(() => _selectedPropertyType = v),
-                          suburbs: _suburbs,
-                          selectedSuburb: _selectedSuburb,
-                          onSuburbChanged: (v) =>
-                              setState(() => _selectedSuburb = v),
-                          rentCtrl: TextEditingController(),
-                          rentFrequencies: _rentFrequencies,
-                          selectedRentFrequency: _selectedRentFrequency,
-                          onRentFrequencyChanged: (v) =>
-                              setState(() => _selectedRentFrequency = v),
-                          loanAmountCtrl: TextEditingController(),
-                          interestRateCtrl: TextEditingController(),
-                        ),
-                      ],
-                    ),
+                      return Column(
+                        children: [
+                          for (int i = 0; i < forms.length; i++) ...[
+                            _propertyCard(
+                              index: i,
+                              titleTop: forms[i].name,
+                              purchasePriceCtrl: forms[i].purchasePriceCtrl,
+                              propertyTypes: controller.propertyTypes,
+                              selectedPropertyType:
+                              forms[i].selectedPropertyType,
+                              onPropertyTypeChanged: (v) =>
+                                  controller.setPropertyType(i, v),
+                              suburbs: controller.suburbs,
+                              selectedSuburb: forms[i].selectedSuburb,
+                              onSuburbChanged: (v) =>
+                                  controller.setSuburb(i, v),
+                              rentCtrl: forms[i].rentCtrl,
+                              rentFrequencies: controller.rentFrequencies,
+                              selectedRentFrequency:
+                              forms[i].selectedRentFrequency,
+                              onRentFrequencyChanged: (v) =>
+                                  controller.setRentFrequency(i, v),
+                              loanAmountCtrl: forms[i].loanAmountCtrl,
+                              interestRateCtrl: forms[i].interestRateCtrl,
+                              // loan type
+                              selectedLoanType: forms[i].selectedLoanType,
+                              onLoanTypeChanged: (v) =>
+                                  controller.setLoanType(i, v),
+                            ),
+                            const SizedBox(height: 12),
+                          ],
+                        ],
+                      );
+                    }),
                   ),
                 ),
               ),
@@ -146,22 +124,38 @@ class _PropertyInvestmentScreenState extends State<PropertyInvestmentScreen> {
                 child: SizedBox(
                   width: double.infinity,
                   height: 56,
-                  child: ElevatedButton(
-                    onPressed: () => Get.to(() => InvestmentResultsScreen()),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.primary,
-                      foregroundColor: AppColors.white,
-                      elevation: 4,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(0),
+                  child: Obx(() {
+                    return ElevatedButton(
+                      onPressed: controller.isLoading.value
+                          ? null
+                          : () async {
+                        await controller.createPropertyCalculator();
+                        // navigation handled in controller
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.primary,
+                        foregroundColor: AppColors.white,
+                        elevation: 4,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(0),
+                        ),
+                        textStyle: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
-                      textStyle: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    child: const Text("Calculate"),
-                  ),
+                      child: controller.isLoading.value
+                          ? const SizedBox(
+                        height: 22,
+                        width: 22,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          color: Colors.white,
+                        ),
+                      )
+                          : const Text("Calculate"),
+                    );
+                  }),
                 ),
               ),
             ],
@@ -172,6 +166,7 @@ class _PropertyInvestmentScreenState extends State<PropertyInvestmentScreen> {
   }
 
   Widget _propertyCard({
+    required int index,
     required String titleTop,
     required TextEditingController purchasePriceCtrl,
     required List<String> propertyTypes,
@@ -186,7 +181,22 @@ class _PropertyInvestmentScreenState extends State<PropertyInvestmentScreen> {
     required void Function(String) onRentFrequencyChanged,
     required TextEditingController loanAmountCtrl,
     required TextEditingController interestRateCtrl,
+
+    // loan type
+    required String selectedLoanType,
+    required void Function(String) onLoanTypeChanged,
   }) {
+    // ✅ FIX (no UI change): dropdown value must exist in items, otherwise null
+    final safePropertyType =
+    propertyTypes.contains(selectedPropertyType) ? selectedPropertyType : null;
+
+    final safeSuburb =
+    suburbs.contains(selectedSuburb) ? selectedSuburb : null;
+
+    final safeRentFrequency = rentFrequencies.contains(selectedRentFrequency)
+        ? selectedRentFrequency
+        : null;
+
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
@@ -227,7 +237,7 @@ class _PropertyInvestmentScreenState extends State<PropertyInvestmentScreen> {
 
           _label("Property Type"),
           DropdownButtonFormField<String>(
-            value: selectedPropertyType,
+            value: safePropertyType,
             decoration: _ddDecoration(),
             isExpanded: true,
             items: propertyTypes
@@ -242,7 +252,7 @@ class _PropertyInvestmentScreenState extends State<PropertyInvestmentScreen> {
 
           _label("Suburb"),
           DropdownButtonFormField<String>(
-            value: selectedSuburb,
+            value: safeSuburb,
             decoration: _ddDecoration(),
             isExpanded: true,
             items: suburbs
@@ -279,7 +289,7 @@ class _PropertyInvestmentScreenState extends State<PropertyInvestmentScreen> {
               const SizedBox(width: 10),
               Expanded(
                 child: DropdownButtonFormField<String>(
-                  value: selectedRentFrequency,
+                  value: safeRentFrequency,
                   decoration: _ddDecoration(),
                   isExpanded: true,
                   items: rentFrequencies
@@ -325,7 +335,8 @@ class _PropertyInvestmentScreenState extends State<PropertyInvestmentScreen> {
           const SizedBox(height: 10),
 
           _label("Loan Type"),
-          // Use your existing widget (P&I / Interest Only)
+
+          // ✅ keep your existing widget UI (no change)
           CustomSegmentSelector(
             height: 36,
             borderRadius: 4,

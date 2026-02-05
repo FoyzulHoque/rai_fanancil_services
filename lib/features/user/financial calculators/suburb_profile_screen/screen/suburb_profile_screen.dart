@@ -5,6 +5,7 @@ import '../../../../../core/themes/app_colors.dart';
 import '../../../../../core/widgets/custom_input_field_widget.dart';
 import '../../../../../core/widgets/full_page_pdf_make_widget.dart';
 import '../../../user navbar/controller/navbar_controller.dart';
+import '../controller/suburb_profile_controller.dart';
 
 class SuburbProfileScreen extends StatelessWidget {
   SuburbProfileScreen({super.key});
@@ -12,15 +13,8 @@ class SuburbProfileScreen extends StatelessWidget {
   final UserBottomNavbarController navbarController =
   Get.find<UserBottomNavbarController>();
 
-  final TextEditingController postcodeController = TextEditingController();
-
-  // ✅ demo values (replace with API later)
-  final String medianPrice = "\$1250k";
-  final double rentalYield = 3.8;
-  final double growth10y = 6.2;
-
-  final List<double> marketSeries = [950, 1050, 1150, 1200, 1280]; // $k
-  final List<int> years = [2020, 2021, 2022, 2023, 2024];
+  // ✅ Controller
+  final SuburbProfileController controller = Get.put(SuburbProfileController());
 
   @override
   Widget build(BuildContext context) {
@@ -69,226 +63,308 @@ class SuburbProfileScreen extends StatelessWidget {
                 child: SingleChildScrollView(
                   child: RepaintBoundary(
                     key: pageKey,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // ✅ Postcode input card
-                        Container(
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            border: Border.all(color: const Color(0xFFBEE3F4)),
-                          ),
-                          padding: const EdgeInsets.all(10),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Text(
-                                "Postcode",
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  color: Colors.black54,
-                                  fontWeight: FontWeight.w600,
+                    child: Obx(() {
+                      final showResult = controller.showResult.value;
+                      final res = controller.profile.value;
+                      final d = res?.data;
+
+                      final metrics = d?.suburbMetrics;
+                      final mp = d?.marketPerformance;
+                      final risk = d?.liveabilityRisk;
+
+                      final medianPriceNum = metrics?.medianPrice ?? 0;
+                      final rentalYield = metrics?.rentalYield ?? 0;
+                      final growth10y = metrics?.growth10Y ?? 0;
+
+                      final bool tenYear = controller.isTenYear.value;
+
+                      final series = tenYear
+                          ? (mp?.tenYear ?? const [])
+                          : (mp?.fiveYear ?? const []);
+
+                      final years = <int>[];
+                      final marketSeriesK = <double>[];
+                      for (final p in series) {
+                        final y = p.year;
+                        final v = p.value;
+                        if (y == null || v == null) continue;
+                        years.add(y);
+                        marketSeriesK.add(v / 1000.0); // chart uses $k
+                      }
+
+                      final school = risk?.schoolRanking ?? "N/A";
+                      final crime = risk?.crimeLevel ?? "N/A";
+                      final infra = risk?.infrastructureSpend ?? "N/A";
+
+                      final error = controller.errorMessage.value.trim();
+
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // ✅ Postcode input card
+                          Container(
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              border: Border.all(color: const Color(0xFFBEE3F4)),
+                            ),
+                            padding: const EdgeInsets.all(10),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text(
+                                  "Postcode",
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.black54,
+                                    fontWeight: FontWeight.w600,
+                                  ),
                                 ),
-                              ),
-                              const SizedBox(height: 6),
-                              CustomInputField(
-                                controller: postcodeController,
-                                keyboardType: TextInputType.number,
-                                hintText: "Type postcode to get result",
-                              ),
-                            ],
-                          ),
-                        ),
-
-                        const SizedBox(height: 12),
-
-                        // ✅ 3 stat boxes
-                        Row(
-                          children: [
-                            Expanded(
-                              child: _StatBox(
-                                title: "Median Price",
-                                value: medianPrice,
-                                borderColor: const Color(0xFF4CAF50),
-                              ),
-                            ),
-                            const SizedBox(width: 12),
-                            Expanded(
-                              child: _StatBox(
-                                title: "Rental Yield",
-                                value: "${rentalYield.toStringAsFixed(1)}%",
-                                borderColor: const Color(0xFFFFB74D),
-                              ),
-                            ),
-                            const SizedBox(width: 12),
-                            Expanded(
-                              child: _StatBox(
-                                title: "10Y Growth",
-                                value: "${growth10y.toStringAsFixed(1)}%",
-                                borderColor: const Color(0xFF42A5F5),
-                              ),
-                            ),
-                          ],
-                        ),
-
-                        const SizedBox(height: 12),
-
-                        // ✅ Market Performance card with segmented buttons
-                        Container(
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            border: Border.all(color: const Color(0xFFE6E6E6)),
-                          ),
-                          padding: const EdgeInsets.all(12),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                children: [
-                                  const Expanded(
-                                    child: Text(
-                                      "Market Performance",
-                                      style: TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w800,
-                                        color: Colors.black87,
-                                      ),
+                                const SizedBox(height: 6),
+                                CustomInputField(
+                                  controller: controller.postcodeController,
+                                  keyboardType: TextInputType.number,
+                                  hintText: "Type postcode to get result",
+                                ),
+                                if (error.isNotEmpty) ...[
+                                  const SizedBox(height: 8),
+                                  Text(
+                                    error,
+                                    style: const TextStyle(
+                                      fontSize: 12,
+                                      color: Colors.red,
+                                      fontWeight: FontWeight.w600,
                                     ),
                                   ),
-                                  _MiniToggle(active: true, label: "5Y"),
-                                  _MiniToggle(active: false, label: "10Y"),
+                                ],
+                              ],
+                            ),
+                          ),
+
+                          // ✅ everything below only after Calculate success
+                          if (showResult) ...[
+                            const SizedBox(height: 12),
+
+                            // ✅ 3 stat boxes
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: _StatBox(
+                                    title: "Median Price",
+                                    value: _medianPriceK(medianPriceNum),
+                                    borderColor: const Color(0xFF4CAF50),
+                                  ),
+                                ),
+                                const SizedBox(width: 12),
+                                Expanded(
+                                  child: _StatBox(
+                                    title: "Rental Yield",
+                                    value: "${rentalYield.toStringAsFixed(1)}%",
+                                    borderColor: const Color(0xFFFFB74D),
+                                  ),
+                                ),
+                                const SizedBox(width: 12),
+                                Expanded(
+                                  child: _StatBox(
+                                    title: "10Y Growth",
+                                    value: "${growth10y.toStringAsFixed(1)}%",
+                                    borderColor: const Color(0xFF42A5F5),
+                                  ),
+                                ),
+                              ],
+                            ),
+
+                            const SizedBox(height: 12),
+
+                            // ✅ Market Performance card with segmented buttons
+                            Container(
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                border: Border.all(
+                                    color: const Color(0xFFE6E6E6)),
+                              ),
+                              padding: const EdgeInsets.all(12),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    children: [
+                                      const Expanded(
+                                        child: Text(
+                                          "Market Performance",
+                                          style: TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w800,
+                                            color: Colors.black87,
+                                          ),
+                                        ),
+                                      ),
+                                      GestureDetector(
+                                        onTap: () => controller.setToggle(false),
+                                        child: _MiniToggle(
+                                            active: !tenYear, label: "5Y"),
+                                      ),
+                                      GestureDetector(
+                                        onTap: () => controller.setToggle(true),
+                                        child: _MiniToggle(
+                                            active: tenYear, label: "10Y"),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 12),
+                                  SizedBox(
+                                    height: 190,
+                                    child: _MarketLineChart(
+                                      seriesK: marketSeriesK.isEmpty
+                                          ? const [0]
+                                          : marketSeriesK,
+                                      years: years.isEmpty ? const [0] : years,
+                                    ),
+                                  ),
                                 ],
                               ),
-                              const SizedBox(height: 12),
-                              SizedBox(
-                                height: 190,
-                                child: _MarketLineChart(
-                                  seriesK: marketSeries,
-                                  years: years,
+                            ),
+
+                            const SizedBox(height: 12),
+
+                            // ✅ Liveability & Risk
+                            Container(
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                border: Border.all(
+                                    color: const Color(0xFFE6E6E6)),
+                              ),
+                              padding: const EdgeInsets.all(12),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Text(
+                                    "Liveability & Risk",
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w800,
+                                      color: Colors.black87,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 10),
+                                  _RiskRow(
+                                    icon: Icons.school_outlined,
+                                    label: "School Ranking",
+                                    tagText: school,
+                                    tagColor: const Color(0xFF00A651),
+                                  ),
+                                  const SizedBox(height: 10),
+                                  _RiskRow(
+                                    icon: Icons.security_outlined,
+                                    label: "Crime Level",
+                                    tagText: crime,
+                                    tagColor: const Color(0xFFD32F2F),
+                                  ),
+                                  const SizedBox(height: 10),
+                                  _RiskRow(
+                                    icon: Icons.apartment_outlined,
+                                    label: "Infrastructure Spend",
+                                    tagText: infra,
+                                    tagColor: const Color(0xFF29B6F6),
+                                  ),
+                                ],
+                              ),
+                            ),
+
+                            const SizedBox(height: 14),
+
+                            // ✅ Export PDF (outlined)
+                            SizedBox(
+                              width: double.infinity,
+                              height: 48,
+                              child: OutlinedButton.icon(
+                                onPressed: () async {
+                                  await Future.delayed(
+                                      const Duration(milliseconds: 50));
+                                  final imageBytes = await captureFullPage();
+                                  if (imageBytes != null) {
+                                    final pdfFile = await generatePdf(imageBytes);
+                                    await printPdf(pdfFile);
+                                  }
+                                },
+                                icon: const Icon(Icons.download,
+                                    color: Colors.black54, size: 18),
+                                label: const Text(
+                                  "Export PDF",
+                                  style: TextStyle(
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.black87,
+                                  ),
+                                ),
+                                style: OutlinedButton.styleFrom(
+                                  side: BorderSide(
+                                    color: AppColors.primary.withOpacity(0.35),
+                                    width: 1,
+                                  ),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(0),
+                                  ),
+                                  backgroundColor: Colors.white,
                                 ),
                               ),
-                            ],
-                          ),
-                        ),
+                            ),
 
-                        const SizedBox(height: 12),
+                            const SizedBox(height: 14),
+                          ],
 
-                        // ✅ Liveability & Risk
-                        Container(
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            border: Border.all(color: const Color(0xFFE6E6E6)),
-                          ),
-                          padding: const EdgeInsets.all(12),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Text(
-                                "Liveability & Risk",
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w800,
-                                  color: Colors.black87,
+                          const SizedBox(height: 14),
+
+                          // ✅ Bottom button (Calculate first, then Done)
+                          SizedBox(
+                            width: double.infinity,
+                            height: 48,
+                            child: ElevatedButton(
+                              onPressed: controller.isLoading.value
+                                  ? null
+                                  : () async {
+                                if (!controller.showResult.value) {
+                                  await controller.calculate();
+                                } else {
+                                  navbarController.financialCalculatorsScreen();
+                                  Get.back();
+                                }
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: AppColors.primary,
+                                foregroundColor: Colors.white,
+                                elevation: 0,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(0),
+                                ),
+                                textStyle: const TextStyle(
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w700,
                                 ),
                               ),
-                              const SizedBox(height: 10),
-
-                              _RiskRow(
-                                icon: Icons.school_outlined,
-                                label: "School Ranking",
-                                tagText: "High",
-                                tagColor: const Color(0xFF00A651),
-                              ),
-                              const SizedBox(height: 10),
-                              _RiskRow(
-                                icon: Icons.security_outlined,
-                                label: "Crime Level",
-                                tagText: "Low",
-                                tagColor: const Color(0xFFD32F2F),
-                              ),
-                              const SizedBox(height: 10),
-                              _RiskRow(
-                                icon: Icons.apartment_outlined,
-                                label: "Infrastructure Spend",
-                                tagText: "Planned",
-                                tagColor: const Color(0xFF29B6F6),
-                              ),
-                            ],
-                          ),
-                        ),
-
-                        const SizedBox(height: 14),
-
-                        // ✅ Export PDF (outlined)
-                        SizedBox(
-                          width: double.infinity,
-                          height: 48,
-                          child: OutlinedButton.icon(
-                            onPressed: () async {
-                              await Future.delayed(
-                                  const Duration(milliseconds: 50));
-                              final imageBytes = await captureFullPage();
-                              if (imageBytes != null) {
-                                final pdfFile = await generatePdf(imageBytes);
-                                await printPdf(pdfFile);
-                              }
-                            },
-                            icon: const Icon(Icons.download,
-                                color: Colors.black54, size: 18),
-                            label: const Text(
-                              "Export PDF",
-                              style: TextStyle(
-                                fontSize: 13,
-                                fontWeight: FontWeight.w600,
-                                color: Colors.black87,
+                              child: controller.isLoading.value
+                                  ? const SizedBox(
+                                height: 20,
+                                width: 20,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  color: Colors.white,
+                                ),
+                              )
+                                  : Text(
+                                controller.showResult.value
+                                    ? "Done"
+                                    : "Calculate",
                               ),
                             ),
-                            style: OutlinedButton.styleFrom(
-                              side: BorderSide(
-                                color: AppColors.primary.withOpacity(0.35),
-                                width: 1,
-                              ),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(0),
-                              ),
-                              backgroundColor: Colors.white,
-                            ),
                           ),
-                        ),
 
-                        const SizedBox(height: 14),
-
-                        // ✅ Done
-                        SizedBox(
-                          width: double.infinity,
-                          height: 48,
-                          child: ElevatedButton(
-                            onPressed: () {
-                              navbarController.financialCalculatorsScreen();
-                              Get.back();
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: AppColors.primary,
-                              foregroundColor: Colors.white,
-                              elevation: 0,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(0),
-                              ),
-                              textStyle: const TextStyle(
-                                fontSize: 13,
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
-                            child: const Text("Done"),
-                          ),
-                        ),
-
-                        const SizedBox(height: 18),
-                      ],
-                    ),
+                          const SizedBox(height: 18),
+                        ],
+                      );
+                    }),
                   ),
                 ),
               ),
@@ -298,9 +374,15 @@ class SuburbProfileScreen extends StatelessWidget {
       ),
     );
   }
+
+  // ✅ format: medianPrice -> "$1250k"
+  static String _medianPriceK(double v) {
+    final k = (v / 1000.0);
+    return "\$${k.toStringAsFixed(0)}k";
+  }
 }
 
-// ---------------- UI widgets ----------------
+// ---------------- UI widgets (UNCHANGED) ----------------
 
 class _StatBox extends StatelessWidget {
   final String title;
@@ -454,8 +536,11 @@ class _MarketLineChart extends StatelessWidget {
       spots.add(FlSpot(i.toDouble(), seriesK[i]));
     }
 
-    final maxY = (seriesK.reduce((a, b) => a > b ? a : b)) * 1.15;
-    final minY = (seriesK.reduce((a, b) => a < b ? a : b)) * 0.85;
+    final maxV = seriesK.reduce((a, b) => a > b ? a : b);
+    final minV = seriesK.reduce((a, b) => a < b ? a : b);
+
+    final maxY = (maxV == 0 ? 1 : maxV) * 1.15;
+    final minY = (minV == 0 ? 0 : minV) * 0.85;
 
     return LineChart(
       LineChartData(

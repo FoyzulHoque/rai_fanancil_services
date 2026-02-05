@@ -27,12 +27,11 @@ class HomeDashboardController extends GetxController {
   }
 
   final NetworkCaller networkCaller = NetworkCaller();
-  String token =
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5NmRiYzU5ZmFhN2U2MmM4OTk0Mzk3NiIsImVtYWlsIjoicmFmc2Fuc2F5ZWQxMzJAZ21haWwuY29tIiwicm9sZSI6IlVzZXIiLCJlbWFpbFZlcmlmaWNhdGlvbiI6dHJ1ZSwiaXNGaW5hbmNpYWxQcm9maWxlQ29tcGxldGUiOnRydWUsImlhdCI6MTc2OTg0MTYzOCwiZXhwIjoxODAxMzc3NjM4fQ.Ci57ZPiOMWraRRd4XcAQZBnv5Yj4vFGLpyiBkixkIRo';
   final userDashboard = <UserDashBoardResult>[].obs;
 
   // user dashboard
   Future<void> userDashboardData() async {
+    final token = await Urls.token;
     isLoading.value = true;
     try {
       final response = await networkCaller.getRequest(
@@ -57,6 +56,7 @@ class HomeDashboardController extends GetxController {
 
   final cashFlowTrendData = <Datum>[].obs;
   Future<void> cashFlowTrend() async {
+    final token = await Urls.token;
     isLoading.value = true;
     try {
       final response = await networkCaller.getRequest(
@@ -85,6 +85,7 @@ class HomeDashboardController extends GetxController {
 
   final propertyValueData = <UserPropertyValueDetum>[].obs;
   Future<void> propertyValueTrend() async {
+    final token = await Urls.token;
     isLoading.value = true;
     try {
       final response = await networkCaller.getRequest(

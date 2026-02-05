@@ -4,27 +4,16 @@ import 'package:get/get.dart';
 import '../../../../../core/themes/app_colors.dart';
 import '../../../../../core/widgets/full_page_pdf_make_widget.dart';
 import '../../../user navbar/controller/navbar_controller.dart';
-
+import '../controllers/borrowing_controller.dart';
 class BorrowingOverviewResultScreen extends StatelessWidget {
   BorrowingOverviewResultScreen({super.key});
 
   final UserBottomNavbarController navbarController =
   Get.find<UserBottomNavbarController>();
 
-  // ✅ demo values (replace with API later)
-  final String capacityRange = "\$145,000 – \$230,000";
-  final String statusLabel = "Weak";
-
-  final double netWorth = 170000;
-  final double dtiRatio = 66.4;
-
-  final double assets = 450000;
-  final double liabilities = 280000;
-
-  final double totalPropertyValue = 650000;
-  final double totalCurrentBorrowings = 520000;
-  final double availableEquity = 130000;
-  final double totalLvr = 80.0;
+  // ✅ Add controller
+  final BorrowingController borrowingController =
+  Get.put(BorrowingController());
 
   @override
   Widget build(BuildContext context) {
@@ -73,110 +62,247 @@ class BorrowingOverviewResultScreen extends StatelessWidget {
                 child: SingleChildScrollView(
                   child: RepaintBoundary(
                     key: pageKey,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // ✅ Estimated Borrowing Capacity (gradient)
-                        Container(
-                          width: double.infinity,
-                          padding: const EdgeInsets.all(14),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(0),
-                            gradient: LinearGradient(
-                              colors: [
-                                AppColors.primary.withOpacity(0.95),
-                                AppColors.blue.withOpacity(0.85),
-                              ],
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
+                    child: Obx(() {
+                      // ✅ loading
+                      if (borrowingController.isLoading.value) {
+                        return const Padding(
+                          padding: EdgeInsets.only(top: 50),
+                          child: Center(child: CircularProgressIndicator()),
+                        );
+                      }
+
+                      // ✅ error
+                      if (borrowingController.errorMessage.value.isNotEmpty) {
+                        return Padding(
+                          padding: const EdgeInsets.only(top: 50),
+                          child: Center(
+                            child: Text(
+                              borrowingController.errorMessage.value,
+                              style: const TextStyle(
+                                color: Colors.black54,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
+                              ),
+                              textAlign: TextAlign.center,
                             ),
                           ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                children: [
-                                  const Text(
-                                    "Estimated Borrowing Capacity",
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 13,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
-                                  const SizedBox(width: 8),
-                                  Container(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 8, vertical: 3),
-                                    decoration: BoxDecoration(
-                                      color: const Color(0xFFFFCDD2),
-                                      borderRadius: BorderRadius.circular(12),
-                                    ),
-                                    child: Text(
-                                      statusLabel,
-                                      style: const TextStyle(
-                                        fontSize: 11,
-                                        fontWeight: FontWeight.w700,
-                                        color: Color(0xFFD32F2F),
+                        );
+                      }
+
+                      final res = borrowingController.borrowing.value;
+                      final d = res?.data;
+
+                      // ✅ safe fallbacks
+                      final min = d?.estimatedBorrowingCapacity?.min ?? 0;
+                      final max = d?.estimatedBorrowingCapacity?.max ?? 0;
+                      final statusLabel =
+                          d?.estimatedBorrowingCapacity?.status ?? "N/A";
+
+                      final netWorth = d?.financialSummary?.netWorth ?? 0;
+                      final dtiRatio = d?.financialSummary?.debtToIncomeRatio ?? 0;
+
+                      final assets = d?.assetsVsLiabilities?.assets ?? 0;
+                      final liabilities = d?.assetsVsLiabilities?.liabilities ?? 0;
+
+                      final totalPropertyValue =
+                          d?.propertyPortfolioDetails?.totalPropertyValue ?? 0;
+                      final totalCurrentBorrowings =
+                          d?.propertyPortfolioDetails?.totalCurrentBorrowings ?? 0;
+                      final availableEquity =
+                          d?.propertyPortfolioDetails?.availableEquity ?? 0;
+                      final totalLvr = d?.propertyPortfolioDetails?.totalLvr ?? 0;
+
+                      final capacityRange =
+                          "\$${_money(min)} – \$${_money(max)}";
+
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // ✅ Estimated Borrowing Capacity (gradient)
+                          Container(
+                            width: double.infinity,
+                            padding: const EdgeInsets.all(14),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(0),
+                              gradient: LinearGradient(
+                                colors: [
+                                  AppColors.primary.withOpacity(0.95),
+                                  AppColors.blue.withOpacity(0.85),
+                                ],
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                              ),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    const Text(
+                                      "Estimated Borrowing Capacity",
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 13,
+                                        fontWeight: FontWeight.w600,
                                       ),
                                     ),
+                                    const SizedBox(width: 8),
+                                    Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 8, vertical: 3),
+                                      decoration: BoxDecoration(
+                                        color: const Color(0xFFFFCDD2),
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                      child: Text(
+                                        statusLabel,
+                                        style: const TextStyle(
+                                          fontSize: 11,
+                                          fontWeight: FontWeight.w700,
+                                          color: Color(0xFFD32F2F),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 6),
+                                Text(
+                                  capacityRange,
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 22,
+                                    fontWeight: FontWeight.w800,
                                   ),
-                                ],
+                                ),
+                              ],
+                            ),
+                          ),
+
+                          const SizedBox(height: 12),
+
+                          // ✅ Net Worth + DTI boxes
+                          Row(
+                            children: [
+                              Expanded(
+                                child: _SmallStatBox(
+                                  title: "Net Worth",
+                                  value: "\$${_money(netWorth)}",
+                                  borderColor: const Color(0xFF4CAF50),
+                                  valueColor: Colors.black87,
+                                ),
                               ),
-                              const SizedBox(height: 6),
-                              Text(
-                                capacityRange,
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 22,
-                                  fontWeight: FontWeight.w800,
+                              const SizedBox(width: 12),
+                              Expanded(
+                                child: _SmallStatBox(
+                                  title: "Debt-to-Income Ratio",
+                                  value: "${dtiRatio.toStringAsFixed(1)}%",
+                                  borderColor: const Color(0xFFFFB74D),
+                                  valueColor: Colors.black87,
                                 ),
                               ),
                             ],
                           ),
-                        ),
 
-                        const SizedBox(height: 12),
+                          const SizedBox(height: 12),
 
-                        // ✅ Net Worth + DTI boxes
-                        Row(
-                          children: [
-                            Expanded(
-                              child: _SmallStatBox(
-                                title: "Net Worth",
-                                value: "\$${_money(netWorth)}",
-                                borderColor: const Color(0xFF4CAF50),
-                                valueColor: Colors.black87,
+                          // ✅ Assets vs Liabilities (chart card)
+                          Container(
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              border: Border.all(color: const Color(0xFFE6E6E6)),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(12),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Text(
+                                    "Assets vs Liabilities",
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w800,
+                                      color: Colors.black87,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 10),
+                                  SizedBox(
+                                    height: 170,
+                                    child: _AssetsLiabilitiesBarChart(
+                                      assets: assets.toDouble(),
+                                      liabilities: liabilities.toDouble(),
+                                    ),
+                                  ),
+                                  const SizedBox(height: 12),
+                                  Row(
+                                    children: [
+                                      _LegendDot(color: const Color(0xFF0D6EAA)),
+                                      const SizedBox(width: 8),
+                                      const Expanded(
+                                        child: Text(
+                                          "Assets",
+                                          style: TextStyle(
+                                            fontSize: 12,
+                                            color: Colors.black54,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
+                                      ),
+                                      Text(
+                                        "\$${_shortMoney(assets)}",
+                                        style: const TextStyle(
+                                          fontSize: 12,
+                                          color: Colors.black87,
+                                          fontWeight: FontWeight.w700,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 6),
+                                  Row(
+                                    children: [
+                                      _LegendDot(color: const Color(0xFF29B6F6)),
+                                      const SizedBox(width: 8),
+                                      const Expanded(
+                                        child: Text(
+                                          "Liabilities",
+                                          style: TextStyle(
+                                            fontSize: 12,
+                                            color: Colors.black54,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
+                                      ),
+                                      Text(
+                                        "\$${_shortMoney(liabilities)}",
+                                        style: const TextStyle(
+                                          fontSize: 12,
+                                          color: Colors.black87,
+                                          fontWeight: FontWeight.w700,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
                               ),
                             ),
-                            const SizedBox(width: 12),
-                            Expanded(
-                              child: _SmallStatBox(
-                                title: "Debt-to-Income Ratio",
-                                value: "${dtiRatio.toStringAsFixed(1)}%",
-                                borderColor: const Color(0xFFFFB74D),
-                                valueColor: Colors.black87,
-                              ),
-                            ),
-                          ],
-                        ),
-
-                        const SizedBox(height: 12),
-
-                        // ✅ Assets vs Liabilities (chart card)
-                        Container(
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            border: Border.all(color: const Color(0xFFE6E6E6)),
                           ),
-                          child: Padding(
+
+                          const SizedBox(height: 12),
+
+                          // ✅ Property Portfolio Details (table-style)
+                          Container(
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              border: Border.all(color: const Color(0xFFE6E6E6)),
+                            ),
                             padding: const EdgeInsets.all(12),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 const Text(
-                                  "Assets vs Liabilities",
+                                  "Property Portfolio Details",
                                   style: TextStyle(
                                     fontSize: 14,
                                     fontWeight: FontWeight.w800,
@@ -184,187 +310,102 @@ class BorrowingOverviewResultScreen extends StatelessWidget {
                                   ),
                                 ),
                                 const SizedBox(height: 10),
-                                SizedBox(
-                                  height: 170,
-                                  child: _AssetsLiabilitiesBarChart(
-                                    assets: assets,
-                                    liabilities: liabilities,
-                                  ),
+                                _TableRowLine(
+                                  label: "Total Property Value",
+                                  value: "\$${_money(totalPropertyValue)}",
+                                  valueColor: Colors.black87,
                                 ),
-                                const SizedBox(height: 12),
-                                Row(
-                                  children: [
-                                    _LegendDot(
-                                        color: const Color(0xFF0D6EAA)),
-                                    const SizedBox(width: 8),
-                                    const Expanded(
-                                      child: Text(
-                                        "Assets",
-                                        style: TextStyle(
-                                          fontSize: 12,
-                                          color: Colors.black54,
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                      ),
-                                    ),
-                                    Text(
-                                      "\$${_shortMoney(assets)}",
-                                      style: const TextStyle(
-                                        fontSize: 12,
-                                        color: Colors.black87,
-                                        fontWeight: FontWeight.w700,
-                                      ),
-                                    ),
-                                  ],
+                                const Divider(height: 12),
+                                _TableRowLine(
+                                  label: "Total Current Borrowings",
+                                  value: "\$${_money(totalCurrentBorrowings)}",
+                                  valueColor: Colors.red,
                                 ),
-                                const SizedBox(height: 6),
-                                Row(
-                                  children: [
-                                    _LegendDot(
-                                        color: const Color(0xFF29B6F6)),
-                                    const SizedBox(width: 8),
-                                    const Expanded(
-                                      child: Text(
-                                        "Liabilities",
-                                        style: TextStyle(
-                                          fontSize: 12,
-                                          color: Colors.black54,
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                      ),
-                                    ),
-                                    Text(
-                                      "\$${_shortMoney(liabilities)}",
-                                      style: const TextStyle(
-                                        fontSize: 12,
-                                        color: Colors.black87,
-                                        fontWeight: FontWeight.w700,
-                                      ),
-                                    ),
-                                  ],
+                                const Divider(height: 12),
+                                _TableRowLine(
+                                  label: "Available Equity",
+                                  value: "\$${_money(availableEquity)}",
+                                  valueColor: const Color(0xFF00A651),
+                                ),
+                                const Divider(height: 12),
+                                _TableRowLine(
+                                  label: "Total LVR",
+                                  value: "${totalLvr.toStringAsFixed(1)}%",
+                                  valueColor: const Color(0xFF00A651),
                                 ),
                               ],
                             ),
                           ),
-                        ),
 
-                        const SizedBox(height: 12),
+                          const SizedBox(height: 14),
 
-                        // ✅ Property Portfolio Details (table-style)
-                        Container(
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            border: Border.all(color: const Color(0xFFE6E6E6)),
-                          ),
-                          padding: const EdgeInsets.all(12),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Text(
-                                "Property Portfolio Details",
+                          // ✅ Export PDF (outlined)
+                          SizedBox(
+                            width: double.infinity,
+                            height: 48,
+                            child: OutlinedButton.icon(
+                              onPressed: () async {
+                                await Future.delayed(
+                                    const Duration(milliseconds: 50));
+                                final imageBytes = await captureFullPage();
+                                if (imageBytes != null) {
+                                  final pdfFile = await generatePdf(imageBytes);
+                                  await printPdf(pdfFile);
+                                }
+                              },
+                              icon: const Icon(Icons.download,
+                                  color: Colors.black54, size: 18),
+                              label: const Text(
+                                "Export PDF",
                                 style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w800,
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w600,
                                   color: Colors.black87,
                                 ),
                               ),
-                              const SizedBox(height: 10),
-                              _TableRowLine(
-                                label: "Total Property Value",
-                                value: "\$${_money(totalPropertyValue)}",
-                                valueColor: Colors.black87,
-                              ),
-                              const Divider(height: 12),
-                              _TableRowLine(
-                                label: "Total Current Borrowings",
-                                value: "\$${_money(totalCurrentBorrowings)}",
-                                valueColor: Colors.red,
-                              ),
-                              const Divider(height: 12),
-                              _TableRowLine(
-                                label: "Available Equity",
-                                value: "\$${_money(availableEquity)}",
-                                valueColor: const Color(0xFF00A651),
-                              ),
-                              const Divider(height: 12),
-                              _TableRowLine(
-                                label: "Total LVR",
-                                value: "${totalLvr.toStringAsFixed(1)}%",
-                                valueColor: const Color(0xFF00A651),
-                              ),
-                            ],
-                          ),
-                        ),
-
-                        const SizedBox(height: 14),
-
-                        // ✅ Export PDF (outlined)
-                        SizedBox(
-                          width: double.infinity,
-                          height: 48,
-                          child: OutlinedButton.icon(
-                            onPressed: () async {
-                              await Future.delayed(
-                                  const Duration(milliseconds: 50));
-                              final imageBytes = await captureFullPage();
-                              if (imageBytes != null) {
-                                final pdfFile = await generatePdf(imageBytes);
-                                await printPdf(pdfFile);
-                              }
-                            },
-                            icon: const Icon(Icons.download,
-                                color: Colors.black54, size: 18),
-                            label: const Text(
-                              "Export PDF",
-                              style: TextStyle(
-                                fontSize: 13,
-                                fontWeight: FontWeight.w600,
-                                color: Colors.black87,
+                              style: OutlinedButton.styleFrom(
+                                side: BorderSide(
+                                  color: AppColors.primary.withOpacity(0.35),
+                                  width: 1,
+                                ),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(0),
+                                ),
+                                backgroundColor: Colors.white,
                               ),
                             ),
-                            style: OutlinedButton.styleFrom(
-                              side: BorderSide(
-                                color: AppColors.primary.withOpacity(0.35),
-                                width: 1,
+                          ),
+
+                          const SizedBox(height: 14),
+
+                          // ✅ Done
+                          SizedBox(
+                            width: double.infinity,
+                            height: 48,
+                            child: ElevatedButton(
+                              onPressed: () {
+                                Get.back();
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: AppColors.primary,
+                                foregroundColor: Colors.white,
+                                elevation: 0,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(0),
+                                ),
+                                textStyle: const TextStyle(
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w700,
+                                ),
                               ),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(0),
-                              ),
-                              backgroundColor: Colors.white,
+                              child: const Text("Done"),
                             ),
                           ),
-                        ),
 
-                        const SizedBox(height: 14),
-
-                        // ✅ Done
-                        SizedBox(
-                          width: double.infinity,
-                          height: 48,
-                          child: ElevatedButton(
-                            onPressed: () {
-                              Get.back();
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: AppColors.primary,
-                              foregroundColor: Colors.white,
-                              elevation: 0,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(0),
-                              ),
-                              textStyle: const TextStyle(
-                                fontSize: 13,
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
-                            child: const Text("Done"),
-                          ),
-                        ),
-
-                        const SizedBox(height: 18),
-                      ],
-                    ),
+                          const SizedBox(height: 18),
+                        ],
+                      );
+                    }),
                   ),
                 ),
               ),
@@ -376,7 +417,6 @@ class BorrowingOverviewResultScreen extends StatelessWidget {
   }
 
   // ---------------- helpers ----------------
-
   static String _money(num v) {
     final s = v.toStringAsFixed(0);
     final reg = RegExp(r'\B(?=(\d{3})+(?!\d))');
@@ -384,7 +424,6 @@ class BorrowingOverviewResultScreen extends StatelessWidget {
   }
 
   static String _shortMoney(num v) {
-    // 450000 -> 450k (matches screenshot)
     if (v >= 1000) {
       return "${(v / 1000).toStringAsFixed(0)}k";
     }
@@ -550,7 +589,6 @@ class _AssetsLiabilitiesBarChart extends StatelessWidget {
               reservedSize: 34,
               interval: maxY / 4,
               getTitlesWidget: (value, meta) {
-                // show like 100000, 75000 etc (simple)
                 return Padding(
                   padding: const EdgeInsets.only(right: 6),
                   child: Text(
