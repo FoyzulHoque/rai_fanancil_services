@@ -1,6 +1,5 @@
 import 'package:get/get.dart';
 
-
 class TaxRegionStateDropdownController extends GetxController {
   // RxList<String> hishebe declare koro (observable)
   final RxList<String> properties = <String>[].obs;  // .obs add koro – eta RxList banay

@@ -7,6 +7,8 @@ import 'package:image_picker/image_picker.dart';
 import '../../../../core/network_path/natwork_path.dart';
 import '../../../../core/services_class/shared_preferences_helper.dart';
 import '../../user navbar/user_navbar_screen.dart';
+import '../model/financial_profile_model.dart';
+import 'financial_profile_controller.dart';
 
 // ==================== LIABILITY MODELS ====================
 class LoanModel {
@@ -130,6 +132,9 @@ class Property {
 
 // ==================== MAIN CONTROLLER ====================
 class SetUpYourFinancialProfileController extends GetxController {
+  // Reference to the FinancialProfileController
+  final FinancialProfileController financialProfileController = Get.find<FinancialProfileController>();
+
   // ==================== FAMILY VARIABLES ====================
   RxInt adultCount = 0.obs;
   RxInt dependentCount = 0.obs;
@@ -205,10 +210,13 @@ class SetUpYourFinancialProfileController extends GetxController {
   final ImagePicker _picker = ImagePicker();
 
   // ==================== CONFIGURATION ====================
-  final int minAdults = 0;
+  final int minAdults = 1;
   final int maxAdults = 8;
   final int minDependents = 0;
   final int maxDependents = 8;
+
+  // Flag to track if data has been loaded
+  bool _dataLoaded = false;
 
   // ==================== INITIALIZATION ====================
   @override
@@ -238,6 +246,244 @@ class SetUpYourFinancialProfileController extends GetxController {
     }
     if (smsfs.isEmpty) {
       addSMSF();
+    }
+
+    // Load existing financial profile data if available
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      loadFinancialProfileData();
+    });
+  }
+
+  // ==================== LOAD FINANCIAL PROFILE DATA ====================
+  void loadFinancialProfileData() {
+    if (_dataLoaded) return;
+
+    final profileData = financialProfileController.profileData.value;
+    if (profileData == null) return;
+
+    try {
+      // Set counts
+      adultCount.value = profileData.howManyBorrowingAdults;
+      dependentCount.value = profileData.howManyDependents;
+
+      // Clear and recreate adult controllers based on API data
+      for (var adult in adultControllers) {
+        adult.forEach((_, controller) => controller.dispose());
+      }
+      adultControllers.clear();
+      adultIncomes.clear();
+
+      // Load adults
+      if (profileData.adults.isNotEmpty) {
+        for (var adult in profileData.adults) {
+          final adultControllersMap = _createNewAdult();
+          adultControllersMap['name']?.text = adult.name;
+          adultControllersMap['dob']?.text = adult.dob;
+          adultControllersMap['email']?.text = adult.email;
+          adultControllersMap['phone']?.text = adult.phone;
+          adultControllers.add(adultControllersMap);
+
+          // Load income data
+          if (adult.incomes.isNotEmpty) {
+            final income = adult.incomes.first;
+            adultIncomes.add({
+              "primaryIncomeType": income.primaryIncomeType,
+              "primaryIncomeAmount": income.primaryIncomeAmount.toDouble(),
+              "incomeFrequency": income.incomeFrequency,
+              "otherIncome": income.otherIncome.toDouble(),
+              "taxRegion": income.taxRegion,
+            });
+          } else {
+            adultIncomes.add({
+              "primaryIncomeType": "Salary/Wages",
+              "primaryIncomeAmount": 0.0,
+              "incomeFrequency": "Annually",
+              "otherIncome": 0.0,
+              "taxRegion": "",
+            });
+          }
+        }
+      }
+
+      // Load dependents
+      for (var dependent in dependentControllers) {
+        dependent.forEach((_, controller) => controller.dispose());
+      }
+      dependentControllers.clear();
+
+      if (profileData.dependents.isNotEmpty) {
+        for (var dependent in profileData.dependents) {
+          final dependentControllersMap = _createNewDependent();
+          // Since Dependent uses raw map, we need to extract data
+          final rawData = dependent.raw;
+          dependentControllersMap['name']?.text = rawData['name'] ?? '';
+          dependentControllersMap['dob']?.text = rawData['dob'] ?? '';
+          dependentControllers.add(dependentControllersMap);
+        }
+      }
+
+      // Load expenses
+      if (profileData.expenses.isNotEmpty) {
+        final expense = profileData.expenses.first;
+        selectedLivingSituation.value = expense.livingSituation;
+        monthlyRentalPayment.value = expense.monthlyRentalPayment.toDouble();
+
+        if (expense.food != null) {
+          foodAmount.value = expense.food!.amount.toDouble();
+          foodFrequency.value = expense.food!.frequency;
+          foodExpenseDate.value = expense.food!.expenseDate;
+        }
+        if (expense.transport != null) {
+          transportAmount.value = expense.transport!.amount.toDouble();
+          transportFrequency.value = expense.transport!.frequency;
+          transportExpenseDate.value = expense.transport!.expenseDate;
+        }
+        if (expense.utilities != null) {
+          utilitiesAmount.value = expense.utilities!.amount.toDouble();
+          utilitiesFrequency.value = expense.utilities!.frequency;
+          utilitiesExpenseDate.value = expense.utilities!.expenseDate;
+        }
+        if (expense.insurance != null) {
+          insuranceAmount.value = expense.insurance!.amount.toDouble();
+          insuranceFrequency.value = expense.insurance!.frequency;
+          insuranceExpenseDate.value = expense.insurance!.expenseDate;
+        }
+        if (expense.entertainment != null) {
+          entertainmentAmount.value = expense.entertainment!.amount.toDouble();
+          entertainmentFrequency.value = expense.entertainment!.frequency;
+          entertainmentExpenseDate.value = expense.entertainment!.expenseDate;
+        }
+        _updateExpensesList();
+      }
+
+      // Load properties
+      for (var property in properties) {
+        property.dispose();
+      }
+      properties.clear();
+
+      if (profileData.propertyDetails.isNotEmpty) {
+        for (var property in profileData.propertyDetails) {
+          final newProperty = Property();
+          newProperty.propertyType = property.type;
+          newProperty.addressController.text = property.address;
+          newProperty.purchasePriceController.text = property.purchasePrice.toString();
+          newProperty.purchaseDateController.text = property.purchaseDate;
+          newProperty.estimatedValueController.text = property.currentEstimateValue.toString();
+          newProperty.mortgageProviderController.text = property.mortgageProvider;
+          newProperty.mortgageAmountController.text = property.currentMortgageAmount.toString();
+          newProperty.mortgageRateController.text = property.currentMortgageRate.toString();
+          newProperty.interestRateController.text = property.currentMortgageInterestRate.toString();
+          newProperty.finishedRateController.text = property.mortgageFinishedRate.toString();
+          newProperty.mortgageType = property.mortgageType;
+          newProperty.isInterestOnly = property.isInterestOnly;
+          newProperty.totalMonthOfInterest = property.totalMonthOfInterest;
+          newProperty.ioPeriodMonth = property.ioPeriodMonth;
+          newProperty.loanTermController.text = property.remainingTerm.toString();
+          newProperty.monthlyRentalController.text = property.monthlyRentalPayment.toString();
+          properties.add(newProperty);
+        }
+      }
+
+      // Load assets
+      totalAssets.value = profileData.totalAssets.toDouble();
+
+      for (var account in savingAccounts) {
+        account.dispose();
+      }
+      savingAccounts.clear();
+
+      if (profileData.assets.isNotEmpty) {
+        for (var asset in profileData.assets) {
+          final newAccount = SavingAccountForm();
+          newAccount.bankName.text = asset.bankName;
+          newAccount.accountNo.text = asset.accountNumber;
+          newAccount.accountType.text = asset.accountType;
+          newAccount.interestRate.text = asset.interestRate.toString();
+          newAccount.cashSaving.text = asset.cashSaving.toString();
+          newAccount.investment.text = asset.investment.toString();
+          newAccount.superannuation.text = asset.superannuation.toString();
+          newAccount.otherAssets.text = asset.otherAssets.toString();
+          savingAccounts.add(newAccount);
+        }
+      }
+      updateAssetsList();
+
+      // Load liabilities
+      for (var loan in loans) {
+        loan.dispose();
+      }
+      loans.clear();
+
+      for (var card in creditCards) {
+        card.dispose();
+      }
+      creditCards.clear();
+
+      for (var bnpl in buyNowPayLaters) {
+        bnpl.dispose();
+      }
+      buyNowPayLaters.clear();
+
+      for (var smsf in smsfs) {
+        smsf.dispose();
+      }
+      smsfs.clear();
+
+      if (profileData.liabilities.isNotEmpty) {
+        final liability = profileData.liabilities.first;
+        hecsDebt.value = liability.hecsDebt.toDouble();
+        hecsDebtController.text = liability.hecsDebt.toString();
+
+        // Load loans
+        for (var loan in liability.loans) {
+          final newLoan = LoanModel();
+          newLoan.bankNameController.text = loan.bankName;
+          newLoan.balanceController.text = loan.currentBalance.toString();
+          newLoan.interestRateController.text = loan.interestRate.toString();
+          newLoan.monthlyPaymentController.text = loan.monthlyPayment.toString();
+          newLoan.monthsRemainingController.text = loan.remainingMonths.toString();
+          loans.add(newLoan);
+        }
+
+        // Load credit cards
+        for (var card in liability.creditCards) {
+          final newCard = CreditCardModel();
+          newCard.bankController.text = card.bankName;
+          newCard.limitController.text = card.creditLimit.toString();
+          newCard.balanceController.text = card.currentBalance.toString();
+          newCard.monthlyPaymentController.text = card.monthlyPayment;
+          creditCards.add(newCard);
+        }
+
+        // Load buy now pay later
+        for (var bnpl in liability.buyNowPayLaters) {
+          final newBnpl = BuyNowPayLaterModel();
+          newBnpl.bankController.text = bnpl.bankName;
+          newBnpl.balanceController.text = bnpl.currentBalance.toString();
+          newBnpl.interestRateController.text = bnpl.interestRate.toString();
+          newBnpl.monthlyPaymentController.text = bnpl.monthlyPayment.toString();
+          newBnpl.monthsRemainingController.text = bnpl.remainingMonths.toString();
+          buyNowPayLaters.add(newBnpl);
+        }
+
+        // Load SMSFs
+        for (var smsf in liability.smsfs) {
+          final newSmsf = SMSFModel();
+          newSmsf.bankController.text = smsf.bankName;
+          newSmsf.balanceController.text = smsf.loanBalance.toString();
+          newSmsf.rateController.text = smsf.rate.toString();
+          newSmsf.monthlyAmountController.text = smsf.monthlyAmount.toString();
+          newSmsf.monthsController.text = smsf.remainingMonths.toString();
+          smsfs.add(newSmsf);
+        }
+      }
+
+      _dataLoaded = true;
+      update();
+
+    } catch (e) {
+      print("Error loading financial profile data: $e");
     }
   }
 
@@ -561,7 +807,7 @@ class SetUpYourFinancialProfileController extends GetxController {
     adultControllers.add(_createNewAdult());
 
     adultIncomes.add({
-      "primaryIncomeType": "Primary",
+      "primaryIncomeType": "Salary/Wages",
       "primaryIncomeAmount": 0.0,
       "incomeFrequency": "Annually",
       "otherIncome": 0.0,
@@ -638,7 +884,7 @@ class SetUpYourFinancialProfileController extends GetxController {
       return adultIncomes[index];
     }
     return {
-      "primaryIncomeType": "Primary",
+      "primaryIncomeType": "Salary/Wages",
       "primaryIncomeAmount": 0.0,
       "incomeFrequency": "Annually",
       "otherIncome": 0.0,
@@ -676,7 +922,7 @@ class SetUpYourFinancialProfileController extends GetxController {
     for (int i = 0; i < adultControllers.length; i++) {
       var adult = adultControllers[i];
       var incomeData = i < adultIncomes.length ? adultIncomes[i] : {
-        "primaryIncomeType": "Primary",
+        "primaryIncomeType": "Salary/Wages",
         "primaryIncomeAmount": 0.0,
         "incomeFrequency": "Annually",
         "otherIncome": 0.0,
@@ -823,6 +1069,7 @@ class SetUpYourFinancialProfileController extends GetxController {
     liabilities.clear();
     propertyDetails.clear();
 
+    _dataLoaded = false;
     update();
   }
 

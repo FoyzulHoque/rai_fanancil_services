@@ -43,6 +43,27 @@ class BorrowingAdultsController extends GetxController {
     };
   }
 
+  // Method to load existing adult data
+  void loadAdultData(List<Map<String, String>> adultsData) {
+    // Clear existing controllers
+    for (var adult in adultControllers) {
+      adult.forEach((_, controller) => controller.dispose());
+    }
+    adultControllers.clear();
+    adultCount.value = 0;
+
+    // Add adults from data
+    for (var adultData in adultsData) {
+      final newAdult = _createNewAdult();
+      newAdult['name']?.text = adultData['name'] ?? '';
+      newAdult['dob']?.text = adultData['dob'] ?? '';
+      newAdult['email']?.text = adultData['email'] ?? '';
+      newAdult['phone']?.text = adultData['phone'] ?? '';
+      adultControllers.add(newAdult);
+      adultCount.value++;
+    }
+  }
+
   @override
   void onClose() {
     for (var adult in adultControllers) {

@@ -32,8 +32,6 @@ class IncomeDetailsPropertyDropdownController extends GetxController {
   }
 }
 
-
-
 class PrimaryIncomeDropdownController extends GetxController {
   final RxList<String> propertiesIcom = <String>[].obs;  // .obs add koro – eta RxList banay
 

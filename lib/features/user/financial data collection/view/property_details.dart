@@ -3,15 +3,29 @@ import 'package:get/get.dart';
 import 'package:rai_fanancil_services/core/themes/app_colors.dart';
 import '../../../../core/widgets/custom_input_field_widget.dart';
 import '../../financial calculators/property investment/widget/custom_button_widget.dart';
-import '../controller/set_up_your_financial_profile_controller.dart'; // Changed to unified controller
+import '../controller/set_up_your_financial_profile_controller.dart';
 import '../widget/custom_app_bar_set_before_nave_bar.dart';
 import '../widget/select_button_widget.dart';
 import 'assets.dart';
 
-class PropertyDetailsScreen extends StatelessWidget {
+class PropertyDetailsScreen extends StatefulWidget {
   PropertyDetailsScreen({super.key});
 
-  final SetUpYourFinancialProfileController controller = Get.find<SetUpYourFinancialProfileController>(); // Changed to Get.find()
+  @override
+  State<PropertyDetailsScreen> createState() => _PropertyDetailsScreenState();
+}
+
+class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
+  final SetUpYourFinancialProfileController controller = Get.find<SetUpYourFinancialProfileController>();
+
+  @override
+  void initState() {
+    super.initState();
+    // Ensure property details are loaded
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      controller.updatePropertyDetails();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +67,7 @@ class PropertyDetailsScreen extends StatelessWidget {
                         ),
                         child: ElevatedButton(
                           onPressed: () {
-                            controller.addProperty(); // Changed to controller.addProperty()
+                            controller.addProperty();
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.white,
@@ -118,7 +132,7 @@ class PropertyDetailsScreen extends StatelessWidget {
   }
 
   Widget _buildPropertyCard(int index) {
-    final property = controller.properties[index]; // Changed to controller.properties
+    final property = controller.properties[index];
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -151,6 +165,7 @@ class PropertyDetailsScreen extends StatelessWidget {
                 const SizedBox(height: 16),
                 //-------------------Select Button-----------------
                 SelectButtonWidget(
+                  initialValue: property.propertyType,
                   onSelected: (value) {
                     if (value != null) {
                       controller.updateProperty(index, propertyType: value);
@@ -172,6 +187,7 @@ class PropertyDetailsScreen extends StatelessWidget {
                   controller: property.addressController,
                   keyboardType: TextInputType.text,
                   hintText: "Enter address",
+                  onChanged: (_) => controller.updatePropertyDetails(),
                 ),
                 const SizedBox(height: 8),
                 Text(
@@ -188,6 +204,7 @@ class PropertyDetailsScreen extends StatelessWidget {
                   controller: property.purchasePriceController,
                   keyboardType: TextInputType.number,
                   hintText: "0",
+                  onChanged: (_) => controller.updatePropertyDetails(),
                 ),
                 const SizedBox(height: 8),
                 Text(
@@ -204,6 +221,7 @@ class PropertyDetailsScreen extends StatelessWidget {
                   controller: property.purchaseDateController,
                   keyboardType: TextInputType.datetime,
                   hintText: "01/01/0001",
+                  onChanged: (_) => controller.updatePropertyDetails(),
                 ),
                 const SizedBox(height: 8),
                 Text(
@@ -220,6 +238,7 @@ class PropertyDetailsScreen extends StatelessWidget {
                   controller: property.estimatedValueController,
                   keyboardType: TextInputType.number,
                   hintText: "0",
+                  onChanged: (_) => controller.updatePropertyDetails(),
                 ),
                 const SizedBox(height: 8),
                 Text(
@@ -236,6 +255,7 @@ class PropertyDetailsScreen extends StatelessWidget {
                   controller: property.mortgageProviderController,
                   keyboardType: TextInputType.text,
                   hintText: "Provider name",
+                  onChanged: (_) => controller.updatePropertyDetails(),
                 ),
                 const SizedBox(height: 8),
                 Text(
@@ -252,6 +272,7 @@ class PropertyDetailsScreen extends StatelessWidget {
                   controller: property.mortgageAmountController,
                   keyboardType: TextInputType.number,
                   hintText: "0",
+                  onChanged: (_) => controller.updatePropertyDetails(),
                 ),
                 const SizedBox(height: 8),
                 Text(
@@ -268,6 +289,7 @@ class PropertyDetailsScreen extends StatelessWidget {
                   controller: property.mortgageRateController,
                   keyboardType: TextInputType.number,
                   hintText: "0",
+                  onChanged: (_) => controller.updatePropertyDetails(),
                 ),
                 const SizedBox(height: 8),
                 Text(
@@ -284,6 +306,7 @@ class PropertyDetailsScreen extends StatelessWidget {
                   controller: property.interestRateController,
                   keyboardType: TextInputType.number,
                   hintText: "0",
+                  onChanged: (_) => controller.updatePropertyDetails(),
                 ),
                 const SizedBox(height: 8),
                 Text(
@@ -300,6 +323,7 @@ class PropertyDetailsScreen extends StatelessWidget {
                   controller: property.finishedRateController,
                   keyboardType: TextInputType.number,
                   hintText: "0",
+                  onChanged: (_) => controller.updatePropertyDetails(),
                 ),
               ],
             ),
@@ -326,12 +350,16 @@ class PropertyDetailsScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 12),
                 CustomSegmentSelector(
+                  initialValue: property.mortgageType,
                   height: 42,
                   borderRadius: 6,
                   backgroundColor: AppColors.btncolor,
                   selectedColor: AppColors.primary,
                   selectedTextColor: Colors.white,
                   unSelectedTextColor: Colors.grey,
+                  onSelected: (value) {
+                    controller.updateProperty(index, mortgageType: value);
+                  },
                 ),
                 const SizedBox(height: 12),
                 Text(
@@ -344,9 +372,10 @@ class PropertyDetailsScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 8),
                 CustomInputField(
-                  controller: property.loanTermController, // Fixed: using correct property controller
+                  controller: property.loanTermController,
                   keyboardType: TextInputType.text,
-                  hintText: "0",
+                  hintText: property.totalMonthOfInterest.toString(),
+                  onChanged: (_) => controller.updatePropertyDetails(),
                 ),
                 const SizedBox(height: 16),
                 Text(
@@ -359,9 +388,13 @@ class PropertyDetailsScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 8),
                 CustomInputField(
-                  controller: TextEditingController(text: property.ioPeriodMonth.toString()), // Fixed: using correct controller
+                  controller: TextEditingController(text: property.ioPeriodMonth.toString()),
                   keyboardType: TextInputType.text,
                   hintText: "0",
+                  onChanged: (value) {
+                    property.ioPeriodMonth = int.tryParse(value) ?? 0;
+                    controller.updatePropertyDetails();
+                  },
                 ),
                 const SizedBox(height: 16),
                 Text(
@@ -374,9 +407,10 @@ class PropertyDetailsScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 8),
                 CustomInputField(
-                  controller: property.loanTermController, // Fixed: using correct property controller
+                  controller: property.loanTermController,
                   keyboardType: TextInputType.text,
                   hintText: "0",
+                  onChanged: (_) => controller.updatePropertyDetails(),
                 ),
               ],
             ),
@@ -411,9 +445,10 @@ class PropertyDetailsScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 8),
                 CustomInputField(
-                  controller: property.monthlyRentalController, // Added controller
+                  controller: property.monthlyRentalController,
                   keyboardType: TextInputType.text,
                   hintText: "0",
+                  onChanged: (_) => controller.updatePropertyDetails(),
                 ),
               ],
             ),

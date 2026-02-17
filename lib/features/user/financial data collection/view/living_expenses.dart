@@ -44,7 +44,38 @@ class _LivingExpensesScreenState extends State<LivingExpensesScreen> {
   @override
   void initState() {
     super.initState();
-    _selectedResidence = "Own House";
+    _selectedResidence = controller.selectedLivingSituation.value;
+
+    // Load existing data from controller
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _loadExpensesData();
+    });
+  }
+
+  void _loadExpensesData() {
+    setState(() {
+      _foodAmountController.text = controller.foodAmount.value.toString();
+      _foodFrequency = controller.foodFrequency.value;
+      _foodDateController.text = controller.foodExpenseDate.value;
+
+      _transportAmountController.text = controller.transportAmount.value.toString();
+      _transportFrequency = controller.transportFrequency.value;
+      _transportDateController.text = controller.transportExpenseDate.value;
+
+      _utilitiesAmountController.text = controller.utilitiesAmount.value.toString();
+      _utilitiesFrequency = controller.utilitiesFrequency.value;
+      _utilitiesDateController.text = controller.utilitiesExpenseDate.value;
+
+      _insuranceAmountController.text = controller.insuranceAmount.value.toString();
+      _insuranceFrequency = controller.insuranceFrequency.value;
+      _insuranceDateController.text = controller.insuranceExpenseDate.value;
+
+      _entertainmentAmountController.text = controller.entertainmentAmount.value.toString();
+      _entertainmentFrequency = controller.entertainmentFrequency.value;
+      _entertainmentDateController.text = controller.entertainmentExpenseDate.value;
+
+      _mortgagePaymentController.text = controller.monthlyRentalPayment.value.toString();
+    });
   }
 
   @override
@@ -210,7 +241,7 @@ class _LivingExpensesScreenState extends State<LivingExpensesScreen> {
                             const SizedBox(height: 8),
                             CustomInputField(
                               prefixIcon: const Icon(Icons.calendar_month),
-                              controller: _foodDateController, // USE SEPARATE CONTROLLER
+                              controller: _foodDateController,
                               keyboardType: TextInputType.datetime,
                               hintText: "YYYY-MM-DD",
                               onChanged: (value) => _saveExpensesData(),
@@ -263,7 +294,7 @@ class _LivingExpensesScreenState extends State<LivingExpensesScreen> {
                             const SizedBox(height: 8),
                             CustomInputField(
                               prefixIcon: const Icon(Icons.calendar_month),
-                              controller: _transportDateController, // USE SEPARATE CONTROLLER
+                              controller: _transportDateController,
                               keyboardType: TextInputType.datetime,
                               hintText: "YYYY-MM-DD",
                               onChanged: (value) => _saveExpensesData(),
@@ -316,7 +347,7 @@ class _LivingExpensesScreenState extends State<LivingExpensesScreen> {
                             const SizedBox(height: 8),
                             CustomInputField(
                               prefixIcon: const Icon(Icons.calendar_month),
-                              controller: _utilitiesDateController, // USE SEPARATE CONTROLLER
+                              controller: _utilitiesDateController,
                               keyboardType: TextInputType.datetime,
                               hintText: "YYYY-MM-DD",
                               onChanged: (value) => _saveExpensesData(),
@@ -369,7 +400,7 @@ class _LivingExpensesScreenState extends State<LivingExpensesScreen> {
                             const SizedBox(height: 8),
                             CustomInputField(
                               prefixIcon: const Icon(Icons.calendar_month),
-                              controller: _insuranceDateController, // USE SEPARATE CONTROLLER
+                              controller: _insuranceDateController,
                               keyboardType: TextInputType.datetime,
                               hintText: "YYYY-MM-DD",
                               onChanged: (value) => _saveExpensesData(),
@@ -422,7 +453,7 @@ class _LivingExpensesScreenState extends State<LivingExpensesScreen> {
                             const SizedBox(height: 8),
                             CustomInputField(
                               prefixIcon: const Icon(Icons.calendar_month),
-                              controller: _entertainmentDateController, // USE SEPARATE CONTROLLER
+                              controller: _entertainmentDateController,
                               keyboardType: TextInputType.datetime,
                               hintText: "YYYY-MM-DD",
                               onChanged: (value) => _saveExpensesData(),
@@ -528,7 +559,7 @@ class _LivingExpensesScreenState extends State<LivingExpensesScreen> {
     );
   }
 
-  @override // FIXED: lowercase @override
+  @override
   void dispose() {
     // Dispose amount controllers
     _foodAmountController.dispose();

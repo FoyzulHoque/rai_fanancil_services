@@ -6,10 +6,24 @@ import '../widget/custom_app_bar_set_before_nave_bar.dart';
 import 'liabilities.dart';
 import '../controller/set_up_your_financial_profile_controller.dart';
 
-class AssetsScreen extends StatelessWidget {
+class AssetsScreen extends StatefulWidget {
   AssetsScreen({super.key});
 
+  @override
+  State<AssetsScreen> createState() => _AssetsScreenState();
+}
+
+class _AssetsScreenState extends State<AssetsScreen> {
   final SetUpYourFinancialProfileController mainCtrl = Get.find<SetUpYourFinancialProfileController>();
+
+  @override
+  void initState() {
+    super.initState();
+    // Ensure assets are loaded and calculated
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      mainCtrl.updateAssetsList();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {

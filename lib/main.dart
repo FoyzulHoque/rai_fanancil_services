@@ -8,11 +8,13 @@ import 'features/splash/splash_screen.dart';
 import 'features/user/financial calculators/cash flow calculator/controller/cashflow_result_controller.dart';
 import 'features/user/financial calculators/income calculator/controllers/income_result_controller.dart';
 import 'features/user/financial calculators/property investment/controller/proprty_result_controller.dart';
+import 'features/user/financial data collection/controller/financial_profile_controller.dart';
 import 'features/user/financial data collection/view/set_up_your_financial_profile.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   Get.put(CashFlowResultController(), permanent: true);
+  Get.put(FinancialProfileController(), permanent: true);
   Get.put(IncomeResultController(), permanent: true);
   Get.put(PropertyResultController(), permanent: true);
 
