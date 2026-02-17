@@ -1,7 +1,3 @@
-// To parse this JSON data, do
-//
-//     final userPropertyValueResponse = userPropertyValueResponseFromJson(jsonString);
-
 import 'dart:convert';
 
 UserPropertyValueResponse userPropertyValueResponseFromJson(String str) =>
@@ -27,13 +23,20 @@ class UserPropertyValueResponse {
 
   factory UserPropertyValueResponse.fromJson(Map<String, dynamic> json) =>
       UserPropertyValueResponse(
-        statusCode: json["statusCode"],
-        success: json["success"],
-        message: json["message"],
+        statusCode: (json["statusCode"] as num?)?.toInt(),
+        success: json["success"] as bool?,
+        message: json["message"] as String?,
         data: json["data"] == null
-            ? []
-            : List<UserPropertyValueDetum>.from(json["data"]!.map((x) => UserPropertyValueDetum.fromJson(x))),
-        stats: json["stats"] == null ? null : Stats.fromJson(json["stats"]),
+            ? <UserPropertyValueDetum>[]
+            : List<UserPropertyValueDetum>.from(
+          (json["data"] as List).map(
+                (x) => UserPropertyValueDetum.fromJson(
+                x as Map<String, dynamic>),
+          ),
+        ),
+        stats: json["stats"] == null
+            ? null
+            : Stats.fromJson(json["stats"] as Map<String, dynamic>),
       );
 
   Map<String, dynamic> toJson() => {
@@ -43,22 +46,27 @@ class UserPropertyValueResponse {
     "data": data == null
         ? []
         : List<dynamic>.from(data!.map((x) => x.toJson())),
-    "stats": stats?.toJson(),
+    "stats": stats?.toJson() ?? {},
   };
 }
 
 class UserPropertyValueDetum {
   String? date;
-  int? propertyValue;
 
-  UserPropertyValueDetum({this.date, this.propertyValue});
+  /// ✅ API field name is "value"
+  double? value;
+
+  UserPropertyValueDetum({this.date, this.value});
 
   factory UserPropertyValueDetum.fromJson(Map<String, dynamic> json) =>
-      UserPropertyValueDetum(date: json["date"], propertyValue: json["propertyValue"]);
+      UserPropertyValueDetum(
+        date: json["date"] as String?,
+        value: (json["value"] as num?)?.toDouble() ?? 0.0, // ✅ null-safe
+      );
 
   Map<String, dynamic> toJson() => {
     "date": date,
-    "propertyValue": propertyValue,
+    "value": value,
   };
 }
 
