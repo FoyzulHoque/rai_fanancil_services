@@ -1,76 +1,62 @@
-// To parse this JSON data, do
-//
-//     final userCashFlowResponse = userCashFlowResponseFromJson(jsonString);
+class CashflowTrendResponse {
+  final int statusCode;
+  final bool success;
+  final String message;
+  final List<Datum> data;
+  final Map<String, dynamic> stats;
 
-import 'dart:convert';
-
-UserCashFlowResponse userCashFlowResponseFromJson(String str) =>
-    UserCashFlowResponse.fromJson(json.decode(str));
-
-String userCashFlowResponseToJson(UserCashFlowResponse data) =>
-    json.encode(data.toJson());
-
-class UserCashFlowResponse {
-  int? statusCode;
-  bool? success;
-  String? message;
-  List<Datum>? data;
-  Stats? stats;
-
-  UserCashFlowResponse({
-    this.statusCode,
-    this.success,
-    this.message,
-    this.data,
-    this.stats,
+  CashflowTrendResponse({
+    required this.statusCode,
+    required this.success,
+    required this.message,
+    required this.data,
+    required this.stats,
   });
 
-  factory UserCashFlowResponse.fromJson(Map<String, dynamic> json) =>
-      UserCashFlowResponse(
-        statusCode: json["statusCode"],
-        success: json["success"],
-        message: json["message"],
-        data: json["data"] == null
-            ? []
-            : List<Datum>.from(json["data"]!.map((x) => Datum.fromJson(x))),
-        stats: json["stats"] == null ? null : Stats.fromJson(json["stats"]),
-      );
+  factory CashflowTrendResponse.fromJson(Map<String, dynamic> json) {
+    return CashflowTrendResponse(
+      statusCode: (json['statusCode'] as num?)?.toInt() ?? 0,
+      success: json['success'] as bool? ?? false,
+      message: json['message'] as String? ?? '',
+      data: (json['data'] as List<dynamic>? ?? [])
+          .map((e) => Datum.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      stats: (json['stats'] as Map<String, dynamic>?) ?? <String, dynamic>{},
+    );
+  }
 
   Map<String, dynamic> toJson() => {
-    "statusCode": statusCode,
-    "success": success,
-    "message": message,
-    "data": data == null
-        ? []
-        : List<dynamic>.from(data!.map((x) => x.toJson())),
-    "stats": stats?.toJson(),
+    'statusCode': statusCode,
+    'success': success,
+    'message': message,
+    'data': data.map((e) => e.toJson()).toList(),
+    'stats': stats,
   };
 }
 
+/// ✅ Single point model used everywhere
 class Datum {
-  String? date;
-  int? monthlyCashflow;
-  int? annualCashflow;
+  final String date; // e.g. "Jan"
+  final double value; // can be int or double from API, we store as double
 
-  Datum({this.date, this.monthlyCashflow, this.annualCashflow});
+  Datum({
+    required this.date,
+    required this.value,
+  });
 
-  factory Datum.fromJson(Map<String, dynamic> json) => Datum(
-    date: json["date"],
-    monthlyCashflow: json["monthlyCashflow"],
-    annualCashflow: json["annualCashflow"],
-  );
+  factory Datum.fromJson(Map<String, dynamic> json) {
+    return Datum(
+      date: json['date'] as String? ?? '',
+      value: (json['value'] as num?)?.toDouble() ?? 0.0,
+    );
+  }
 
   Map<String, dynamic> toJson() => {
     "date": date,
-    "monthlyCashflow": monthlyCashflow,
-    "annualCashflow": annualCashflow,
+    "value": value,
   };
 }
 
-class Stats {
-  Stats();
-
-  factory Stats.fromJson(Map<String, dynamic> json) => Stats();
-
-  Map<String, dynamic> toJson() => {};
-}
+/// ✅ If other parts of your UI already reference CashflowTrendPoint,
+/// keep this alias so you don't refactor code everywhere.
+typedef CashflowTrendPoint = Datum;

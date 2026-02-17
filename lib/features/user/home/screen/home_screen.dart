@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:rai_fanancil_services/core/themes/app_colors.dart';
 import 'package:rai_fanancil_services/features/user/home/controller/home_dashboard_controller.dart';
 import '../../profile/my_profile/controller/my_profile_controller.dart';
-import '../widget/body_graph_widget01.dart';
+import '../widget/cash_flow_trend_graph.dart';
 import '../widget/body_graph_widget02.dart';
 import '../widget/body_widget01.dart';
 import '../widget/body_widget02.dart';
@@ -127,44 +127,14 @@ class HomeScreen extends StatelessWidget {
                     const SizedBox(height: 10),
 
                     // ✅ Cashflow Trend graph
-                    Obx(() {
-                      final data = homeDashboardController.cashFlowTrendData;
-                      if (data.isEmpty) return const SizedBox();
+                     CashFlowTrendGraph(),
 
-                      final graphData = data.map((e) {
-                        return {
-                          'month': e.date ?? '',
-                          'amount': e.monthlyCashflow ?? 0,
-                        };
-                      }).toList();
-
-                      return BodyGraphWidget01(
-                        title: "Cashflow Trend",
-                        monthlyData: graphData,
-                        lineColor: AppColors.primary,
-                        fillOpacity: 0.20,
-                      );
-                    }),
 
                     const SizedBox(height: 10),
 
                     // ✅ Property Value Growth graph
-                    Obx(() {
-                      final data = homeDashboardController.propertyValueData;
-                      if (data.isEmpty) return const SizedBox();
+                     PropertyValueGrowthChart()
 
-                      final graphData = data.map((e) {
-                        return {
-                          'month': e.date ?? '',
-                          'amount': e.propertyValue ?? 0,
-                        };
-                      }).toList();
-
-                      return PropertyValueGrowthChart(
-                        title: "Property Value Growth",
-                        monthlyData: graphData,
-                      );
-                    }),
                   ],
                 ),
               ),

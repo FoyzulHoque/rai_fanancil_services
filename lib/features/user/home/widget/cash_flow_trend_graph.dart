@@ -1,47 +1,42 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:get/get.dart';
-import 'package:rai_fanancil_services/core/themes/app_colors.dart';
 
-import '../controller/user_property_value_controller.dart';
-import '../model/user_property_value_trend_modal.dart';
+import '../../../../core/themes/app_colors.dart';
+import '../controller/cash_flow_trend_data_controller.dart';
+import '../model/user_cash_flow_trend_modal.dart';
 
-class PropertyValueGrowthChart extends StatelessWidget {
-  const PropertyValueGrowthChart({
-    super.key,
-    this.lineColor = const Color(0xFF2196F3),
-    this.dotOuterColor = const Color(0xFF1976D2),
-    this.dotInnerColor = Colors.white,
-  });
+class CashFlowTrendGraph extends StatefulWidget {
+  const CashFlowTrendGraph({super.key});
 
-  final Color lineColor;
-  final Color dotOuterColor;
-  final Color dotInnerColor;
+  @override
+  State<CashFlowTrendGraph> createState() => _CashFlowTrendGraphState();
+}
+
+class _CashFlowTrendGraphState extends State<CashFlowTrendGraph> {
+  late final CashFlowTrendController controller;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = Get.put(CashFlowTrendController());
+  }
 
   @override
   Widget build(BuildContext context) {
-    // ✅ register once (won't recreate on rebuild)
-    final UserPropertyValueController controller =
-    Get.isRegistered<UserPropertyValueController>()
-        ? Get.find<UserPropertyValueController>()
-        : Get.put(UserPropertyValueController());
+    final lineColor = AppColors.primary;
+    const double fillOpacity = 0.20;
 
     return Obx(() {
-      // ✅ map controller data to your existing monthlyData structure
-      final monthlyData = controller.propertyValue
-          .map<Map<String, dynamic>>((UserPropertyValueDetum e) => {
-        'month': e.date ?? '',
-        'amount': (e.value ?? 0.0), // null-safe
+      final monthlyData = controller.cashFlowTrendData
+          .map<Map<String, dynamic>>((Datum e) => {
+        'month': e.date,
+        'amount': e.value,
       })
           .toList();
 
       if (monthlyData.isEmpty) {
-        return Container(
-          width: double.infinity,
-          decoration: BoxDecoration(
-            color: AppColors.white,
-            border: Border.all(color: const Color(0xFFE6E6E6)),
-          ),
+        return _cardShell(
           child: const Padding(
             padding: EdgeInsets.all(18),
             child: Center(child: Text("No data available")),
@@ -63,19 +58,14 @@ class PropertyValueGrowthChart extends StatelessWidget {
           .map<String>((e) => (e['month'] ?? '').toString())
           .toList();
 
-      // ✅ FIX: prevent fl_chart crash when all values are 0
+      // ✅ safe maxY + safe interval (fix fl_chart crash)
       final maxSpotY =
       spots.fold<double>(0.0, (prev, s) => s.y > prev ? s.y : prev);
 
       final safeMaxY = maxSpotY <= 0 ? 1.0 : (maxSpotY * 1.15);
       final safeInterval = (safeMaxY / 4) <= 0 ? 1.0 : (safeMaxY / 4);
 
-      return Container(
-        width: double.infinity,
-        decoration: BoxDecoration(
-          color: AppColors.white,
-          border: Border.all(color: const Color(0xFFE6E6E6)),
-        ),
+      return _cardShell(
         child: Padding(
           padding: const EdgeInsets.all(12),
           child: Column(
@@ -84,7 +74,7 @@ class PropertyValueGrowthChart extends StatelessWidget {
                 children: [
                   Expanded(
                     child: Text(
-                      "Property Value Growth",
+                      "Cashflow Trend",
                       style: const TextStyle(
                         fontWeight: FontWeight.w800,
                         fontSize: 13,
@@ -92,7 +82,7 @@ class PropertyValueGrowthChart extends StatelessWidget {
                       ),
                     ),
                   ),
-                  _miniDropdown(controller),
+                  _miniDropdown(),
                 ],
               ),
               const SizedBox(height: 8),
@@ -113,7 +103,7 @@ class PropertyValueGrowthChart extends StatelessWidget {
                       leftTitles: AxisTitles(
                         sideTitles: SideTitles(
                           showTitles: true,
-                          reservedSize: 44,
+                          reservedSize: 36,
                           getTitlesWidget: (value, meta) => Text(
                             value.toInt().toString(),
                             style: const TextStyle(
@@ -165,17 +155,18 @@ class PropertyValueGrowthChart extends StatelessWidget {
                         color: lineColor,
                         barWidth: 2.8,
                         isStrokeCapRound: true,
-                        dotData: FlDotData(
+                        dotData: const FlDotData(show: false),
+                        belowBarData: BarAreaData(
                           show: true,
-                          getDotPainter: (spot, percent, barData, index) =>
-                              FlDotCirclePainter(
-                                radius: 5.5,
-                                color: dotInnerColor,
-                                strokeWidth: 2.5,
-                                strokeColor: dotOuterColor,
-                              ),
+                          gradient: LinearGradient(
+                            colors: [
+                              lineColor.withOpacity(fillOpacity),
+                              lineColor.withOpacity(0.0),
+                            ],
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                          ),
                         ),
-                        belowBarData: BarAreaData(show: false),
                       ),
                     ],
                     lineTouchData: const LineTouchData(enabled: true),
@@ -189,7 +180,9 @@ class PropertyValueGrowthChart extends StatelessWidget {
     });
   }
 
-  Widget _miniDropdown(UserPropertyValueController controller) {
+  Widget _miniDropdown() {
+    final controller = Get.find<CashFlowTrendController>();
+
     return Container(
       height: 28,
       padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -210,7 +203,7 @@ class PropertyValueGrowthChart extends StatelessWidget {
             onChanged: (val) {
               if (val == null) return;
               controller.selectedTrendType.value = val;
-              controller.userPropertyValue(val); // ✅ correct API call
+              controller.cashFlowTrend(val);
             },
             icon: const Icon(Icons.keyboard_arrow_down_rounded, size: 18),
             style: const TextStyle(
@@ -221,6 +214,17 @@ class PropertyValueGrowthChart extends StatelessWidget {
           );
         }),
       ),
+    );
+  }
+
+  Widget _cardShell({required Widget child}) {
+    return Container(
+      width: double.infinity,
+      decoration: BoxDecoration(
+        color: AppColors.white,
+        border: Border.all(color: const Color(0xFFE6E6E6)),
+      ),
+      child: child,
     );
   }
 }

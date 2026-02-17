@@ -41,6 +41,25 @@ class BorrowingDependentsController extends GetxController {
     };
   }
 
+  // Method to load existing dependent data
+  void loadDependentData(List<Map<String, String>> dependentsData) {
+    // Clear existing controllers
+    for (var dependent in adultControllers) {
+      dependent.forEach((_, controller) => controller.dispose());
+    }
+    adultControllers.clear();
+    adultCount.value = 0;
+
+    // Add dependents from data
+    for (var dependentData in dependentsData) {
+      final newDependent = _createNewAdult();
+      newDependent['name']?.text = dependentData['name'] ?? '';
+      newDependent['dob']?.text = dependentData['dob'] ?? '';
+      adultControllers.add(newDependent);
+      adultCount.value++;
+    }
+  }
+
   @override
   void onClose() {
     for (var adult in adultControllers) {
