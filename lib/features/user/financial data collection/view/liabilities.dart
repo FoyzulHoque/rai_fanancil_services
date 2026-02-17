@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:get/Get.dart';
+import 'package:get/get.dart';
 import 'package:rai_fanancil_services/core/themes/app_colors.dart';
 import '../../../../core/widgets/custom_input_field_widget.dart';
 import '../../user navbar/user_navbar_screen.dart';
@@ -59,6 +59,7 @@ class _LiabilitiesScreenState extends State<LiabilitiesScreen> {
                       ),
                     )),
 
+                    const SizedBox(height: 32),
                     // ── Credit Cards ─────────────────────────────────────────────────
                     _buildSectionHeader("Credit Cards", "+ Add Card", controller.addCreditCard),
                     const SizedBox(height: 16),
@@ -69,7 +70,7 @@ class _LiabilitiesScreenState extends State<LiabilitiesScreen> {
                       ),
                     )),
 
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 32),
                     // ── SMSF ─────────────────────────────────────────────────────────
                     _buildSectionHeader("SMSF", "+ Add SMSF", controller.addSMSF),
                     const SizedBox(height: 16),
@@ -80,7 +81,7 @@ class _LiabilitiesScreenState extends State<LiabilitiesScreen> {
                       ),
                     )),
 
-                    const SizedBox(height:16),
+                    const SizedBox(height:32),
                     _buildSectionHeader("HECS Debt", "", (){}),
                     const SizedBox(height: 16),
                     Card(

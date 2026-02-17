@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:get/Get.dart';
+import 'package:get/get.dart';
 import 'package:rai_fanancil_services/core/themes/app_colors.dart';
 import '../controller/set_up_your_financial_profile_controller.dart';
 import '../widget/custom_app_bar_set_before_nave_bar.dart';
@@ -12,6 +12,9 @@ class HouseholdBorrowingProfile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Initialize the controller if not already initialized
+    Get.put(SetUpYourFinancialProfileController());
+
     return Scaffold(
       backgroundColor: AppColors.white,
       body: Column(
@@ -52,7 +55,7 @@ class HouseholdBorrowingProfile extends StatelessWidget {
             ),
             child: ElevatedButton(
               onPressed: () {
-                final controller = Get.put(SetUpYourFinancialProfileController());
+                final controller = Get.find<SetUpYourFinancialProfileController>();
                 if (controller.validateAdultsData()) {
                   Get.to(() => IncomeDetailsScreen());
                 } else {

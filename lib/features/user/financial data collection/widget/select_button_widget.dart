@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import '../../../../core/themes/app_colors.dart';
 
 class SelectButtonWidget extends StatefulWidget {
+  final String? initialValue; // Add initialValue parameter
   final ValueChanged<String>? onSelected; // Optional: parent ke selected value pathabe
 
   const SelectButtonWidget({
     super.key,
+    this.initialValue,
     this.onSelected,
   });
 
@@ -14,9 +16,27 @@ class SelectButtonWidget extends StatefulWidget {
 }
 
 class _SelectButtonWidgetState extends State<SelectButtonWidget> {
-  String _selectedItem = "Primary"; // default selected
+  late String _selectedItem; // Changed from final to late
 
   final List<String> _items = ["Primary", "Investment", "SMSF"];
+
+  @override
+  void initState() {
+    super.initState();
+    // Initialize with widget.initialValue if provided, otherwise use default
+    _selectedItem = widget.initialValue ?? "Primary";
+  }
+
+  @override
+  void didUpdateWidget(SelectButtonWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // Update if initialValue changes
+    if (widget.initialValue != oldWidget.initialValue && widget.initialValue != null) {
+      setState(() {
+        _selectedItem = widget.initialValue!;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
