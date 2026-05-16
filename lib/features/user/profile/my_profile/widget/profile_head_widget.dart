@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../../../../../core/themes/app_colors.dart';
 
@@ -39,6 +40,7 @@ class ProfileHeadWidget extends StatelessWidget {
               color: Colors.white,
               fontSize:24,
               fontWeight: FontWeight.bold,
+              fontFamily: GoogleFonts.montserrat().fontFamily,
             ),
           ),
            Text(
@@ -47,6 +49,7 @@ class ProfileHeadWidget extends StatelessWidget {
               color: Colors.white,
               fontSize: 16,
               fontWeight: FontWeight.w500,
+              fontFamily: GoogleFonts.montserrat().fontFamily,
             ),
           ),
         ],

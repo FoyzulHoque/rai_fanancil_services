@@ -114,7 +114,7 @@ class SearchingFilterScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Filter'),
+        title: const Text('Filter', style: TextStyle(color: AppColors.darkGrey)),
         centerTitle: true,
         actions: [
           TextButton(

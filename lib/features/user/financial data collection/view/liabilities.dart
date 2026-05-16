@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:rai_fanancil_services/core/themes/app_colors.dart';
 import '../../../../core/widgets/custom_input_field_widget.dart';
 import '../../user navbar/user_navbar_screen.dart';
@@ -164,9 +165,10 @@ class _LiabilitiesScreenState extends State<LiabilitiesScreen> {
         Text(
           title,
           style: TextStyle(
-            color: AppColors.black,
+            color: AppColors.darkGrey,
             fontSize: 20,
             fontWeight: FontWeight.w600,
+            fontFamily: GoogleFonts.montserrat().fontFamily,
           ),
         ),
         GestureDetector(
@@ -177,6 +179,7 @@ class _LiabilitiesScreenState extends State<LiabilitiesScreen> {
               color: AppColors.primary,
               fontSize: 18,
               fontWeight: FontWeight.w600,
+              fontFamily: GoogleFonts.montserrat().fontFamily,
             ),
           ),
         ),
@@ -341,9 +344,10 @@ class _LiabilitiesScreenState extends State<LiabilitiesScreen> {
 
   // ── Helper Widgets ───────────────────────────────────────────────────────────
   TextStyle _titleStyle() => TextStyle(
-    color: AppColors.black,
+    color: AppColors.darkGrey,
     fontSize: 18,
     fontWeight: FontWeight.w600,
+    fontFamily: GoogleFonts.montserrat().fontFamily,
   );
 
   Widget _buildField(
@@ -363,6 +367,7 @@ class _LiabilitiesScreenState extends State<LiabilitiesScreen> {
             color: AppColors.grey,
             fontSize: 16,
             fontWeight: FontWeight.w600,
+              fontFamily: GoogleFonts.montserrat().fontFamily,
           ),
         ),
         const SizedBox(height: 8),

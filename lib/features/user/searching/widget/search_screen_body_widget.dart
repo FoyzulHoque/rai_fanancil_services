@@ -44,7 +44,7 @@ class SearchScreenBodyWidget extends StatelessWidget {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        border: Border.all(color: AppColors.grey),
+        border: Border.all(color: AppColors.primary),
       ),
       padding: const EdgeInsets.all(8),
       child: Column(
@@ -110,7 +110,7 @@ class SearchScreenBodyWidget extends StatelessWidget {
                   borderRadius: BorderRadius.circular(0),
                 ),
                 side: BorderSide(
-                  color: borderColorLeft ?? AppColors.grey,
+                  color: borderColorLeft ?? AppColors.primary,
                 ),
               ),
               onPressed: onTapAddProperty,

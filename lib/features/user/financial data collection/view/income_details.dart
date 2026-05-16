@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:rai_fanancil_services/core/themes/app_colors.dart';
 import '../../../../core/widgets/custom_input_field_widget.dart';
 import '../controller/set_up_your_financial_profile_controller.dart';
@@ -73,23 +74,24 @@ class _IncomeDetailsScreenState extends State<IncomeDetailsScreen> {
                             Text(
                               "Select Adults",
                               style: TextStyle(
-                                color: AppColors.black,
+                                color: AppColors.darkGrey,
                                 fontSize: 18,
                                 fontWeight: FontWeight.w600,
+                                fontFamily: GoogleFonts.montserrat().fontFamily,
                               ),
                             ),
                             const SizedBox(height: 4),
 
                             if (controller.adultControllers.isEmpty)
-                              const Padding(
+                              Padding(
                                 padding: EdgeInsets.symmetric(vertical: 20),
-                                child: Text("No adults added yet"),
+                                child: Text("No adults added yet", style: TextStyle(color: AppColors.grey, fontSize: 16, fontWeight: FontWeight.w600, fontFamily: GoogleFonts.montserrat().fontFamily)),
                               )
                             else
                               DropdownButtonFormField<int>(
                                 key: ValueKey('adultSelection_$currentAdultIndex'),
                                 value: currentAdultIndex,
-                                hint: const Text("Select Adult"),
+                                hint: Text("Select Adult", style: TextStyle(fontFamily: GoogleFonts.montserrat().fontFamily)),
                                 decoration: InputDecoration(
                                   border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(8),
@@ -114,9 +116,10 @@ class _IncomeDetailsScreenState extends State<IncomeDetailsScreen> {
                                   color: Colors.blueGrey,
                                 ),
                                 dropdownColor: Colors.white,
-                                style: const TextStyle(
-                                  color: Colors.black87,
+                                style: TextStyle(
+                                  color: AppColors.darkGrey,
                                   fontSize: 16,
+                                  fontFamily: GoogleFonts.montserrat().fontFamily,
                                 ),
                                 isExpanded: true,
                                 items: List.generate(controller.adultControllers.length, (index) {
@@ -156,9 +159,10 @@ class _IncomeDetailsScreenState extends State<IncomeDetailsScreen> {
                                 Text(
                                   "Primary Income for Adult $adultNumber",
                                   style: TextStyle(
-                                    color: AppColors.black,
+                                    color: AppColors.darkGrey,
                                     fontSize: 22,
                                     fontWeight: FontWeight.w600,
+                                    fontFamily: GoogleFonts.montserrat().fontFamily,
                                   ),
                                 ),
                                 const SizedBox(height: 8),
@@ -168,6 +172,7 @@ class _IncomeDetailsScreenState extends State<IncomeDetailsScreen> {
                                     color: AppColors.grey,
                                     fontSize: 16,
                                     fontWeight: FontWeight.w600,
+                                    fontFamily: GoogleFonts.montserrat().fontFamily,
                                   ),
                                 ),
                                 const SizedBox(height: 16),
@@ -175,7 +180,7 @@ class _IncomeDetailsScreenState extends State<IncomeDetailsScreen> {
                                 DropdownButtonFormField<String>(
                                   key: ValueKey('incomeType_${currentAdultIndex}_$_selectedIncomeType'),
                                   value: _getValidValue(_selectedIncomeType, _buildIncomeTypeItems()),
-                                  hint: const Text("Select Income Type"),
+                                  hint: Text("Select Income Type", style: TextStyle(fontFamily: GoogleFonts.montserrat().fontFamily)),
                                   decoration: InputDecoration(
                                     border: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(0),
@@ -200,9 +205,10 @@ class _IncomeDetailsScreenState extends State<IncomeDetailsScreen> {
                                     color: Colors.blueGrey,
                                   ),
                                   dropdownColor: Colors.white,
-                                  style: const TextStyle(
-                                    color: Colors.black87,
+                                  style: TextStyle(
+                                    color: AppColors.darkGrey,
                                     fontSize: 16,
+                                    fontFamily: GoogleFonts.montserrat().fontFamily,
                                   ),
                                   isExpanded: true,
                                   items: _buildIncomeTypeItems(),
@@ -243,9 +249,10 @@ class _IncomeDetailsScreenState extends State<IncomeDetailsScreen> {
                                 Text(
                                   "Income Frequency for Adult $adultNumber",
                                   style: TextStyle(
-                                    color: AppColors.black,
+                                    color: AppColors.darkGrey,
                                     fontSize: 18,
                                     fontWeight: FontWeight.w600,
+                                    fontFamily: GoogleFonts.montserrat().fontFamily,
                                   ),
                                 ),
                                 const SizedBox(height: 4),
@@ -255,13 +262,14 @@ class _IncomeDetailsScreenState extends State<IncomeDetailsScreen> {
                                     color: AppColors.grey,
                                     fontSize: 14,
                                     fontWeight: FontWeight.w600,
+                                    fontFamily: GoogleFonts.montserrat().fontFamily,
                                   ),
                                 ),
                                 const SizedBox(height: 8),
                                 DropdownButtonFormField<String>(
                                   key: ValueKey('incomeFrequency_${currentAdultIndex}_$_selectedIncomeFrequency'),
                                   value: _getValidValue(_selectedIncomeFrequency, _buildIncomeFrequencyItems()),
-                                  hint: const Text("Select Frequency"),
+                                  hint: Text("Select Frequency", style: TextStyle(fontFamily: GoogleFonts.montserrat().fontFamily)),
                                   decoration: InputDecoration(
                                     border: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(8),
@@ -286,9 +294,10 @@ class _IncomeDetailsScreenState extends State<IncomeDetailsScreen> {
                                     color: Colors.blueGrey,
                                   ),
                                   dropdownColor: Colors.white,
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                     color: Colors.black87,
                                     fontSize: 16,
+                                    fontFamily: GoogleFonts.montserrat().fontFamily,
                                   ),
                                   isExpanded: true,
                                   items: _buildIncomeFrequencyItems(),
@@ -319,9 +328,10 @@ class _IncomeDetailsScreenState extends State<IncomeDetailsScreen> {
                                 Text(
                                   "Other Income for Adult $adultNumber (Optional)",
                                   style: TextStyle(
-                                    color: AppColors.black,
+                                    color: AppColors.darkGrey,
                                     fontSize: 22,
                                     fontWeight: FontWeight.w600,
+                                    fontFamily: GoogleFonts.montserrat().fontFamily,
                                   ),
                                 ),
                                 const SizedBox(height: 8),
@@ -331,6 +341,7 @@ class _IncomeDetailsScreenState extends State<IncomeDetailsScreen> {
                                     color: AppColors.grey,
                                     fontSize: 16,
                                     fontWeight: FontWeight.w600,
+                                    fontFamily: GoogleFonts.montserrat().fontFamily,
                                   ),
                                 ),
                                 const SizedBox(height: 16),
@@ -361,9 +372,10 @@ class _IncomeDetailsScreenState extends State<IncomeDetailsScreen> {
                                 Text(
                                   "Tax Region/State for Adult $adultNumber",
                                   style: TextStyle(
-                                    color: AppColors.black,
+                                    color: AppColors.darkGrey,
                                     fontSize: 18,
                                     fontWeight: FontWeight.w600,
+                                    fontFamily: GoogleFonts.montserrat().fontFamily,
                                   ),
                                 ),
                                 const SizedBox(height: 4),
@@ -373,13 +385,14 @@ class _IncomeDetailsScreenState extends State<IncomeDetailsScreen> {
                                     color: AppColors.grey,
                                     fontSize: 14,
                                     fontWeight: FontWeight.w600,
+                                    fontFamily: GoogleFonts.montserrat().fontFamily,
                                   ),
                                 ),
                                 const SizedBox(height: 8),
                                 DropdownButtonFormField<String>(
                                   key: ValueKey('taxRegion_${currentAdultIndex}_$_selectedTaxRegion'),
                                   value: _getValidValue(_selectedTaxRegion, _buildTaxRegionItems()),
-                                  hint: const Text("Select Tax Region"),
+                                  hint: Text("Select Tax Region", style: TextStyle(fontFamily: GoogleFonts.montserrat().fontFamily)),
                                   decoration: InputDecoration(
                                     border: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(8),
@@ -404,9 +417,10 @@ class _IncomeDetailsScreenState extends State<IncomeDetailsScreen> {
                                     color: Colors.blueGrey,
                                   ),
                                   dropdownColor: Colors.white,
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                     color: Colors.black87,
                                     fontSize: 16,
+                                    fontFamily: GoogleFonts.montserrat().fontFamily,
                                   ),
                                   isExpanded: true,
                                   items: _buildTaxRegionItems(),
@@ -458,12 +472,13 @@ class _IncomeDetailsScreenState extends State<IncomeDetailsScreen> {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(0),
                 ),
-                textStyle: const TextStyle(
+                textStyle: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
+                  fontFamily: GoogleFonts.montserrat().fontFamily,
                 ),
               ),
-              child: const Text("Continue"),
+              child: Text("Continue", style: TextStyle(fontFamily: GoogleFonts.montserrat().fontFamily)),
             ),
           ),
         ],
@@ -494,7 +509,7 @@ class _IncomeDetailsScreenState extends State<IncomeDetailsScreen> {
     return items.map<DropdownMenuItem<String>>((String value) {
       return DropdownMenuItem<String>(
         value: value,
-        child: Text(value),
+        child: Text(value, style: TextStyle(fontFamily: GoogleFonts.montserrat().fontFamily)),
       );
     }).toList();
   }
@@ -511,7 +526,7 @@ class _IncomeDetailsScreenState extends State<IncomeDetailsScreen> {
     return items.map<DropdownMenuItem<String>>((String value) {
       return DropdownMenuItem<String>(
         value: value,
-        child: Text(value),
+        child: Text(value, style: TextStyle(fontFamily: GoogleFonts.montserrat().fontFamily)),
       );
     }).toList();
   }
@@ -532,7 +547,7 @@ class _IncomeDetailsScreenState extends State<IncomeDetailsScreen> {
     return items.map<DropdownMenuItem<String>>((String value) {
       return DropdownMenuItem<String>(
         value: value,
-        child: Text(value),
+        child: Text(value, style: TextStyle(fontFamily: GoogleFonts.montserrat().fontFamily)),
       );
     }).toList();
   }
@@ -597,4 +612,4 @@ class _IncomeDetailsScreenState extends State<IncomeDetailsScreen> {
     _otherIncomeController.dispose();
     super.dispose();
   }
-}
+} 

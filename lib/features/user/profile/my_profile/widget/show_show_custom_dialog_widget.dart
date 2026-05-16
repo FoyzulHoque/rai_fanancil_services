@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../../../../../core/themes/app_colors.dart';
 
@@ -13,9 +14,11 @@ Future<void> showCustomDialog({
 }) {
   return showDialog<void>(
     context: context,
-    barrierDismissible: false, // optional: prevents closing by tapping outside
+    barrierDismissible: false,
+    barrierColor: Colors.black54,
     builder: (BuildContext context) {
       return Dialog(
+        backgroundColor: Colors.white,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
         child: Padding(
           padding: const EdgeInsets.all(24),
@@ -25,9 +28,10 @@ Future<void> showCustomDialog({
               if (title != null) ...[
                 Text(
                   title,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
+                    fontFamily: GoogleFonts.montserrat().fontFamily,
                   ),
                   textAlign: TextAlign.center,
                 ),
@@ -41,6 +45,7 @@ Future<void> showCustomDialog({
                   style: TextStyle(
                     fontSize: 15,
                     color: Colors.grey[700],
+                    fontFamily: GoogleFonts.montserrat().fontFamily,
                   ),
                 ),
 
@@ -60,7 +65,7 @@ Future<void> showCustomDialog({
                       ),
                       child: Text(
                         cancelText,
-                        style: const TextStyle(color: AppColors.secondaryColors, fontSize: 16),
+                        style: TextStyle(color: AppColors.secondaryColors, fontSize: 16, fontWeight: FontWeight.w600, fontFamily: GoogleFonts.montserrat().fontFamily),
                       ),
                     ),
                   ),
@@ -80,7 +85,7 @@ Future<void> showCustomDialog({
                       ),
                       child: Text(
                         confirmText!,
-                        style: const TextStyle(color: Colors.white, fontSize: 16),
+                        style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600, fontFamily: GoogleFonts.montserrat().fontFamily),
                       ),
                     ),
                   ),

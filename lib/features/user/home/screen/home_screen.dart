@@ -55,6 +55,7 @@ class HomeScreen extends StatelessWidget {
                               title: "Total Properties",
                               totalNumber: totalProps.toString(),
                               iconColor: AppColors.primary,
+                              
                             );
                           }),
                         ),

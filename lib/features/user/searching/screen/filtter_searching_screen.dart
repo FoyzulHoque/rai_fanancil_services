@@ -110,8 +110,8 @@ class _FilterSearchingResultScreenState extends State<FilterSearchingResultScree
                               beds: property.beds?.toString() ?? "0",
                               location: property.address ?? "",
                               price: property.price?.toString() ?? "",
-                              leftButtonText: '+Add property',
-                              leftTextColor: AppColors.black,
+                              leftButtonText: '+ Add property',
+                              leftTextColor: AppColors.darkGrey,
                               onTapAddProperty: () {
                                 allPropertiesController.saveProperty(
                                   property.id.toString(),

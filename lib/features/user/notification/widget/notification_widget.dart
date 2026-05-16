@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
 class NotificationWidget extends StatelessWidget {
-  const NotificationWidget({
-    super.key,
-    this.title,
-    this.subTitle,
-  });
+  const NotificationWidget({super.key, this.title, this.subTitle});
 
   final String? title;
   final String? subTitle;
@@ -33,10 +30,14 @@ class NotificationWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Day / Date Section
-
           Text(
             DateFormat('dd MMM yyyy • hh:mm a').format(DateTime.now()),
-            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: Colors.black87),
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+              color: Colors.black87,
+              fontFamily: GoogleFonts.montserrat().fontFamily,
+            ),
           ),
           const SizedBox(height: 10),
 
@@ -62,15 +63,17 @@ class NotificationWidget extends StatelessWidget {
                 Container(
                   height: 64,
                   width: 64,
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                  ),
+                  decoration: const BoxDecoration(shape: BoxShape.circle),
                   child: ClipOval(
                     child: Image.asset(
                       "assets/icons/Auto Layout Horizontal.png",
                       fit: BoxFit.cover,
                       errorBuilder: (context, error, stackTrace) {
-                        return const Icon(Icons.notifications, size: 32, color: Colors.grey);
+                        return const Icon(
+                          Icons.notifications,
+                          size: 32,
+                          color: Colors.grey,
+                        );
                       },
                     ),
                   ),
@@ -85,10 +88,11 @@ class NotificationWidget extends StatelessWidget {
                       if (title != null && title!.isNotEmpty)
                         Text(
                           title!,
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.w600,
                             color: Colors.black87,
+                            fontFamily: GoogleFonts.montserrat().fontFamily,
                           ),
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
@@ -97,10 +101,11 @@ class NotificationWidget extends StatelessWidget {
                       if (subTitle != null && subTitle!.isNotEmpty)
                         Text(
                           subTitle!,
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 13.5,
                             color: Colors.black54,
                             height: 1.4,
+                            fontFamily: GoogleFonts.montserrat().fontFamily,
                           ),
                           maxLines: 3,
                           overflow: TextOverflow.ellipsis,

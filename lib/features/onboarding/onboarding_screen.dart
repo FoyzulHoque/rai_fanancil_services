@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../../core/themes/app_colors.dart';
 import '../auth/signin/screens/signin_screens.dart';
 
@@ -31,11 +32,10 @@ class OnboardingScreen extends StatelessWidget {
                         "Manage your finances",
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                          fontWeight: FontWeight.w700,
+                          fontWeight: FontWeight.w900,
                           fontSize: 20,
-                          color: AppColors.colorList.isNotEmpty
-                              ? AppColors.colorList[0]
-                              : Colors.black,
+                          color: AppColors.primary,
+                          fontFamily: GoogleFonts.montserrat().fontFamily,
                         ),
                       ),
                     ),
@@ -47,7 +47,7 @@ class OnboardingScreen extends StatelessWidget {
                     child: SizedBox(
                       height: 370.97,
                       child: Image.asset(
-                        "assets/images/onboarding1.png",
+                        "assets/images/onboarding_one.png",
                         height: screenHeight * 0.55,
                         width: screenWidth,
                         fit: BoxFit.cover,
@@ -65,9 +65,11 @@ class OnboardingScreen extends StatelessWidget {
               "Instant insights for\nany property, anytime.",
               textAlign: TextAlign.center,
               style: TextStyle(
-                  color: AppColors.black,
+                  color: AppColors.darkGrey,
                   fontWeight: FontWeight.w700,
-                  fontSize: 28),
+                  fontFamily: GoogleFonts.montserrat().fontFamily,
+                  fontSize: 28,
+                  letterSpacing: -2),
             ),
             const SizedBox(height: 12),
             Text(
@@ -76,6 +78,7 @@ class OnboardingScreen extends StatelessWidget {
               style: TextStyle(
                   color: AppColors.grey,
                   fontWeight: FontWeight.w400,
+                  fontFamily: GoogleFonts.montserrat().fontFamily,
                   fontSize: 14),
             ),
 
@@ -95,12 +98,13 @@ class OnboardingScreen extends StatelessWidget {
                 onPressed: () {
                   Get.to(() => LoginScreen());
                 },
-                child: const Text(
+                child: Text(
                   "Next",
                   style: TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.w400,
                     fontSize: 14,
+                    fontFamily: GoogleFonts.montserrat().fontFamily,
                   ),
                 ),
               ),

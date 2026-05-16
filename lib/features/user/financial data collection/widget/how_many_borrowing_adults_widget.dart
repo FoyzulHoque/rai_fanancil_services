@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:rai_fanancil_services/core/themes/app_colors.dart';
 import '../controller/set_up_your_financial_profile_controller.dart';
 
@@ -45,9 +46,10 @@ class HowManyBorrowingAdultsWidget extends StatelessWidget {
                 Text(
                   "How many borrowing adults?",
                   style: labelStyle ??
-                      const TextStyle(
+                      TextStyle(
                         fontSize: 17,
                         fontWeight: FontWeight.w600,
+                        fontFamily: GoogleFonts.montserrat().fontFamily,
                       ),
                 ),
                 const SizedBox(height: 6),
@@ -139,9 +141,10 @@ class HowManyBorrowingAdultsWidget extends StatelessWidget {
           children: [
             Text(
               "Adult ${index + 1}",
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
+                fontFamily: GoogleFonts.montserrat().fontFamily,
               ),
             ),
             const SizedBox(height: 16),

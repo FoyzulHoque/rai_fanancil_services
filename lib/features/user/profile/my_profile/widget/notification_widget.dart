@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../../../../../core/themes/app_colors.dart';
 
 class CustomNotificationToggle extends StatelessWidget {
@@ -37,13 +38,14 @@ class CustomNotificationToggle extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 14),
-          const Expanded(
+          Expanded(
             child: Text(
               "Notification",
               style: TextStyle(
                 fontSize: 15,
                 fontWeight: FontWeight.w500,
                 color: Colors.black87,
+                fontFamily: GoogleFonts.montserrat().fontFamily,
               ),
             ),
           ),
@@ -58,7 +60,7 @@ class CustomNotificationToggle extends StatelessWidget {
               padding: const EdgeInsets.all(2),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20),
-                color: value ? AppColors.primary : Colors.grey.shade400,
+                color: value ? AppColors.secondaryColors : Colors.grey.shade400,
               ),
               child: AnimatedAlign(
                 duration: const Duration(milliseconds: 250),

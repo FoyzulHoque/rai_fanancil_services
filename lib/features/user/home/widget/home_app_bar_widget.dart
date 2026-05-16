@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:rai_fanancil_services/core/themes/app_colors.dart';
 
@@ -78,19 +79,21 @@ class HomeAppBarWidget extends StatelessWidget {
               children: [
                 Text(
                   dateText,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 11.5,
                     color: Colors.white70,
                     fontWeight: FontWeight.w600,
+                    fontFamily: GoogleFonts.montserrat().fontFamily,
                   ),
                 ),
                 const SizedBox(height: 3),
                 Text(
                   "${_getGreetingWord()}, $userName!",
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 15,
                     color: Colors.white,
                     fontWeight: FontWeight.w800,
+                    fontFamily: GoogleFonts.montserrat().fontFamily,
                   ),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,

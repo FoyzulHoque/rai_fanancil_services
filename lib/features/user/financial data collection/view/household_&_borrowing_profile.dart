@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:rai_fanancil_services/core/themes/app_colors.dart';
 import '../controller/set_up_your_financial_profile_controller.dart';
 import '../widget/custom_app_bar_set_before_nave_bar.dart';
@@ -75,12 +76,13 @@ class HouseholdBorrowingProfile extends StatelessWidget {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(0),
                 ),
-                textStyle: const TextStyle(
+                textStyle: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
+                  fontFamily: GoogleFonts.montserrat().fontFamily,
                 ),
               ),
-              child: const Text("Continue"),
+              child: Text("Continue", style: TextStyle(fontFamily: GoogleFonts.montserrat().fontFamily)),
             ),
           ),
         ],

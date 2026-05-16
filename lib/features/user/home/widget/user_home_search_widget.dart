@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class SearchWidget extends StatelessWidget {
   final TextEditingController? searchingController;
@@ -41,7 +42,7 @@ class SearchWidget extends StatelessWidget {
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("Filter"),
+              Text("Filter", style: TextStyle(fontSize: 18,fontWeight: FontWeight.w600,color: Colors.black, fontFamily: GoogleFonts.montserrat().fontFamily), ),
               Spacer(),
               TextButton(onPressed: cancelCallBack, child: Text("Cancel")),
             ],
@@ -60,7 +61,7 @@ class SearchWidget extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("Where to?" ,style: TextStyle(fontSize: 18,fontWeight: FontWeight.w600,color: Colors.black),),
+                  Text("Where to?" ,style: TextStyle(fontSize: 18,fontWeight: FontWeight.w600,color: Colors.black, fontFamily: GoogleFonts.montserrat().fontFamily),),
                   const SizedBox(height: 5),
                   TextFormField(
                     controller: searchingController,
@@ -107,7 +108,7 @@ class SearchWidget extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(height: 5,),
-                        Text("Lebanon",style: TextStyle(fontSize: 16,fontWeight: FontWeight.w600,color: Colors.black),),
+                        Text("Lebanon",style: TextStyle(fontSize: 16,fontWeight: FontWeight.w600,color: Colors.black, fontFamily: GoogleFonts.montserrat().fontFamily),),
 
                       ],
                     );
@@ -119,7 +120,7 @@ class SearchWidget extends StatelessWidget {
           const SizedBox(height: 10),
           Card(
             child:ListTile(
-              
+              title: Text("Lebanon", style: TextStyle(fontFamily: GoogleFonts.montserrat().fontFamily)),
             )
           )
         ],

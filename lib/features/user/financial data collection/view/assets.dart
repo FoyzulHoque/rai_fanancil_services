@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:rai_fanancil_services/core/themes/app_colors.dart';
 import '../../../../core/widgets/custom_input_field_widget.dart';
 import '../widget/custom_app_bar_set_before_nave_bar.dart';
@@ -66,6 +67,7 @@ class _AssetsScreenState extends State<AssetsScreen> {
                                 fontWeight: FontWeight.w800,
                                 fontSize: 16,
                                 color: Colors.white,
+                                fontFamily: GoogleFonts.montserrat().fontFamily,
                               ),
                             ),
                             SizedBox(height: 4),
@@ -75,6 +77,7 @@ class _AssetsScreenState extends State<AssetsScreen> {
                                 fontWeight: FontWeight.w900,
                                 fontSize: 30,
                                 color: Colors.white,
+                                fontFamily: GoogleFonts.montserrat().fontFamily,
                               ),
                             )),
                           ],
@@ -91,9 +94,10 @@ class _AssetsScreenState extends State<AssetsScreen> {
                         Text(
                           "Saving Accounts",
                           style: TextStyle(
-                            color: AppColors.black,
+                            color: AppColors.darkGrey,
                             fontSize: 22,
                             fontWeight: FontWeight.w600,
+                            fontFamily: GoogleFonts.montserrat().fontFamily,
                           ),
                         ),
                         const SizedBox(width: 16),
@@ -107,6 +111,7 @@ class _AssetsScreenState extends State<AssetsScreen> {
                               color: AppColors.primary,
                               fontSize: 18,
                               fontWeight: FontWeight.w400,
+                              fontFamily: GoogleFonts.montserrat().fontFamily,
                             ),
                           ),
                         ),
@@ -158,9 +163,10 @@ class _AssetsScreenState extends State<AssetsScreen> {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(0),
                 ),
-                textStyle: const TextStyle(
+                textStyle: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
+                  fontFamily: GoogleFonts.montserrat().fontFamily,
                 ),
               ),
               child: const Text("Continue"),
@@ -191,9 +197,10 @@ class _AssetsScreenState extends State<AssetsScreen> {
                     Text(
                       "Saving Account ${index + 1}",
                       style: TextStyle(
-                        color: AppColors.black,
+                        color: AppColors.darkGrey,
                         fontSize: 22,
                         fontWeight: FontWeight.w600,
+                        fontFamily: GoogleFonts.montserrat().fontFamily,
                       ),
                     ),
                     IconButton(
@@ -210,6 +217,7 @@ class _AssetsScreenState extends State<AssetsScreen> {
                     color: AppColors.grey,
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
+                    fontFamily: GoogleFonts.montserrat().fontFamily,
                   ),
                 ),
                 const SizedBox(height: 16),
@@ -228,6 +236,7 @@ class _AssetsScreenState extends State<AssetsScreen> {
                     color: AppColors.grey,
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
+                    fontFamily: GoogleFonts.montserrat().fontFamily,
                   ),
                 ),
                 const SizedBox(height: 16),
@@ -246,6 +255,7 @@ class _AssetsScreenState extends State<AssetsScreen> {
                     color: AppColors.grey,
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
+                    fontFamily: GoogleFonts.montserrat().fontFamily,
                   ),
                 ),
                 const SizedBox(height: 16),
@@ -263,6 +273,7 @@ class _AssetsScreenState extends State<AssetsScreen> {
                     color: AppColors.grey,
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
+                    fontFamily: GoogleFonts.montserrat().fontFamily,
                   ),
                 ),
                 const SizedBox(height: 16),
@@ -328,9 +339,10 @@ class _AssetsScreenState extends State<AssetsScreen> {
                     Text(
                       "Cash & Savings",
                       style: TextStyle(
-                        color: AppColors.black,
+                        color: AppColors.darkGrey,
                         fontSize: 22,
                         fontWeight: FontWeight.w600,
+                        fontFamily: GoogleFonts.montserrat().fontFamily,
                       ),
                     ),
                     const SizedBox(height: 8),
@@ -340,6 +352,7 @@ class _AssetsScreenState extends State<AssetsScreen> {
                         color: AppColors.grey,
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
+                        fontFamily: GoogleFonts.montserrat().fontFamily,
                       ),
                     ),
                   ],
@@ -398,9 +411,10 @@ class _AssetsScreenState extends State<AssetsScreen> {
                     Text(
                       "Investments",
                       style: TextStyle(
-                        color: AppColors.black,
+                        color: AppColors.darkGrey,
                         fontSize: 22,
                         fontWeight: FontWeight.w600,
+                        fontFamily: GoogleFonts.montserrat().fontFamily,
                       ),
                     ),
                     const SizedBox(height: 4),
@@ -410,6 +424,7 @@ class _AssetsScreenState extends State<AssetsScreen> {
                         color: AppColors.grey,
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
+                        fontFamily: GoogleFonts.montserrat().fontFamily,
                       ),
                     ),
                   ],
@@ -468,9 +483,10 @@ class _AssetsScreenState extends State<AssetsScreen> {
                     Text(
                       "Superannuation",
                       style: TextStyle(
-                        color: AppColors.black,
+                        color: AppColors.darkGrey,
                         fontSize: 22,
                         fontWeight: FontWeight.w600,
+                        fontFamily: GoogleFonts.montserrat().fontFamily,
                       ),
                     ),
                     const SizedBox(height: 4),
@@ -480,6 +496,7 @@ class _AssetsScreenState extends State<AssetsScreen> {
                         color: AppColors.grey,
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
+                        fontFamily: GoogleFonts.montserrat().fontFamily,
                       ),
                     ),
                   ],
@@ -538,9 +555,10 @@ class _AssetsScreenState extends State<AssetsScreen> {
                     Text(
                       "Other Assets",
                       style: TextStyle(
-                        color: AppColors.black,
+                        color: AppColors.darkGrey,
                         fontSize: 22,
                         fontWeight: FontWeight.w600,
+                        fontFamily: GoogleFonts.montserrat().fontFamily,
                       ),
                     ),
                     const SizedBox(height: 4),
@@ -550,6 +568,7 @@ class _AssetsScreenState extends State<AssetsScreen> {
                         color: AppColors.grey,
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
+                        fontFamily: GoogleFonts.montserrat().fontFamily,
                       ),
                     ),
                   ],

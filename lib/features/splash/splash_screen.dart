@@ -55,12 +55,10 @@ class _SplashScreenState extends State<SplashScreen>
       _textController.forward();
     });
 
-    // ✅ After splash delay, decide navigation
     Timer(const Duration(seconds: 3), () async {
       bool? isLoggedIn = await SharedPreferencesHelper.isLoggedIn();
       final role = await SharedPreferencesHelper.getUserRole();
 
-      // You can modify this part to handle role-based navigation
       if (isLoggedIn == true) {
 
         Get.offAll(()=>UserBottomNavbar());
@@ -80,24 +78,29 @@ class _SplashScreenState extends State<SplashScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.white,
-      body: Column(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          SizedBox(height: 400),
-          Center(
-            child: ScaleTransition(
-              scale: _scaleAnimation,
-              child: Image.asset(
-                'assets/icons/logo_withtext.png',
-                width: 250,
-                fit: BoxFit.contain,
-              ),
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: RadialGradient(
+            center: Alignment.center,
+            radius: 0.6,
+            colors: [
+              Color(0x75008080),
+              Color(0xFFFFFFFF), 
+              
+            ],
+            stops: [0.0, 1.0],
+          ),
+        ),
+        child: Center(
+          child: ScaleTransition(
+            scale: _scaleAnimation,
+            child: Image.asset(
+              'assets/logos/logo.png',
+              width: 250,
+              fit: BoxFit.contain,
             ),
           ),
-        ],
+        ),
       ),
     );
   }

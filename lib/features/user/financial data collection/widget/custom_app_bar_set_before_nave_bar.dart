@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:rai_fanancil_services/core/themes/app_colors.dart';
 
 class CustomAppBarSetBeforeNaveBar extends StatelessWidget {
@@ -42,11 +43,12 @@ class CustomAppBarSetBeforeNaveBar extends StatelessWidget {
             Center(
               child: Text(
                 title!,
-                style: const TextStyle(
+                style: TextStyle(
                   color: Colors.white,
                   fontSize: 22,
                   fontWeight: FontWeight.w700,
                   letterSpacing: 0.3,
+                  fontFamily: GoogleFonts.montserrat().fontFamily,
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -66,6 +68,7 @@ class CustomAppBarSetBeforeNaveBar extends StatelessWidget {
                       color: Colors.white.withOpacity(0.92),
                       fontSize: 13,
                       fontWeight: FontWeight.w600,
+                      fontFamily: GoogleFonts.montserrat().fontFamily,
                     ),
                   ),
                   Text(
@@ -73,6 +76,7 @@ class CustomAppBarSetBeforeNaveBar extends StatelessWidget {
                     style: TextStyle(
                       color: Colors.white.withOpacity(0.70),
                       fontSize: 12,
+                      fontFamily: GoogleFonts.montserrat().fontFamily,
                     ),
                   ),
                 ],

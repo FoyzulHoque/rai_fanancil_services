@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../../../../core/themes/app_colors.dart';
 import '../controller/cash_flow_trend_data_controller.dart';
@@ -29,10 +30,9 @@ class _CashFlowTrendGraphState extends State<CashFlowTrendGraph> {
 
     return Obx(() {
       final monthlyData = controller.cashFlowTrendData
-          .map<Map<String, dynamic>>((Datum e) => {
-        'month': e.date,
-        'amount': e.value,
-      })
+          .map<Map<String, dynamic>>(
+            (Datum e) => {'month': e.date, 'amount': e.value},
+          )
           .toList();
 
       if (monthlyData.isEmpty) {
@@ -48,10 +48,12 @@ class _CashFlowTrendGraphState extends State<CashFlowTrendGraph> {
       final spots = monthlyData
           .asMap()
           .entries
-          .map((e) => FlSpot(
-        e.key.toDouble(),
-        ((e.value['amount'] as num?)?.toDouble() ?? 0.0),
-      ))
+          .map(
+            (e) => FlSpot(
+              e.key.toDouble(),
+              ((e.value['amount'] as num?)?.toDouble() ?? 0.0),
+            ),
+          )
           .toList();
 
       final months = monthlyData
@@ -59,10 +61,19 @@ class _CashFlowTrendGraphState extends State<CashFlowTrendGraph> {
           .toList();
 
       // ✅ safe maxY + safe interval (fix fl_chart crash)
-      final maxSpotY =
-      spots.fold<double>(0.0, (prev, s) => s.y > prev ? s.y : prev);
+      final maxSpotY = spots.fold<double>(
+        double.negativeInfinity,
+        (prev, s) => s.y > prev ? s.y : prev,
+      );
+      final minSpotY = spots.fold<double>(
+        double.infinity,
+        (prev, s) => s.y < prev ? s.y : prev,
+      );
 
       final safeMaxY = maxSpotY <= 0 ? 1.0 : (maxSpotY * 1.15);
+      final safeMinY = minSpotY >= 0 ? 0.0 : (minSpotY * 1.15);
+
+      final range = safeMaxY - safeMinY;
       final safeInterval = (safeMaxY / 4) <= 0 ? 1.0 : (safeMaxY / 4);
 
       return _cardShell(
@@ -75,10 +86,11 @@ class _CashFlowTrendGraphState extends State<CashFlowTrendGraph> {
                   Expanded(
                     child: Text(
                       "Cashflow Trend",
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontWeight: FontWeight.w800,
                         fontSize: 13,
-                        color: Colors.black87,
+                        color: AppColors.darkGrey,
+                        fontFamily: GoogleFonts.montserrat().fontFamily,
                       ),
                     ),
                   ),
@@ -87,17 +99,15 @@ class _CashFlowTrendGraphState extends State<CashFlowTrendGraph> {
               ),
               const SizedBox(height: 8),
               SizedBox(
-                height: 190,
+                height: 200,
                 child: LineChart(
                   LineChartData(
                     gridData: FlGridData(
                       show: true,
                       drawVerticalLine: false,
-                      horizontalInterval: safeInterval, // ✅ never 0
-                      getDrawingHorizontalLine: (_) => FlLine(
-                        color: Colors.grey.shade200,
-                        strokeWidth: 1,
-                      ),
+                      horizontalInterval: safeInterval,
+                      getDrawingHorizontalLine: (_) =>
+                          FlLine(color: Colors.grey.shade200, strokeWidth: 1),
                     ),
                     titlesData: FlTitlesData(
                       leftTitles: AxisTitles(
@@ -106,9 +116,10 @@ class _CashFlowTrendGraphState extends State<CashFlowTrendGraph> {
                           reservedSize: 36,
                           getTitlesWidget: (value, meta) => Text(
                             value.toInt().toString(),
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 9,
                               color: Colors.black45,
+                              fontFamily: GoogleFonts.montserrat().fontFamily,
                             ),
                           ),
                         ),
@@ -126,9 +137,10 @@ class _CashFlowTrendGraphState extends State<CashFlowTrendGraph> {
                               padding: const EdgeInsets.only(top: 6),
                               child: Text(
                                 months[i],
-                                style: const TextStyle(
+                                style: TextStyle(
                                   fontSize: 9,
                                   color: Colors.black45,
+                                  fontFamily: GoogleFonts.montserrat().fontFamily,
                                 ),
                               ),
                             );
@@ -145,8 +157,8 @@ class _CashFlowTrendGraphState extends State<CashFlowTrendGraph> {
                     borderData: FlBorderData(show: false),
                     minX: 0,
                     maxX: (monthlyData.length - 1).toDouble(),
-                    minY: 0,
-                    maxY: safeMaxY, // ✅ never 0
+                    minY: safeMinY, 
+                    maxY: safeMaxY, 
                     lineBarsData: [
                       LineChartBarData(
                         spots: spots,
@@ -195,10 +207,10 @@ class _CashFlowTrendGraphState extends State<CashFlowTrendGraph> {
           return DropdownButton<String>(
             value: controller.selectedTrendType.value,
             items: const [
-              DropdownMenuItem(value: "daily", child: Text("Daily")),
-              DropdownMenuItem(value: "weekly", child: Text("Weekly")),
-              DropdownMenuItem(value: "monthly", child: Text("Monthly")),
-              DropdownMenuItem(value: "yearly", child: Text("Yearly")),
+              DropdownMenuItem(value: "daily", child: Text("Daily", style: TextStyle(fontSize: 11.5, color: AppColors.darkGrey, fontWeight: FontWeight.w700))),
+              DropdownMenuItem(value: "weekly", child: Text("Weekly", style: TextStyle(fontSize: 11.5, color: AppColors.darkGrey, fontWeight: FontWeight.w700))),
+              DropdownMenuItem(value: "monthly", child: Text("Monthly", style: TextStyle(fontSize: 11.5, color: AppColors.darkGrey, fontWeight: FontWeight.w700))),
+              DropdownMenuItem(value: "yearly", child: Text("Yearly", style: TextStyle(fontSize: 11.5, color: AppColors.darkGrey, fontWeight: FontWeight.w700))),
             ],
             onChanged: (val) {
               if (val == null) return;
@@ -206,10 +218,11 @@ class _CashFlowTrendGraphState extends State<CashFlowTrendGraph> {
               controller.cashFlowTrend(val);
             },
             icon: const Icon(Icons.keyboard_arrow_down_rounded, size: 18),
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 11.5,
               color: Colors.black87,
               fontWeight: FontWeight.w700,
+              fontFamily: GoogleFonts.montserrat().fontFamily,
             ),
           );
         }),

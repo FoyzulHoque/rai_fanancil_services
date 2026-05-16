@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../../../../core/themes/app_colors.dart';
 import '../../../../core/themes/text_styles.dart';
@@ -132,7 +133,9 @@ class _AccountVerificationScreenState extends State<AccountVerificationScreen> {
                               ),
                               child: Text(
                                 'We\'ve sent a verification code to your email. Please check your inbox and enter the code below to verify your account.',
-                                style: AppTextStyles.subtitle,
+                                style: AppTextStyles.subtitle.copyWith(
+                                  fontFamily: GoogleFonts.montserrat().fontFamily,
+                                ),
                                 textAlign: TextAlign.center,
                               ),
                             ),
@@ -199,6 +202,7 @@ class _AccountVerificationScreenState extends State<AccountVerificationScreen> {
                                         fontSize: 14,
                                         color: AppColors.primary,
                                         fontWeight: FontWeight.w600,
+                                        fontFamily: GoogleFonts.montserrat().fontFamily,
                                       ),
                                       textAlign: TextAlign.center,
                                     ),
