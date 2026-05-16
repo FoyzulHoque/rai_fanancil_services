@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/Get.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../../../../core/themes/app_colors.dart';
 import '../../../user/user navbar/user_navbar_screen.dart';
 
 class DisclaimerPage extends StatelessWidget {
   DisclaimerPage({super.key});
-
-  // ✅ State inside Stateless using ValueNotifier
   final ValueNotifier<bool> _accepted = ValueNotifier<bool>(false);
 
   static const Color kPrimary = Color(0xFF24BAED);
@@ -23,7 +22,6 @@ class DisclaimerPage extends StatelessWidget {
             children: [
               const SizedBox(height: 18),
 
-              // Title
               const Text(
                 "Disclaimer",
                 style: TextStyle(
@@ -67,7 +65,8 @@ class DisclaimerPage extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 15.6,
                           height: 1.6,
-                          color: Colors.black87,
+                          color: AppColors.darkGrey,
+                          fontFamily: GoogleFonts.montserrat().fontFamily,
                         ),
                         textAlign: TextAlign.justify,
                       ),
@@ -95,13 +94,14 @@ class DisclaimerPage extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(width: 10),
-                      const Expanded(
+                      Expanded(
                         child: Text(
                           "By clicking this,\nI am accepting this disclaimer",
                           style: TextStyle(
                             fontSize: 13,
                             height: 1.3,
-                            color: Colors.black87,
+                            color: AppColors.darkGrey,
+                            fontFamily: GoogleFonts.montserrat().fontFamily,
                           ),
                         ),
                       ),
@@ -133,12 +133,13 @@ class DisclaimerPage extends StatelessWidget {
                           borderRadius: BorderRadius.circular(0),
                         ),
                       ),
-                      child: const Text(
+                      child: Text(
                         "Continue to Home",
                         style: TextStyle(
                           fontSize: 14.5,
                           fontWeight: FontWeight.w600,
                           color: Colors.white,
+                          fontFamily: GoogleFonts.montserrat().fontFamily,
                         ),
                       ),
                     ),

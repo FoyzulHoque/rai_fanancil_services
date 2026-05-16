@@ -120,7 +120,7 @@ class _SearchingScreenState extends State<SearchingScreen> {
               children: [
                 SearchingBodyHeadWidget(
                   price1: "500",
-                  price2: "1",
+                  price2: "2",
                   apartment: "Apartment",
                 ),
                 const SizedBox(height: 10),
@@ -157,14 +157,14 @@ class _SearchingScreenState extends State<SearchingScreen> {
                               beds: property.beds?.toString() ?? "0",
                               location: property.address ?? "",
                               price: property.price?.toString() ?? "",
-                              leftButtonText: '+Add property',
-                              leftTextColor: AppColors.black,
+                              leftButtonText: '+ Add property',
+                              leftTextColor: AppColors.primary,
                               onTapAddProperty: () {
                                 allPropertiesController.saveProperty(
                                   property.id.toString(),
                                 );
                               },
-                              borderColorLeft: AppColors.grey,
+                              borderColorLeft: AppColors.primary,
                               rightButtonText: 'Use in Calculator',
                               rightTextColor: AppColors.white,
                               onTapUseInCalculator: () {},

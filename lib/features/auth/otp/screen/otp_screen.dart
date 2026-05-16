@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../../../../core/themes/app_colors.dart';
 import '../../create new password/screen/create_new_password_screen.dart';
 import '../../forget password/controller/send_email_with_otp_controller.dart';
@@ -93,20 +94,21 @@ class _OtpScreenState extends State<OtpScreen> {
               const SizedBox(height: 20),
               Text(
                 'Enter OTP'.tr,
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: AppColors.darkGrey, fontFamily: GoogleFonts.montserrat().fontFamily),
               ),
               const SizedBox(height: 10),
               RichText(
                 textAlign: TextAlign.center,
                 text: TextSpan(
-                  style: const TextStyle(color: Colors.grey, fontSize: 14),
+                  style: TextStyle(color: Colors.grey, fontSize: 14, fontFamily: GoogleFonts.montserrat().fontFamily),
                   children: [
                     TextSpan(text: "OTP code has been sent to".tr),
                     TextSpan(
                       text: accountTextEditingController.emailController.text,
-                      style: const TextStyle(
+                      style: TextStyle(
                         color: Colors.black,
                         fontWeight: FontWeight.w500,
+                        fontFamily: GoogleFonts.montserrat().fontFamily,
                       ),
                     ),
                   ],
@@ -171,9 +173,10 @@ class _OtpScreenState extends State<OtpScreen> {
                     TextSpan(text: 'Resend code in '.tr),
                     TextSpan(
                       text: '$_secondsRemaining s',
-                      style: const TextStyle(
+                      style: TextStyle(
                         color: AppColors.primary,
                         fontWeight: FontWeight.w600,
+                        fontFamily: GoogleFonts.montserrat().fontFamily,
                       ),
                     ),
                   ],
@@ -188,7 +191,7 @@ class _OtpScreenState extends State<OtpScreen> {
                     color: AppColors.white,
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  child: Image.asset("assets/images/forget_images.png"),
+                  child: Image.asset("assets/images/forget.png"),
                 ),
               ),
               const SizedBox(height: 40),
@@ -227,9 +230,10 @@ class _OtpScreenState extends State<OtpScreen> {
                     TextSpan(text: 'Resend code in '.tr),
                     TextSpan(
                       text: '$_secondsRemaining s',
-                      style: const TextStyle(
+                      style: TextStyle(
                         color: AppColors.primary,
                         fontWeight: FontWeight.w600,
+                        fontFamily: GoogleFonts.montserrat().fontFamily,
                       ),
                     ),
                   ],
@@ -246,7 +250,7 @@ class _OtpScreenState extends State<OtpScreen> {
                   children: [
                     Text(
                       "Didn't receive code? ".tr,
-                      style: TextStyle(color: Colors.grey),
+                      style: TextStyle(color: Colors.grey, fontSize: 14, fontFamily: GoogleFonts.montserrat().fontFamily),
                     ),
                     GestureDetector(
                       onTap: _secondsRemaining == 0
@@ -259,6 +263,7 @@ class _OtpScreenState extends State<OtpScreen> {
                               ? AppColors.primary
                               : Colors.grey,
                           fontWeight: FontWeight.w600,
+                          fontFamily: GoogleFonts.montserrat().fontFamily,
                         ),
                       ),
                     ),

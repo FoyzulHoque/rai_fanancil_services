@@ -164,7 +164,7 @@ class _LiabilitiesScreenState extends State<LiabilitiesScreen> {
         Text(
           title,
           style: TextStyle(
-            color: AppColors.black,
+            color: AppColors.darkGrey,
             fontSize: 20,
             fontWeight: FontWeight.w600,
           ),
@@ -341,7 +341,7 @@ class _LiabilitiesScreenState extends State<LiabilitiesScreen> {
 
   // ── Helper Widgets ───────────────────────────────────────────────────────────
   TextStyle _titleStyle() => TextStyle(
-    color: AppColors.black,
+    color: AppColors.darkGrey,
     fontSize: 18,
     fontWeight: FontWeight.w600,
   );

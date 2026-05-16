@@ -81,7 +81,10 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                               fontWeight: FontWeight.w600,
                             ),
                           ),
-                          child: const Text("+ Add Another Property"),
+                          child: const Text("+ Add Another Property",
+                              style: TextStyle(
+                                color: AppColors.darkGrey,
+                              )),
                         ),
                       ),
                       const SizedBox(height: 60),
@@ -150,7 +153,7 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w900,
-                    color: AppColors.black,
+                    color: AppColors.darkGrey,
                   ),
                 ),
                 const SizedBox(height: 8),
@@ -159,7 +162,7 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
-                    color: AppColors.black,
+                    color: AppColors.darkGrey,
                   ),
                 ),
                 const SizedBox(height: 16),
@@ -343,7 +346,7 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                 Text(
                   "Mortgage Type",
                   style: TextStyle(
-                    color: AppColors.black,
+                    color: AppColors.darkGrey,
                     fontSize: 22,
                     fontWeight: FontWeight.w600,
                   ),
@@ -353,7 +356,7 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                   initialValue: property.mortgageType,
                   height: 42,
                   borderRadius: 6,
-                  backgroundColor: AppColors.btncolor,
+                  backgroundColor: AppColors.textIt,
                   selectedColor: AppColors.primary,
                   selectedTextColor: Colors.white,
                   unSelectedTextColor: Colors.grey,
@@ -429,7 +432,7 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                 Text(
                   "Monthly Rental Payment",
                   style: TextStyle(
-                    color: AppColors.black,
+                    color: AppColors.darkGrey,
                     fontSize: 22,
                     fontWeight: FontWeight.w600,
                   ),

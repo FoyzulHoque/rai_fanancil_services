@@ -73,7 +73,7 @@ class _IncomeDetailsScreenState extends State<IncomeDetailsScreen> {
                             Text(
                               "Select Adults",
                               style: TextStyle(
-                                color: AppColors.black,
+                                color: AppColors.darkGrey,
                                 fontSize: 18,
                                 fontWeight: FontWeight.w600,
                               ),
@@ -115,7 +115,7 @@ class _IncomeDetailsScreenState extends State<IncomeDetailsScreen> {
                                 ),
                                 dropdownColor: Colors.white,
                                 style: const TextStyle(
-                                  color: Colors.black87,
+                                  color: AppColors.darkGrey,
                                   fontSize: 16,
                                 ),
                                 isExpanded: true,
@@ -156,7 +156,7 @@ class _IncomeDetailsScreenState extends State<IncomeDetailsScreen> {
                                 Text(
                                   "Primary Income for Adult $adultNumber",
                                   style: TextStyle(
-                                    color: AppColors.black,
+                                    color: AppColors.darkGrey,
                                     fontSize: 22,
                                     fontWeight: FontWeight.w600,
                                   ),
@@ -201,7 +201,7 @@ class _IncomeDetailsScreenState extends State<IncomeDetailsScreen> {
                                   ),
                                   dropdownColor: Colors.white,
                                   style: const TextStyle(
-                                    color: Colors.black87,
+                                    color: AppColors.darkGrey,
                                     fontSize: 16,
                                   ),
                                   isExpanded: true,
@@ -243,7 +243,7 @@ class _IncomeDetailsScreenState extends State<IncomeDetailsScreen> {
                                 Text(
                                   "Income Frequency for Adult $adultNumber",
                                   style: TextStyle(
-                                    color: AppColors.black,
+                                    color: AppColors.darkGrey,
                                     fontSize: 18,
                                     fontWeight: FontWeight.w600,
                                   ),
@@ -319,7 +319,7 @@ class _IncomeDetailsScreenState extends State<IncomeDetailsScreen> {
                                 Text(
                                   "Other Income for Adult $adultNumber (Optional)",
                                   style: TextStyle(
-                                    color: AppColors.black,
+                                    color: AppColors.darkGrey,
                                     fontSize: 22,
                                     fontWeight: FontWeight.w600,
                                   ),
@@ -361,7 +361,7 @@ class _IncomeDetailsScreenState extends State<IncomeDetailsScreen> {
                                 Text(
                                   "Tax Region/State for Adult $adultNumber",
                                   style: TextStyle(
-                                    color: AppColors.black,
+                                    color: AppColors.darkGrey,
                                     fontSize: 18,
                                     fontWeight: FontWeight.w600,
                                   ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rai_fanancil_services/core/themes/app_colors.dart';
 
 class BodyWidget02 extends StatelessWidget {
   final Color containerColor;
@@ -47,7 +48,7 @@ class BodyWidget02 extends StatelessWidget {
                   style: const TextStyle(
                     fontSize: 12.5,
                     fontWeight: FontWeight.w700,
-                    color: Colors.black87,
+                    color: AppColors.darkGrey,
                   ),
                 ),
                 const SizedBox(height: 6),

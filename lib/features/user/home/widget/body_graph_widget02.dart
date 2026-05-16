@@ -9,9 +9,9 @@ import '../model/user_property_value_trend_modal.dart';
 class PropertyValueGrowthChart extends StatelessWidget {
   const PropertyValueGrowthChart({
     super.key,
-    this.lineColor = const Color(0xFF2196F3),
-    this.dotOuterColor = const Color(0xFF1976D2),
-    this.dotInnerColor = Colors.white,
+    this.lineColor = AppColors.secondaryColors,
+    this.dotOuterColor = const Color(0xFF90D8D8),
+    this.dotInnerColor = AppColors.primary,
   });
 
   final Color lineColor;
@@ -88,7 +88,7 @@ class PropertyValueGrowthChart extends StatelessWidget {
                       style: const TextStyle(
                         fontWeight: FontWeight.w800,
                         fontSize: 13,
-                        color: Colors.black87,
+                        color: AppColors.darkGrey,
                       ),
                     ),
                   ),

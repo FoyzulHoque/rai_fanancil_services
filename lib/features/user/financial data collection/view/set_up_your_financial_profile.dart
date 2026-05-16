@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/Get.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../../../../core/themes/app_colors.dart';
 import '../widget/set_up_widget.dart';
@@ -34,13 +35,14 @@ class SetUpYourFinancialProfile extends StatelessWidget {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        const Text(
+                        Text(
                           "Set Up Your Financial Profile",
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 22,
                             fontWeight: FontWeight.w900,
                             letterSpacing: 0.3,
+                            fontFamily: GoogleFonts.montserrat().fontFamily,
                           ),
                           textAlign: TextAlign.center,
                         ),
@@ -52,6 +54,8 @@ class SetUpYourFinancialProfile extends StatelessWidget {
                             fontSize: 15,
                             fontWeight: FontWeight.w600,
                             height: 1.45,
+                            fontFamily: GoogleFonts.montserrat().fontFamily,
+                            
                           ),
                           textAlign: TextAlign.center,
                         ),

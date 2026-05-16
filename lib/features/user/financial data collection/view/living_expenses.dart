@@ -110,7 +110,7 @@ class _LivingExpensesScreenState extends State<LivingExpensesScreen> {
                             Text(
                               "Current Living Status",
                               style: TextStyle(
-                                color: AppColors.black,
+                                color: AppColors.darkGrey,
                                 fontSize: 18,
                                 fontWeight: FontWeight.w600,
                               ),
@@ -118,7 +118,7 @@ class _LivingExpensesScreenState extends State<LivingExpensesScreen> {
                             Text(
                               "Affects your borrowing capacity assessment",
                               style: TextStyle(
-                                color: Colors.black54,
+                                color: AppColors.grey,
                                 fontSize: 16,
                                 fontWeight: FontWeight.w300,
                               ),
@@ -188,7 +188,7 @@ class _LivingExpensesScreenState extends State<LivingExpensesScreen> {
                             Text(
                               "Living Expenses",
                               style: TextStyle(
-                                color: AppColors.black,
+                                color: AppColors.darkGrey,
                                 fontSize: 22,
                                 fontWeight: FontWeight.w600,
                               ),

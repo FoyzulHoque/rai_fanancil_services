@@ -3,6 +3,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:rai_fanancil_services/features/auth/signup/screens/signup_otp_screen.dart';
@@ -54,7 +55,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   style: AppTextStyles.title.copyWith(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
-                    color: AppColors.black,
+                    color: AppColors.darkGrey,
+                    fontFamily: GoogleFonts.montserrat().fontFamily,
                   ),
                 ),
               ),
@@ -138,6 +140,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           color: controller.dateOfBirth.value.isEmpty
                               ? Colors.grey.shade600
                               : Colors.black87,
+                          fontFamily: GoogleFonts.montserrat().fontFamily,
                         ),
                       )),
                     ],
@@ -267,10 +270,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text('Already have an account? ', style: TextStyle(color: Colors.grey)),
+                  Text('Already have an account? ', style: TextStyle(color: AppColors.darkGrey, fontFamily: GoogleFonts.montserrat().fontFamily)),
                   TextButton(
                     onPressed: () => Get.to(()=>LoginScreen()),
-                    child: const Text('Log In', style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF24BAED) )),
+                    child: Text('Log In', style: TextStyle(fontWeight: FontWeight.bold, color:  AppColors.primary, fontFamily: GoogleFonts.montserrat().fontFamily)),
                   ),
                 ],
               ),

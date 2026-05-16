@@ -91,7 +91,7 @@ class _AssetsScreenState extends State<AssetsScreen> {
                         Text(
                           "Saving Accounts",
                           style: TextStyle(
-                            color: AppColors.black,
+                            color: AppColors.darkGrey,
                             fontSize: 22,
                             fontWeight: FontWeight.w600,
                           ),
@@ -191,7 +191,7 @@ class _AssetsScreenState extends State<AssetsScreen> {
                     Text(
                       "Saving Account ${index + 1}",
                       style: TextStyle(
-                        color: AppColors.black,
+                        color: AppColors.darkGrey,
                         fontSize: 22,
                         fontWeight: FontWeight.w600,
                       ),
@@ -328,7 +328,7 @@ class _AssetsScreenState extends State<AssetsScreen> {
                     Text(
                       "Cash & Savings",
                       style: TextStyle(
-                        color: AppColors.black,
+                        color: AppColors.darkGrey,
                         fontSize: 22,
                         fontWeight: FontWeight.w600,
                       ),
@@ -398,7 +398,7 @@ class _AssetsScreenState extends State<AssetsScreen> {
                     Text(
                       "Investments",
                       style: TextStyle(
-                        color: AppColors.black,
+                        color: AppColors.darkGrey,
                         fontSize: 22,
                         fontWeight: FontWeight.w600,
                       ),
@@ -468,7 +468,7 @@ class _AssetsScreenState extends State<AssetsScreen> {
                     Text(
                       "Superannuation",
                       style: TextStyle(
-                        color: AppColors.black,
+                        color: AppColors.darkGrey,
                         fontSize: 22,
                         fontWeight: FontWeight.w600,
                       ),
@@ -538,7 +538,7 @@ class _AssetsScreenState extends State<AssetsScreen> {
                     Text(
                       "Other Assets",
                       style: TextStyle(
-                        color: AppColors.black,
+                        color: AppColors.darkGrey,
                         fontSize: 22,
                         fontWeight: FontWeight.w600,
                       ),

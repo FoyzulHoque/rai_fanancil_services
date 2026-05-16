@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:rai_fanancil_services/core/themes/app_colors.dart';
 
 import '../controller/select_custom_button_controller.dart';
 
@@ -18,7 +19,7 @@ class CustomSegmentSelector extends StatelessWidget {
     this.initialValue,
     this.height = 70,
     this.borderRadius = 6,
-    this.backgroundColor = const Color(0xFF24BAED),
+    this.backgroundColor = AppColors.textIt,
     this.selectedColor = const Color(0xFF0E77B7),
     this.selectedTextColor = Colors.white,
     this.unSelectedTextColor = Colors.black,

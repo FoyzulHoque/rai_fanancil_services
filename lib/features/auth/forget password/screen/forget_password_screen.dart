@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../../../../core/themes/app_colors.dart';
 import '../../otp/screen/otp_screen.dart';
@@ -21,7 +22,6 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
     ResetPasswordController(),
   );
 
-  // Focus nodes for highlighting on focus
   final FocusNode emailFocusNode = FocusNode();
 
   @override
@@ -71,7 +71,8 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                         style: TextStyle(
                           fontSize: 22,
                           fontWeight: FontWeight.bold,
-                          color: Colors.black87,
+                          color: AppColors.darkGrey,
+                          fontFamily: GoogleFonts.montserrat().fontFamily,
                         ),
                       ),
                     ),
@@ -92,7 +93,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  child: Image.asset("assets/images/forget_images.png"),
+                  child: Image.asset("assets/images/forget.png"),
                 ),
               ),
               const SizedBox(height: 40),
@@ -123,7 +124,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                           const SizedBox(height: 4),
                           Text(
                             "Email Address".tr,
-                            style: TextStyle(fontSize: 14, color: Colors.black87),
+                            style: TextStyle(fontSize: 14, color: Colors.black87, fontFamily: GoogleFonts.montserrat().fontFamily),
                           ),
                           Padding(
                             padding: const EdgeInsets.all(2.0),
@@ -172,7 +173,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                   ),
                   child: Text(
                     "Continue".tr,
-                    style: TextStyle(fontSize: 16, color: Colors.white),
+                    style: TextStyle(fontSize: 16, color: Colors.white, fontFamily: GoogleFonts.montserrat().fontFamily),
                   ),
                 ),
               ),

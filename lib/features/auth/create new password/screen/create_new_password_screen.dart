@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../../../../core/themes/app_colors.dart';
 import '../../text editing controller/custom_text_editing_controller.dart';
@@ -9,13 +10,14 @@ import '../widget/dialog_widget.dart';
 
 class CreateNewPasswordScreen extends StatefulWidget {
   @override
-  _CreateNewPasswordScreenState createState() => _CreateNewPasswordScreenState();
+  _CreateNewPasswordScreenState createState() =>
+      _CreateNewPasswordScreenState();
 }
 
 class _CreateNewPasswordScreenState extends State<CreateNewPasswordScreen> {
-
-  final CustomTextEditingController accountTextEditingController=Get.find<CustomTextEditingController>();
-  final AddNewPassword addNewPassword=Get.put(AddNewPassword());
+  final CustomTextEditingController accountTextEditingController =
+      Get.find<CustomTextEditingController>();
+  final AddNewPassword addNewPassword = Get.put(AddNewPassword());
 
   bool _obscureNewPassword = true;
   bool _obscureConfirmPassword = true;
@@ -34,13 +36,12 @@ class _CreateNewPasswordScreenState extends State<CreateNewPasswordScreen> {
     );
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.white,
       appBar: AppBar(
-        backgroundColor:  AppColors.secondaryColors,
+        backgroundColor: AppColors.secondaryColors,
         elevation: 0,
         toolbarHeight: 100,
         leading: Padding(
@@ -67,16 +68,28 @@ class _CreateNewPasswordScreenState extends State<CreateNewPasswordScreen> {
                   children: [
                     Text(
                       'Create a'.tr,
-                      style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                      style: TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: GoogleFonts.montserrat().fontFamily,
+                      ),
                     ),
                     Text(
                       'New Password'.tr,
-                      style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                      style: TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: GoogleFonts.montserrat().fontFamily,
+                      ),
                     ),
                     SizedBox(height: 8),
                     Text(
                       'Enter your new password'.tr,
-                      style: TextStyle(fontSize: 14, color: Colors.black54),
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.black54,
+                        fontFamily: GoogleFonts.montserrat().fontFamily,
+                      ),
                     ),
                   ],
                 ),
@@ -84,21 +97,28 @@ class _CreateNewPasswordScreenState extends State<CreateNewPasswordScreen> {
               SizedBox(height: 30),
               Text(
                 'New Password'.tr,
-                style: TextStyle(fontSize: 14, color: Colors.black87),
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Colors.black87,
+                  fontFamily: GoogleFonts.montserrat().fontFamily,
+                ),
               ),
               SizedBox(height: 8),
               TextField(
                 obscureText: _obscureNewPassword,
                 controller: accountTextEditingController.newPasswordController,
                 decoration: InputDecoration(
-                  focusedBorder: OutlineInputBorder(  // Blue on focus
+                  focusedBorder: OutlineInputBorder(
+                    // Blue on focus
                     borderRadius: BorderRadius.circular(0),
                     borderSide: const BorderSide(color: AppColors.primary),
                   ),
                   hintText: 'Enter new password'.tr,
                   suffixIcon: IconButton(
                     icon: Icon(
-                      _obscureNewPassword ? Icons.visibility_off : Icons.visibility,
+                      _obscureNewPassword
+                          ? Icons.visibility_off
+                          : Icons.visibility,
                       color: Colors.grey,
                     ),
                     onPressed: () {
@@ -117,21 +137,28 @@ class _CreateNewPasswordScreenState extends State<CreateNewPasswordScreen> {
               SizedBox(height: 20),
               Text(
                 'Confirm Password'.tr,
-                style: TextStyle(fontSize: 14, color: Colors.black87),
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Colors.black87,
+                  fontFamily: GoogleFonts.montserrat().fontFamily,
+                ),
               ),
               SizedBox(height: 8),
               TextField(
                 obscureText: _obscureConfirmPassword,
                 controller: accountTextEditingController.passwordController,
                 decoration: InputDecoration(
-                  focusedBorder: OutlineInputBorder(  // Blue on focus
+                  focusedBorder: OutlineInputBorder(
+                    // Blue on focus
                     borderRadius: BorderRadius.circular(0),
                     borderSide: const BorderSide(color: AppColors.primary),
                   ),
                   hintText: 'Confirm your password'.tr,
                   suffixIcon: IconButton(
                     icon: Icon(
-                      _obscureConfirmPassword ? Icons.visibility_off : Icons.visibility,
+                      _obscureConfirmPassword
+                          ? Icons.visibility_off
+                          : Icons.visibility,
                       color: Colors.grey,
                     ),
                     onPressed: () {
@@ -156,7 +183,7 @@ class _CreateNewPasswordScreenState extends State<CreateNewPasswordScreen> {
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  child: Image.asset("assets/images/add_new_password.png"),
+                  child: Image.asset("assets/images/create_new_pass.png"),
                 ),
               ),
               const SizedBox(height: 40),
@@ -167,11 +194,17 @@ class _CreateNewPasswordScreenState extends State<CreateNewPasswordScreen> {
                   onPressed: _apiCallMethod,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.primary,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(0),
+                    ),
                   ),
                   child: Text(
                     'Continue'.tr,
-                    style: TextStyle(fontSize: 16, color: Colors.white),
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.white,
+                      fontFamily: GoogleFonts.montserrat().fontFamily,
+                    ),
                   ),
                 ),
               ),
@@ -183,13 +216,17 @@ class _CreateNewPasswordScreenState extends State<CreateNewPasswordScreen> {
   }
 
   Future<void> _apiCallMethod() async {
-   // _showSuccessDialog();
+    // _showSuccessDialog();
     bool isSuccess = await addNewPassword.addNewPasswordApiCallMethod();
     if (isSuccess) {
       _showSuccessDialog();
     } else {
-       Get.snackbar('Error', addNewPassword.errorMessage ?? 'Try again',
-           backgroundColor: Colors.red, colorText: Colors.white);
+      Get.snackbar(
+        'Error',
+        addNewPassword.errorMessage ?? 'Try again',
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
     }
   }
 }
