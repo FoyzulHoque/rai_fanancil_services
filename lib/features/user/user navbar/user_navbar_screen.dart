@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:rai_fanancil_services/core/themes/app_colors.dart';
 import '../financial calculators/base ui/screen/financial_calculators_screen.dart';
 import '../home/screen/home_screen.dart';
 import '../profile/my_profile/view/My_profile_view.dart';
@@ -41,7 +42,7 @@ class _UserBottomNavbarState extends State<UserBottomNavbar> {
         margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(0),
-          color: Colors.white,
+          color: AppColors.white,
         ),
         child: Row(
           children: [
@@ -97,13 +98,12 @@ class _UserBottomNavbarState extends State<UserBottomNavbar> {
 
         return Container(
           decoration: BoxDecoration(
-
-            /*border: Border(
+            border: Border(
               top: BorderSide(
-                color: isSelected ? const Color(0xFF0071E9) : Colors.transparent,
+                color: isSelected ? AppColors.primary : Colors.transparent,
                 width: 2,
               ),
-            ),*/
+            ),
           ),
           alignment: Alignment.center,
           child: Image.asset(
@@ -111,7 +111,7 @@ class _UserBottomNavbarState extends State<UserBottomNavbar> {
             height: 28,
             fit: BoxFit.contain,
             errorBuilder: (context, error, stackTrace) {
-              return const Icon(Icons.broken_image, size: 30, color: Colors.grey);
+              return const Icon(Icons.broken_image, size: 30, color: AppColors.darkGrey);
             },
           ),
         );

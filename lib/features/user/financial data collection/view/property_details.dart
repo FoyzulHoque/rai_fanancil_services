@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:rai_fanancil_services/core/themes/app_colors.dart';
 import '../../../../core/widgets/custom_input_field_widget.dart';
 import '../../financial calculators/property investment/widget/custom_button_widget.dart';
@@ -76,12 +77,19 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(0),
                             ),
-                            textStyle: const TextStyle(
+                            textStyle: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w600,
+                              fontFamily: GoogleFonts.montserrat().fontFamily,
                             ),
                           ),
-                          child: const Text("+ Add Another Property"),
+                          child: Text("+ Add Another Property",
+                              style: TextStyle(
+                                color: AppColors.darkGrey,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                                fontFamily: GoogleFonts.montserrat().fontFamily,
+                              )),
                         ),
                       ),
                       const SizedBox(height: 60),
@@ -118,12 +126,13 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(0),
                 ),
-                textStyle: const TextStyle(
+                textStyle: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
+                  fontFamily: GoogleFonts.montserrat().fontFamily,
                 ),
               ),
-              child: const Text("Continue"),
+              child: Text("Continue", style: TextStyle(fontFamily: GoogleFonts.montserrat().fontFamily)),
             ),
           ),
         ],
@@ -150,7 +159,8 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w900,
-                    color: AppColors.black,
+                    color: AppColors.darkGrey,
+                    fontFamily: GoogleFonts.montserrat().fontFamily,
                   ),
                 ),
                 const SizedBox(height: 8),
@@ -159,7 +169,8 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
-                    color: AppColors.black,
+                    color: AppColors.darkGrey,
+                    fontFamily: GoogleFonts.montserrat().fontFamily,
                   ),
                 ),
                 const SizedBox(height: 16),
@@ -179,6 +190,7 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                     color: AppColors.grey,
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
+                    fontFamily: GoogleFonts.montserrat().fontFamily,
                   ),
                 ),
                 const SizedBox(height: 16),
@@ -196,6 +208,7 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                     color: AppColors.grey,
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
+                    fontFamily: GoogleFonts.montserrat().fontFamily,
                   ),
                 ),
                 const SizedBox(height: 16),
@@ -213,6 +226,7 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                     color: AppColors.grey,
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
+                    fontFamily: GoogleFonts.montserrat().fontFamily,
                   ),
                 ),
                 const SizedBox(height: 16),
@@ -230,6 +244,7 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                     color: AppColors.grey,
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
+                    fontFamily: GoogleFonts.montserrat().fontFamily,
                   ),
                 ),
                 const SizedBox(height: 16),
@@ -247,6 +262,7 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                     color: AppColors.grey,
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
+                    fontFamily: GoogleFonts.montserrat().fontFamily,
                   ),
                 ),
                 const SizedBox(height: 16),
@@ -264,6 +280,7 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                     color: AppColors.grey,
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
+                      fontFamily: GoogleFonts.montserrat().fontFamily,
                   ),
                 ),
                 const SizedBox(height: 16),
@@ -281,6 +298,7 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                     color: AppColors.grey,
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
+                    fontFamily: GoogleFonts.montserrat().fontFamily,
                   ),
                 ),
                 const SizedBox(height: 16),
@@ -298,6 +316,7 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                     color: AppColors.grey,
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
+                    fontFamily: GoogleFonts.montserrat().fontFamily,
                   ),
                 ),
                 const SizedBox(height: 16),
@@ -315,6 +334,7 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                     color: AppColors.grey,
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
+                    fontFamily: GoogleFonts.montserrat().fontFamily,
                   ),
                 ),
                 const SizedBox(height: 16),
@@ -343,9 +363,10 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                 Text(
                   "Mortgage Type",
                   style: TextStyle(
-                    color: AppColors.black,
+                    color: AppColors.darkGrey,
                     fontSize: 22,
                     fontWeight: FontWeight.w600,
+                    fontFamily: GoogleFonts.montserrat().fontFamily,
                   ),
                 ),
                 const SizedBox(height: 12),
@@ -353,7 +374,7 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                   initialValue: property.mortgageType,
                   height: 42,
                   borderRadius: 6,
-                  backgroundColor: AppColors.btncolor,
+                  backgroundColor: AppColors.textIt,
                   selectedColor: AppColors.primary,
                   selectedTextColor: Colors.white,
                   unSelectedTextColor: Colors.grey,
@@ -368,6 +389,7 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                     color: AppColors.grey,
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
+                    fontFamily: GoogleFonts.montserrat().fontFamily,
                   ),
                 ),
                 const SizedBox(height: 8),
@@ -384,6 +406,7 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                     color: AppColors.grey,
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
+                    fontFamily: GoogleFonts.montserrat().fontFamily,
                   ),
                 ),
                 const SizedBox(height: 8),
@@ -403,6 +426,7 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                     color: AppColors.grey,
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
+                    fontFamily: GoogleFonts.montserrat().fontFamily,
                   ),
                 ),
                 const SizedBox(height: 8),
@@ -429,9 +453,10 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                 Text(
                   "Monthly Rental Payment",
                   style: TextStyle(
-                    color: AppColors.black,
+                    color: AppColors.darkGrey,
                     fontSize: 22,
                     fontWeight: FontWeight.w600,
+                    fontFamily: GoogleFonts.montserrat().fontFamily,
                   ),
                 ),
                 const SizedBox(height: 12),
@@ -441,6 +466,7 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                     color: AppColors.grey,
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
+                    fontFamily: GoogleFonts.montserrat().fontFamily,
                   ),
                 ),
                 const SizedBox(height: 8),

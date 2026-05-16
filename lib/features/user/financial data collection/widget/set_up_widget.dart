@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:rai_fanancil_services/core/themes/app_colors.dart'; // adjust path if needed
 
 class SetupItem extends StatelessWidget {
@@ -76,11 +77,12 @@ class SetupItem extends StatelessWidget {
                     if (title != null && title!.isNotEmpty)
                       Text(
                         title!,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w500,
-                          color: AppColors.black,
+                          color: AppColors.darkGrey,
                           height: 1.2,
+                          fontFamily: GoogleFonts.montserrat().fontFamily,
                         ),
                       ),
 

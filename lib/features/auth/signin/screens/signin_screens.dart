@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../../../../core/themes/app_colors.dart';
 import '../../../../core/themes/text_styles.dart';
 import '../../../../core/widgets/custom_button.dart';
@@ -15,8 +16,9 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final CustomTextEditingController customTextEditingController =
-  Get.put(CustomTextEditingController());
+  final CustomTextEditingController customTextEditingController = Get.put(
+    CustomTextEditingController(),
+  );
 
   final LogInController loginCtrl = Get.put(LogInController());
 
@@ -43,10 +45,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.white,
-      appBar: AppBar(
-        toolbarHeight: 0,
-        backgroundColor: Colors.transparent,
-      ),
+      appBar: AppBar(toolbarHeight: 0, backgroundColor: Colors.transparent),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(24.0),
@@ -56,32 +55,53 @@ class _LoginScreenState extends State<LoginScreen> {
               Center(
                 child: Padding(
                   padding: const EdgeInsets.only(top: 40.0),
-                  child: Image.asset(
-                    'assets/icons/logo_withtext.png',
-                    height: 200,
-                    width: 200,
+                  child: Container(
+                    height:
+                        250,
+                    width: 300,
+                    decoration: const BoxDecoration(
+                      shape:
+                          BoxShape.circle,
+                      gradient: RadialGradient(
+                        center: Alignment.center,
+                        radius: 0.5,
+                        colors: [
+                          Color(0x75008080),
+                          Colors.white, 
+                        ],
+                        stops: [
+                          0.0,
+                          1.0,
+                        ],
+                      ),
+                    ),
+                    child: Center(
+                      child: Image.asset(
+                        'assets/logos/logo.png',
+                        height: 150,
+                        width: 150,
+                        fit: BoxFit.contain,
+                      ),
+                    ),
                   ),
                 ),
               ),
-              SizedBox(height: 20),
-
+              const SizedBox(height: 20),
               Text(
                 'Login to Your Account',
                 style: AppTextStyles.title.copyWith(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
-                  color: Colors.black,
+                  color: AppColors.darkGrey,
                 ),
               ),
-              SizedBox(height: 32),
-
+              const SizedBox(height: 32),
               CustomTextField(
                 controller: customTextEditingController.emailController,
                 hintText: 'Enter Email Address',
                 prefixIcon: 'assets/icons/email.png',
               ),
-              SizedBox(height: 16),
-
+              const SizedBox(height: 16),
               CustomTextField(
                 controller: customTextEditingController.passwordController,
                 hintText: 'Enter Password',
@@ -94,13 +114,14 @@ class _LoginScreenState extends State<LoginScreen> {
                     });
                   },
                   child: Icon(
-                    _isPasswordVisible ? Icons.visibility_off : Icons.visibility,
+                    _isPasswordVisible
+                        ? Icons.visibility_off
+                        : Icons.visibility,
                     color: AppColors.subcolor,
                   ),
                 ),
               ),
-              SizedBox(height: 16),
-
+              const SizedBox(height: 16),
               Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -121,34 +142,32 @@ class _LoginScreenState extends State<LoginScreen> {
                     'Remember Me',
                     style: AppTextStyles.body.copyWith(
                       fontSize: 16,
-                      color: AppColors.primary,
+                      color: AppColors.darkGrey,
+                      fontFamily: GoogleFonts.montserrat().fontFamily,
                     ),
                   ),
                 ],
               ),
-              SizedBox(height: 24),
-
-              // ✅ Login Button with loader inside
+              const SizedBox(height: 24),
               Obx(
-                    () => CustomFloatingButton(
+                () => CustomFloatingButton(
                   customBackgroundColor: AppColors.primary,
                   textColors: AppColors.white,
                   isLoading: loginCtrl.isLoading.value,
-                  buttonText:
-                  loginCtrl.isLoading.value ? "Logging in..." : "Log in",
+                  buttonText: loginCtrl.isLoading.value
+                      ? "Logging in..."
+                      : "Log in",
                   onPressed: () async {
                     await loginCtrl.onSignIn(
                       email: customTextEditingController.emailController.text,
                       password:
-                      customTextEditingController.passwordController.text,
+                          customTextEditingController.passwordController.text,
                       remember: _isRememberMeChecked,
                     );
                   },
                 ),
               ),
-
-              SizedBox(height: 10),
-
+              const SizedBox(height: 10),
               TextButton(
                 onPressed: () {
                   Get.to(() => ForgetPasswordScreen());
@@ -157,13 +176,11 @@ class _LoginScreenState extends State<LoginScreen> {
                   'Forgot the password?',
                   style: AppTextStyles.body.copyWith(
                     fontSize: 16,
-                    color: AppColors.primary,
+                    color: AppColors.secondaryColors,
                   ),
                 ),
               ),
-
-              SizedBox(height: 12),
-
+              const SizedBox(height: 12),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -171,7 +188,8 @@ class _LoginScreenState extends State<LoginScreen> {
                     'Do not have an account? ',
                     style: TextStyle(
                       fontSize: 16,
-                      color: Colors.grey,
+                      color: AppColors.darkGrey,
+                      fontFamily: GoogleFonts.montserrat().fontFamily,
                     ),
                   ),
                   TextButton(
@@ -183,7 +201,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
-                        color: Colors.black,
+                        color: AppColors.secondaryColors,
+                        fontFamily: GoogleFonts.montserrat().fontFamily,
                       ),
                     ),
                   ),

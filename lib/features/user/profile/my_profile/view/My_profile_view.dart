@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:rai_fanancil_services/core/themes/app_colors.dart';
 import 'package:rai_fanancil_services/features/user/profile/my_profile/edit%20profile/screen/personal_info_screen.dart';
 
@@ -47,6 +48,7 @@ class MyProfileView extends StatelessWidget {
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                   color: Colors.grey.shade800,
+                  fontFamily: GoogleFonts.montserrat().fontFamily,
                 ),
               ),
             ),

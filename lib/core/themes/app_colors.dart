@@ -9,15 +9,16 @@ static List<Color>colorList=[
   primary,
   secondaryColors,
   ];
-  static const Color primary = Color(0xFF0C7BB9);
-  static const Color primaryDife = Color(0xFF0E6DAE);
-  static const Color secondaryColors = Color(0xFF24BAED);
+  static const Color primary = Color(0xFF008080);
+  static const Color primaryDife = Color(0xFF008080);
+  static const Color secondaryColors = Color(0xFF76D9D9);
   static const Color thirdColors = Color(0xFFB8DBF1);
   static const Color subcolor = Color(0xFF9E9E9E);
   static const Color btncolor = Color(0xFFB2F7F5); 
   static const Color veryLightCyanBlueColor = Color(0xFFE4F6FC);
   static const Color white = Colors.white;
   static const Color black = Colors.black;
+  static const Color darkGrey = Color.fromRGBO(77, 77, 77, 1);
   static const Color transparent = Colors.transparent;
   static const Color grey = Colors.grey;
   static const Color defaultTextColor = Color(0xFFFFFFFF);
@@ -35,7 +36,7 @@ static List<Color>colorList=[
   static const Color indicator = Color(0xFF9300D3);
   static const Color info = Color(0xFFE6E6E6);
   static const Color deepGrey = Color(0xFF6B7280);
-  static const Color textIt = Color(0xFFB4B4B4);  // amber
+  static const Color textIt = Color(0xFFF3F4F6);  // amber
   static const Color warningSecondary = Color(0xFFFFA000);
   static const Color textFilled = Color(0xFF909090);  // orange
   static const Color indic = Color(0xFF565B5C); // light orange
@@ -62,7 +63,7 @@ static List<Color>colorList=[
   static const Color error = Color(0xFFB00020); // Standard error color
   static const Color success = Color(0xFF00C853); // Green A700
   static const Color warning = Color(0xFFFFAB00); // Amber A400
-  static const Color infoLight = Color(0xFF81D4FA); // Light
+  static const Color infoLight = Color(0xFFB8DBF1); // Light
   static const Color infoLightMore = Color(0xFF0092B8); // Light
   static const Color infoDark = Color(0xFF0288D1); // Dark
   static const Color divider = Color(0xFFBDBDBD); // Grey 400

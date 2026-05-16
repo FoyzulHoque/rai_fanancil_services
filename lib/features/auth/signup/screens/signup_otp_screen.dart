@@ -4,6 +4,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../../../../core/themes/app_colors.dart';
 import '../../../../core/widgets/custom_button.dart';
 import '../../text editing controller/custom_text_editing_controller.dart';
@@ -51,10 +52,17 @@ class _SignupOtpScreenState extends State<SignupOtpScreens> {
           ),
         ),
         centerTitle: false,
-        title: const Text("OTP Code Verification"),
+        title: Text("OTP Code Verification",
+            style: TextStyle(
+              color: AppColors.darkGrey,
+              fontSize: 20,
+              fontWeight: FontWeight.w600,
+              fontFamily: GoogleFonts.montserrat().fontFamily,
+            )),
         backgroundColor: Colors.white,
         elevation: 0,
         systemOverlayStyle: SystemUiOverlayStyle.dark,
+        
       ),
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
@@ -67,8 +75,9 @@ class _SignupOtpScreenState extends State<SignupOtpScreens> {
               Text(
                 'Code has been send to and***ley@yourdomain.com',
                 style:
-                const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                textAlign: TextAlign.center,
+                TextStyle(fontSize: 24, fontWeight: FontWeight.bold,
+                fontFamily: GoogleFonts.montserrat().fontFamily,
+              ),
               ),
               const SizedBox(height: 8),
               Text(
@@ -135,9 +144,10 @@ class _SignupOtpScreenState extends State<SignupOtpScreens> {
                         TextSpan(text: 'Resend code in '.tr),
                         TextSpan(
                           text: '${otpController.secondsRemaining.value} s',
-                          style: const TextStyle(
+                          style: TextStyle(
                             color: AppColors.primary,
                             fontWeight: FontWeight.w600,
+                            fontFamily: GoogleFonts.montserrat().fontFamily,
                           ),
                         ),
                       ],
@@ -163,6 +173,7 @@ class _SignupOtpScreenState extends State<SignupOtpScreens> {
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
                         decoration: TextDecoration.underline,
+                        fontFamily: GoogleFonts.montserrat().fontFamily,
                       ),
                     ),
                   ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:rai_fanancil_services/core/themes/app_colors.dart';
 import 'package:rai_fanancil_services/features/user/financial%20data%20collection/view/property_details.dart';
 import '../../../../core/widgets/custom_input_field_widget.dart';
@@ -110,17 +111,19 @@ class _LivingExpensesScreenState extends State<LivingExpensesScreen> {
                             Text(
                               "Current Living Status",
                               style: TextStyle(
-                                color: AppColors.black,
+                                color: AppColors.darkGrey,
                                 fontSize: 18,
                                 fontWeight: FontWeight.w600,
+                                fontFamily: GoogleFonts.montserrat().fontFamily,
                               ),
                             ),
                             Text(
                               "Affects your borrowing capacity assessment",
                               style: TextStyle(
-                                color: Colors.black54,
+                                color: AppColors.grey,
                                 fontSize: 16,
                                 fontWeight: FontWeight.w300,
+                                fontFamily: GoogleFonts.montserrat().fontFamily,
                               ),
                             ),
                             const SizedBox(height: 16),
@@ -137,7 +140,7 @@ class _LivingExpensesScreenState extends State<LivingExpensesScreen> {
                                         _saveExpensesData();
                                       },
                                     ),
-                                    Text("Own House"),
+                                    Text("Own House", style: TextStyle(fontFamily: GoogleFonts.montserrat().fontFamily)),
                                   ],
                                 ),
                                 Row(
@@ -151,7 +154,7 @@ class _LivingExpensesScreenState extends State<LivingExpensesScreen> {
                                         _saveExpensesData();
                                       },
                                     ),
-                                    Text("Renting"),
+                                    Text("Renting", style: TextStyle(fontFamily: GoogleFonts.montserrat().fontFamily)),
                                   ],
                                 ),
                                 Row(
@@ -165,7 +168,7 @@ class _LivingExpensesScreenState extends State<LivingExpensesScreen> {
                                         _saveExpensesData();
                                       },
                                     ),
-                                    Text("Living with Parents"),
+                                    Text("Living with Parents", style: TextStyle(fontFamily: GoogleFonts.montserrat().fontFamily)),
                                   ],
                                 ),
                               ],
@@ -188,15 +191,16 @@ class _LivingExpensesScreenState extends State<LivingExpensesScreen> {
                             Text(
                               "Living Expenses",
                               style: TextStyle(
-                                color: AppColors.black,
+                                color: AppColors.darkGrey,
                                 fontSize: 22,
                                 fontWeight: FontWeight.w600,
+                                fontFamily: GoogleFonts.montserrat().fontFamily,
                               ),
                             ),
                             const SizedBox(height: 16),
 
                             // FOOD SECTION
-                            Text("Food"),
+                            Text("Food", style: TextStyle(fontFamily: GoogleFonts.montserrat().fontFamily)),
                             const SizedBox(height: 8),
                             Row(
                               children: [
@@ -249,7 +253,7 @@ class _LivingExpensesScreenState extends State<LivingExpensesScreen> {
                             const SizedBox(height: 24),
 
                             // TRANSPORT SECTION
-                            Text("Transport"),
+                            Text("Transport", style: TextStyle(fontFamily: GoogleFonts.montserrat().fontFamily)),
                             const SizedBox(height: 8),
                             Row(
                               children: [
@@ -302,7 +306,7 @@ class _LivingExpensesScreenState extends State<LivingExpensesScreen> {
                             const SizedBox(height: 24),
 
                             // UTILITIES SECTION
-                            Text("Utilities"),
+                            Text("Utilities", style: TextStyle(fontFamily: GoogleFonts.montserrat().fontFamily)),
                             const SizedBox(height: 8),
                             Row(
                               children: [
@@ -355,7 +359,7 @@ class _LivingExpensesScreenState extends State<LivingExpensesScreen> {
                             const SizedBox(height: 24),
 
                             // INSURANCE SECTION
-                            Text("Insurance"),
+                            Text("Insurance", style: TextStyle(fontFamily: GoogleFonts.montserrat().fontFamily)),
                             const SizedBox(height: 8),
                             Row(
                               children: [
@@ -408,7 +412,7 @@ class _LivingExpensesScreenState extends State<LivingExpensesScreen> {
                             const SizedBox(height: 24),
 
                             // ENTERTAINMENT SECTION
-                            Text("Entertainment"),
+                            Text("Entertainment", style: TextStyle(fontFamily: GoogleFonts.montserrat().fontFamily)),
                             const SizedBox(height: 8),
                             Row(
                               children: [
@@ -474,9 +478,9 @@ class _LivingExpensesScreenState extends State<LivingExpensesScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text("Monthly Mortgage Payment"),
+                            Text("Monthly Mortgage Payment", style: TextStyle(fontFamily: GoogleFonts.montserrat().fontFamily)),
                             const SizedBox(height: 8),
-                            Text("Your current mortgage payment amount"),
+                            Text("Your current mortgage payment amount", style: TextStyle(fontFamily: GoogleFonts.montserrat().fontFamily)),
                             const SizedBox(height: 16),
                             CustomInputField(
                               prefixIcon: const Icon(Icons.monetization_on_outlined),
@@ -523,12 +527,13 @@ class _LivingExpensesScreenState extends State<LivingExpensesScreen> {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(0),
                 ),
-                textStyle: const TextStyle(
+                textStyle: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
+                  fontFamily: GoogleFonts.montserrat().fontFamily,
                 ),
               ),
-              child: const Text("Continue"),
+              child: Text("Continue", style: TextStyle(fontFamily: GoogleFonts.montserrat().fontFamily)),
             ),
           ),
         ],
