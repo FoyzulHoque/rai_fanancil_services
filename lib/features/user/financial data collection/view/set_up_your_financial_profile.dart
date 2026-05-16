@@ -135,12 +135,13 @@ class SetUpYourFinancialProfile extends StatelessWidget {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(0), // ← modern look (change to 0 if you want sharp)
                 ),
-                textStyle: const TextStyle(
+                textStyle: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
+                  fontFamily: GoogleFonts.montserrat().fontFamily,
                 ),
               ),
-              child: const Text("Start Setup"),
+              child: Text("Start Setup", style: TextStyle(fontFamily: GoogleFonts.montserrat().fontFamily)),
             ),
           ),
         ],

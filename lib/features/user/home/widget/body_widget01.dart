@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class UserBodyWidget extends StatelessWidget {
   final Color boxColor;
@@ -33,10 +34,11 @@ class UserBodyWidget extends StatelessWidget {
               children: [
                 Text(
                   totalNumber,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w800,
                     color: Colors.black87,
+                    fontFamily: GoogleFonts.montserrat().fontFamily,
                   ),
                 ),
                 const SizedBox(height: 2),
@@ -44,9 +46,10 @@ class UserBodyWidget extends StatelessWidget {
                   title,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 11,
                     fontWeight: FontWeight.w600,
+                    fontFamily: GoogleFonts.montserrat().fontFamily,
                     color: Colors.black54,
                   ),
                 ),

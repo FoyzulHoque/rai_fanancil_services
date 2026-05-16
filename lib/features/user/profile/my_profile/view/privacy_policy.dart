@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:rai_fanancil_services/core/themes/app_colors.dart';
 
 class PrivacyPolicyView extends StatelessWidget {
   const PrivacyPolicyView({super.key});
@@ -34,12 +36,13 @@ class PrivacyPolicyView extends StatelessWidget {
                   const Spacer(),
 
                   /// PAGE TITLE
-                  const Text(
+                  Text(
                     "Privacy Policy",
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w600,
-                      color: Colors.black,
+                      color: AppColors.darkGrey,
+                      fontFamily: GoogleFonts.montserrat().fontFamily,
                     ),
                   ),
 

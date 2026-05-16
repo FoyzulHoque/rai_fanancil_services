@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:rai_fanancil_services/core/themes/app_colors.dart';
 
 import '../controller/user_property_value_controller.dart';
@@ -42,9 +43,9 @@ class PropertyValueGrowthChart extends StatelessWidget {
             color: AppColors.white,
             border: Border.all(color: const Color(0xFFE6E6E6)),
           ),
-          child: const Padding(
-            padding: EdgeInsets.all(18),
-            child: Center(child: Text("No data available")),
+          child: Padding(
+            padding: const EdgeInsets.all(18),
+            child: Center(child: Text("No data available", style: TextStyle(color: Colors.black45, fontFamily: GoogleFonts.montserrat().fontFamily))),
           ),
         );
       }
@@ -85,10 +86,11 @@ class PropertyValueGrowthChart extends StatelessWidget {
                   Expanded(
                     child: Text(
                       "Property Value Growth",
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontWeight: FontWeight.w800,
                         fontSize: 13,
                         color: AppColors.darkGrey,
+                        fontFamily: GoogleFonts.montserrat().fontFamily,
                       ),
                     ),
                   ),
@@ -136,9 +138,10 @@ class PropertyValueGrowthChart extends StatelessWidget {
                               padding: const EdgeInsets.only(top: 6),
                               child: Text(
                                 months[i],
-                                style: const TextStyle(
+                                style: TextStyle(
                                   fontSize: 9,
                                   color: Colors.black45,
+                                  fontFamily: GoogleFonts.montserrat().fontFamily,
                                 ),
                               ),
                             );
@@ -213,10 +216,11 @@ class PropertyValueGrowthChart extends StatelessWidget {
               controller.userPropertyValue(val); // ✅ correct API call
             },
             icon: const Icon(Icons.keyboard_arrow_down_rounded, size: 18),
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 11.5,
               color: Colors.black87,
               fontWeight: FontWeight.w700,
+              fontFamily: GoogleFonts.montserrat().fontFamily,
             ),
           );
         }),

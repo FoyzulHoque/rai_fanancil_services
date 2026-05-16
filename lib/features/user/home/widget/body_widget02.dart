@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:rai_fanancil_services/core/themes/app_colors.dart';
 
 class BodyWidget02 extends StatelessWidget {
@@ -45,19 +46,21 @@ class BodyWidget02 extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 12.5,
                     fontWeight: FontWeight.w700,
                     color: AppColors.darkGrey,
+                    fontFamily: GoogleFonts.montserrat().fontFamily,
                   ),
                 ),
                 const SizedBox(height: 6),
                 Text(
                   totalAmount,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w900,
                     color: Colors.black87,
+                    fontFamily: GoogleFonts.montserrat().fontFamily,
                   ),
                 ),
                 const SizedBox(height: 6),
@@ -69,15 +72,17 @@ class BodyWidget02 extends StatelessWidget {
                         fontSize: 11.5,
                         fontWeight: FontWeight.w800,
                         color: textColor3,
+                        fontFamily: GoogleFonts.montserrat().fontFamily,
                       ),
                     ),
                     const SizedBox(width: 4),
                     Text(
                       totalPercentText,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 11.5,
                         fontWeight: FontWeight.w600,
                         color: Colors.black45,
+                        fontFamily: GoogleFonts.montserrat().fontFamily,
                       ),
                     ),
                   ],

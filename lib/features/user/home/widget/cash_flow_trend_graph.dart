@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../../../../core/themes/app_colors.dart';
 import '../controller/cash_flow_trend_data_controller.dart';
@@ -85,10 +86,11 @@ class _CashFlowTrendGraphState extends State<CashFlowTrendGraph> {
                   Expanded(
                     child: Text(
                       "Cashflow Trend",
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontWeight: FontWeight.w800,
                         fontSize: 13,
                         color: AppColors.darkGrey,
+                        fontFamily: GoogleFonts.montserrat().fontFamily,
                       ),
                     ),
                   ),
@@ -114,9 +116,10 @@ class _CashFlowTrendGraphState extends State<CashFlowTrendGraph> {
                           reservedSize: 36,
                           getTitlesWidget: (value, meta) => Text(
                             value.toInt().toString(),
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 9,
                               color: Colors.black45,
+                              fontFamily: GoogleFonts.montserrat().fontFamily,
                             ),
                           ),
                         ),
@@ -134,9 +137,10 @@ class _CashFlowTrendGraphState extends State<CashFlowTrendGraph> {
                               padding: const EdgeInsets.only(top: 6),
                               child: Text(
                                 months[i],
-                                style: const TextStyle(
+                                style: TextStyle(
                                   fontSize: 9,
                                   color: Colors.black45,
+                                  fontFamily: GoogleFonts.montserrat().fontFamily,
                                 ),
                               ),
                             );
@@ -214,10 +218,11 @@ class _CashFlowTrendGraphState extends State<CashFlowTrendGraph> {
               controller.cashFlowTrend(val);
             },
             icon: const Icon(Icons.keyboard_arrow_down_rounded, size: 18),
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 11.5,
               color: Colors.black87,
               fontWeight: FontWeight.w700,
+              fontFamily: GoogleFonts.montserrat().fontFamily,
             ),
           );
         }),
