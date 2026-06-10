@@ -1,4 +1,4 @@
-package com.example.rai_fanancil_services
+package com.rai_fanancil_services.app
 
 import io.flutter.embedding.android.FlutterActivity
 
